@@ -1,3 +1,5 @@
+export EDITOR=vim
+
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=100000
@@ -17,9 +19,9 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 autoload colors && colors
 setopt prompt_subst
 
-source ~/antigen.zsh
+source ~/dotfiles/antigen.zsh
 antigen use oh-my-zsh
-antigen theme https://rhiroyuki@bitbucket.org/rhiroyuki/peepcode-bright.git peepcode-bright
+antigen theme https://gist.github.com/400461ea289d9c8bdf5f81e4fa1157e5.git peepcode-bright
 antigen bundle git
 antigen bundle command-not-found
 antigen bundle zsh-users/zsh-syntax-highlighting
