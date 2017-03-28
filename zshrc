@@ -1,3 +1,6 @@
+# Disable terminal freeze <C s>
+stty -ixon
+
 export EDITOR=vim
 
 # Lines configured by zsh-newuser-install
@@ -29,3 +32,7 @@ antigen apply
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+# Add NVM to PATH for scripting
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm

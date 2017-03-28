@@ -9,12 +9,14 @@ mv .vim .vim.old
 mv .tmux.conf .tmux.conf.old
 
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 # create symlink
 ln -s zshrc ~/.zshrc
 ln -s vimrc ~/.vimrc
 ln -s vim ~/.vim
-ln -s tmux.conf ~/.tmux.confg
+ln -s tmux.conf ~/.tmux.conf
+ln -s redshift.conf ~/.config/redshift.conf
 
 # install vim plugins
 vim +PluginInstall
