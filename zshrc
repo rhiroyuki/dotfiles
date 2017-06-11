@@ -44,3 +44,6 @@ xset b off
 
 # Change all files/folders to current user
 alias bemine='sudo chown -R $USER:$USER . -R'
+
+# Show dotfiles and dotfolders
+alias lh='ls -Ad .*'
