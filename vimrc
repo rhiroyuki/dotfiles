@@ -86,6 +86,9 @@ endif
 " Default to filename searches
 let g:ctrlp_by_filename = 1
 
+" Make ctrlp ignore folders
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+
 " Make it obvious where 80 characters is
 set textwidth=80
 set colorcolumn=+1

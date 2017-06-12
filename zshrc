@@ -19,6 +19,9 @@ compinit
 # Match uppercase letter and lowercase letter
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
+# 'ls' pretty colors
+alias ls='ls --color=auto'
+eval `dircolors ~/dotfiles/dircolors.256dark`
 autoload colors && colors
 setopt prompt_subst
 
@@ -29,6 +32,11 @@ antigen bundle git
 antigen bundle command-not-found
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen apply
+
+# Tmux start every shell
+# If not running interactively, do not do anything
+[[ $- != *i* ]] && return
+[[ -z "$TMUX" ]] && exec tmux
 
 # Add NVM to PATH for scripting
 export NVM_DIR="$HOME/.nvm"
