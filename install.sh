@@ -13,7 +13,7 @@ is_distro_manjaro() {
 zsh_setup() {
   echo "Setting up ZSH"
   if exists zsh; then
-    sudo chsh -s $(grep /zsh$ /etc/shells | tail -1)
+    chsh -s $(grep /zsh$ /etc/shells | tail -1)
   else
     echo 'Something went wrong, reinstall ZSH or manually set zsh as your default shell'
     exit 1
@@ -29,8 +29,7 @@ install_programs() {
     # Asking for permission
     sudo -v
 
-    apps=("zsh" "redshift" "vim" "tmux" "git" "wget" "curl" "yaourt" "termite"
-    "nodejs" "npm" "ttf-hack" "ttf-inconsolata")
+    apps=("zsh" "redshift" "vim" "tmux" "git" "wget" "curl" "yaourt" "ttf-hack" "ttf-inconsolata")
     for app in "${apps[@]}"
     do
       echo "Installing $app"
@@ -52,19 +51,17 @@ dotfiles_setup() {
   mkdir -p "$(pwd)/backup"
 
   files=("zshrc" "vimrc" "tmux.conf" "vim")
+
   for file in "${files[@]}"
   do
-    ([ -f ~/."$file" ] ||
-     [ -d ~/."$file" ]) &&
-     mv ~/."$file" $(pwd)/backup/."$file".old &&
-     ln -s "$file" ~/."$file"
+    file_origin_path="$(pwd)/${file}"
+    file_dest_path="$HOME/.${file}"
+    if [ -f $file_dest_path ] || [ -d $file_dest_path ]; then
+      mv $file_dest_path "${file_dest_path}.backup"
+    fi
+    ln -s $file_origin_path $file_dest_path
   done
-  [ -d ~/.config ] && [ -f ~/.config/redshift.conf ] && mv ~/.config/redshift.conf ~/.config/redshift.conf.old
-  [ -d ~/.config/termite ] && [ -f ~/.config/termite/config ] && mv ~/.config/termite/config ~/.config/temite/config.old
-
-  mkdir -p ~/.config/termite
-  ln -s termite_config ~/.config/termite/config
-  ln -s redshift.conf ~/.config/redshift.conf
+  mkdir -p ~/.config && [ -d ~/.config ] && [ -f ~/.config/redshift.conf ] && ln -s redshift.conf ~/.config/redshift.conf
 
   echo "Dotfiles done"
 }
