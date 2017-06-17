@@ -55,3 +55,4 @@ alias bemine='sudo chown -R $USER:$USER . -R'
 
 # Show dotfiles and dotfolders
 alias lh='ls -Ad .*'
+export PATH=$PATH:$HOME/bin
