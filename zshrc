@@ -38,16 +38,6 @@ antigen apply
 [[ $- != *i* ]] && return
 [[ -z "$TMUX" ]] && exec tmux
 
-# Add NVM to PATH for scripting
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-# export PATH="$PATH:$HOME/.rvm/bin"
-
-[[ -s "$HOME/.rvm/scripts/rvm"  ]] && source "$HOME/.rvm/scripts/rvm"
-export ANDROID_HOME=/opt/android-sdk
-
 xset b off
 
 # Change all files/folders to current user
@@ -55,4 +45,9 @@ alias bemine='sudo chown -R $USER:$USER . -R'
 
 # Show dotfiles and dotfolders
 alias lh='ls -Ad .*'
-export PATH=$PATH:$HOME/bin
+
+source ~/.zsh_env
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export -U PATH="$PATH:$HOME/.rvm/bin"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

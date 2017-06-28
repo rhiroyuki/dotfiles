@@ -96,4 +96,4 @@ map <Leader>ct :!ctags -R .<CR>
 nnoremap <silent> K :Ag <cword><CR>
 
 " LiveDownPreview
-map <c-m> :LivedownPreview<CR>
+nmap <c-m> :LivedownPreview<CR>
