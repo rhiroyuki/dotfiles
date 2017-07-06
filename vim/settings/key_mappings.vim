@@ -23,7 +23,6 @@ imap <silent> <C-K> <%=  %><Esc>2hi
 " create <%= foo %> erb tags using Ctrl-j in edit mode
 imap <silent> <C-J> <%  %><Esc>2hi
 
-
 " Re-enable tmux_navigator.vim default bindings, minus <c-\>.
 " <c-\> conflicts with NERDTree "current file".
 
@@ -76,6 +75,9 @@ endfunction
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <S-Tab> <c-n>
 
+" Intelligent tab with emmet
+imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+
 function! CloseNerdTree()
   if g:NERDTree.IsOpen()
     NERDTreeFind
@@ -97,3 +99,5 @@ nnoremap <silent> K :Ag <cword><CR>
 
 " LiveDownPreview
 nmap <c-m> :LivedownPreview<CR>
+
+nnoremap <Leader>11 :VtrSendCommandToRunner !! <cr>

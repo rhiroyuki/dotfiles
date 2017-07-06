@@ -10,33 +10,45 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-" The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
-Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'mattn/emmet-vim'
+
+" Theme plugins
+Plugin 'itchyny/lightline.vim' " pretty status bar
 Plugin 'skwp/vim-colors-solarized'
-Plugin 'scrooloose/nerdtree' " file explorer
+
+" Navigation plugins
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'christoomey/vim-tmux-runner'
 Plugin 'ctrlpvim/ctrlp.vim' " fuzzy finder
+Plugin 'jby/tmux.vim' " tmux syntax
 Plugin 'pbrisbin/vim-mkdir' " create folder if it doesn't exist
+Plugin 'rking/ag.vim'
+Plugin 'scrooloose/nerdtree' " file explorer
+
+" All languages
 Plugin 'scrooloose/syntastic' " syntax checking
-Plugin 'thoughtbot/vim-rspec'
-Plugin 'tpope/vim-endwise'
+Plugin 'chrisbra/color_highlight'
+
+" Text plugins
+Plugin 'godlygeek/tabular' " Align texts
+Plugin 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
+Plugin 'shime/vim-livedown'
+Plugin 'tpope/vim-repeat' " Add support to repeat non-native commands
+Plugin 'tpope/vim-surround' " Add tags/surrounds
+Plugin 'vim-scripts/tComment' " add or remove comments
+
+" Git plugins
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-git'
-Plugin 'tpope/vim-rails'
+
+" Ruby/Rails plugins
 Plugin 'keith/rspec.vim'
-Plugin 'tpope/vim-surround'
+Plugin 'thoughtbot/vim-rspec'
+Plugin 'tpope/vim-endwise'
+Plugin 'tpope/vim-rails'
 Plugin 'vim-ruby/vim-ruby'
-Plugin 'vim-scripts/tComment'
-Plugin 'chrisbra/color_highlight'
-Plugin 'jby/tmux.vim' " tmux syntax
-Plugin 'itchyny/lightline.vim' " pretty status bar
-Plugin 'christoomey/vim-tmux-runner'
-Plugin 'rking/ag.vim'
-Plugin 'godlygeek/tabular'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'tpope/vim-repeat'
-Plugin 'shime/vim-livedown'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required

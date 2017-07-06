@@ -160,6 +160,9 @@ else
   let g:rspec_command = "VtrSendCommandToRunner! rspec {spec}"
 endif
 
+" Load colorhighlight
+autocmd VimEnter * ColorHighlight
+
 " Local config
 if filereadable($HOME . "/.vimrc.local")
   source ~/.vimrc.local
