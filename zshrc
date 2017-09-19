@@ -48,6 +48,16 @@ alias lh='ls -Ad .*'
 
 source ~/.zsh_env
 
+if type xcape &> /dev/null; then
+  # Remap CapsLock to Left-Control
+  setxkbmap -option ctrl:nocaps
+
+  # make short-pressed Ctrl behave like Escape:
+  xcape -e 'Control_L=Escape'
+fi
+
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export -U PATH="$PATH:$HOME/.rvm/bin"
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

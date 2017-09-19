@@ -1,11 +1,11 @@
-# Solarized light color scheme
+# Solarized dark color scheme
 
 [colors]
-foreground = #657b83
-foreground_bold = #073642
+foreground = #839496
+foreground_bold = #eee8d5
 #foreground_dim = #888888
-background = #fdf6e3
-cursor = #586e75
+background = #002b36
+cursor = #93a1a1
 
 # if unset, will reverse foreground and background
 #highlight = #839496
@@ -27,6 +27,3 @@ color12 = #839496
 color13 = #6c71c4
 color14 = #93a1a1
 color15 = #fdf6e3
-
-[options]
-font = Hack 16px

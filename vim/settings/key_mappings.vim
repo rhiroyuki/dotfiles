@@ -98,6 +98,10 @@ map <Leader>ct :!ctags -R .<CR>
 nnoremap <silent> K :Ag <cword><CR>
 
 " LiveDownPreview
-nmap <c-m> :LivedownPreview<CR>
+" nmap <c-m>:LivedownPreview <CR>
+
+" Make double-<Esc> clear search highlights
+nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
 
 nnoremap <Leader>11 :VtrSendCommandToRunner !! <cr>
+

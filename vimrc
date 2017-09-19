@@ -17,10 +17,21 @@ set smartcase     " ...unless we type a capital
 set showmode      "Show current mode down the bottom
 set visualbell    " No noise
 set nowrap        "Don't wrap lines
+set autoread      " Detect any externally changes to the file and read it again
 
 syntax on
 
 so ~/.vim/plugins.vim
+let NERDTreeShowHidden=1
+
+" allow mouse in NERDTree
+:set mouse=a
+let g:NERDTreeMouseMode=3
+if has("mouse_sgr")
+    set ttymouse=sgr
+else
+    set ttymouse=xterm2
+end
 
 " load custom settings
 so ~/.vim/settings.vim
@@ -149,7 +160,6 @@ if is_tmux != ""
   autocmd VimEnter * VtrAttachToPane
 endif
 
-let g:solarized_termtrans=1
 syntax enable
 set background=dark
 colorscheme solarized
@@ -160,6 +170,50 @@ else
   let g:rspec_command = "VtrSendCommandToRunner! rspec {spec}"
 endif
 
+
+" Window resizing mappings /*{{{*/
+" Maps Alt-[h,j,k,l] to resizing a window split
+map <silent> <A-h> <C-w><
+map <silent> <A-j> <C-W>-
+map <silent> <A-k> <C-W>+
+map <silent> <A-l> <C-w>>
+
+function! Resize(dir)
+  let this = winnr()
+  if '+' == a:dir || '-' == a:dir
+    execute "normal \<c-w>k"
+    let up = winnr()
+    if up != this
+      execute "normal \<c-w>j"
+      let x = 'bottom'
+    else
+      let x = 'top'
+    endif
+  elseif '>' == a:dir || '<' == a:dir
+    execute "normal \<c-w>h"
+    let left = winnr()
+    if left != this
+      execute "normal \<c-w>l"
+      let x = 'right'
+    else
+      let x = 'left'
+    endif
+  endif
+  if ('+' == a:dir && 'bottom' == x) || ('-' == a:dir && 'top' == x)
+    return "5\<c-v>\<c-w>+"
+  elseif ('-' == a:dir && 'bottom' == x) || ('+' == a:dir && 'top' == x)
+    return "5\<c-v>\<c-w>-"
+  elseif ('<' == a:dir && 'left' == x) || ('>' == a:dir && 'right' == x)
+    return "5\<c-v>\<c-w><"
+  elseif ('>' == a:dir && 'left' == x) || ('<' == a:dir && 'right' == x)
+    return "5\<c-v>\<c-w>>"
+  else
+    echo "oops. check your ~/.vimrc"
+    return ""
+  endif
+endfunction
+" /*}}}*/ 
+
 " Load colorhighlight
 autocmd VimEnter * ColorHighlight
 
@@ -167,3 +221,6 @@ autocmd VimEnter * ColorHighlight
 if filereadable($HOME . "/.vimrc.local")
   source ~/.vimrc.local
 endif
+
+" Clean vim draw/artifacts
+au BufWritePost * :silent! :syntax sync fromstart<cr>:redraw!<cr>
