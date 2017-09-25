@@ -3,55 +3,50 @@ filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
+call plug#begin()
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
-Plugin 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim'
 
 " Theme plugins
-Plugin 'itchyny/lightline.vim' " pretty status bar
-Plugin 'skwp/vim-colors-solarized'
+Plug 'itchyny/lightline.vim' " pretty status bar
+Plug 'skwp/vim-colors-solarized'
 
 " Navigation plugins
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'christoomey/vim-tmux-runner'
-Plugin 'ctrlpvim/ctrlp.vim' " fuzzy finder
-Plugin 'jby/tmux.vim' " tmux syntax
-Plugin 'pbrisbin/vim-mkdir' " create folder if it doesn't exist
-Plugin 'rking/ag.vim'
-Plugin 'scrooloose/nerdtree' " file explorer
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-runner'
+Plug 'ctrlpvim/ctrlp.vim' " fuzzy finder
+Plug 'jby/tmux.vim' " tmux syntax
+Plug 'pbrisbin/vim-mkdir' " create folder if it doesn't exist
+Plug 'rking/ag.vim'
+Plug 'scrooloose/nerdtree' " file explorer
 
 " All languages
-Plugin 'scrooloose/syntastic' " syntax checking
-Plugin 'chrisbra/color_highlight'
+Plug 'w0rp/ale'
+" Plugin 'scrooloose/syntastic' " syntax checking
+Plug 'chrisbra/color_highlight'
 
 " Text plugins
-Plugin 'godlygeek/tabular' " Align texts
-Plugin 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
-Plugin 'shime/vim-livedown'
-Plugin 'tpope/vim-repeat' " Add support to repeat non-native commands
-Plugin 'tpope/vim-surround' " Add tags/surrounds
-Plugin 'vim-scripts/tComment' " add or remove comments
+Plug 'godlygeek/tabular' " Align texts
+Plug 'jiangmiao/auto-pairs' " Insert or delete brackets, parens, quotes in pair
+Plug 'shime/vim-livedown'
+Plug 'tpope/vim-repeat' " Add support to repeat non-native commands
+Plug 'tpope/vim-surround' " Add tags/surrounds
+Plug 'vim-scripts/tComment' " add or remove comments
 
 " Git plugins
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-git'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
 
 " Ruby/Rails plugins
-Plugin 'keith/rspec.vim'
-Plugin 'thoughtbot/vim-rspec'
-Plugin 'tpope/vim-endwise'
-Plugin 'tpope/vim-rails'
-Plugin 'vim-ruby/vim-ruby'
+Plug 'keith/rspec.vim'
+Plug 'thoughtbot/vim-rspec'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-rails'
+Plug 'vim-ruby/vim-ruby'
 
 " All of your Plugins must be added before the following line
-call vundle#end()            " required
+call plug#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on

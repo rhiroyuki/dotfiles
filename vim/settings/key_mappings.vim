@@ -23,6 +23,7 @@ imap <silent> <C-K> <%=  %><Esc>2hi
 " create <%= foo %> erb tags using Ctrl-j in edit mode
 imap <silent> <C-J> <%  %><Esc>2hi
 
+
 " Re-enable tmux_navigator.vim default bindings, minus <c-\>.
 " <c-\> conflicts with NERDTree "current file".
 
@@ -64,19 +65,21 @@ map <Leader>fl :call VtrSendCommand('flog ' . expand("%"))<CR>
 " Tab completion
 " will insert tab at beginning of line,
 " will use completion if not at beginning
-function! InsertTabWrapper()
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    else
-        return "\<c-p>"
-    endif
+function! CleverTab()
+  if pumvisible()
+    return "\<C-N>"
+  endif
+  if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+    return "\<Tab>"
+  elseif exists('&omnifunc') && &omnifunc != ''
+    return "\<C-X>\<C-O>"
+  else
+    return "\<C-N>"
+  endif
 endfunction
-inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
-inoremap <S-Tab> <c-n>
 
-" Intelligent tab with emmet
-imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+inoremap <Tab> <C-R>=CleverTab()<CR>
+inoremap <S-Tab> <c-n>
 
 function! CloseNerdTree()
   if g:NERDTree.IsOpen()
