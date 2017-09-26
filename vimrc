@@ -3,7 +3,7 @@ let mapleader = ' '
 set autoindent
 set autoread
 set autowrite     " Automatically :write before running commands
-set backspace=2   " Backspace deletes like most programs in insert mode
+set backspace=indent,eol,start
 set colorcolumn=+1
 set complete+=kspell " Autocomplete with dictionary words when spell check is on
 set diffopt+=vertical " Always use vertical diffs

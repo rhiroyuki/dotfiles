@@ -18,11 +18,20 @@ nnoremap <silent> vv <C-w>v
 nnoremap <silent> ss <C-w>s
 
 " create <%= foo %> erb tags using Ctrl-k in edit mode
-imap <silent> <C-K> <%=  %><Esc>2hi
+inoremap <silent> <C-K> <%=  %><Esc>2hi
 
 " create <%= foo %> erb tags using Ctrl-j in edit mode
-imap <silent> <C-J> <%  %><Esc>2hi
+inoremap <silent> <C-J> <%  %><Esc>2hi
 
+" Ctrl+Backspace delete whole worlds now (doesnt work for some reason in some
+" terminals)
+" inoremap <S-BS> <C-W>
+
+" copy paste cut
+vnoremap <C-c> "+y<Esc>:echom 'Copied to system clipboard'<CR>
+nnoremap <C-v> "+p"<Esc>:echom 'Pasted from system clipboard'<CR>
+inoremap <C-v> <Esc>"+p"<Esc>:echom 'Pasted from system clipboard'<CR>
+vnoremap <C-x> "+c<Esc>:echom 'Cutted to system clipboard'<CR>
 
 " Re-enable tmux_navigator.vim default bindings, minus <c-\>.
 " <c-\> conflicts with NERDTree "current file".
