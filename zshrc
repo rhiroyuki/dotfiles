@@ -46,6 +46,8 @@ alias bemine='sudo chown -R $USER:$USER . -R'
 # Show dotfiles and dotfolders
 alias lh='ls -Ad .*'
 
+alias battery='acpi --battery'
+
 source ~/.zsh_env
 
 if type xcape &> /dev/null; then
@@ -56,8 +58,9 @@ if type xcape &> /dev/null; then
   xcape -e 'Control_L=Escape'
 fi
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export -U PATH="$PATH:$HOME/.rvm/bin"
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# . $HOME/.asdf/asdf.sh
+# . $HOME/.asdf/completions/asdf.bash
+export HISTTIMEFORMAT="%d/%m/%y %T "
+alias history='fc -lf -100'

@@ -23,6 +23,8 @@ Plug 'scrooloose/nerdtree' " file explorer
 
 " All languages
 Plug 'w0rp/ale'
+Plug 'Shougo/neocomplete.vim'
+
 " Plugin 'scrooloose/syntastic' " syntax checking
 Plug 'chrisbra/color_highlight'
 
@@ -44,6 +46,9 @@ Plug 'thoughtbot/vim-rspec'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-rails'
 Plug 'vim-ruby/vim-ruby'
+
+" Solidity
+Plug 'tomlion/vim-solidity'
 
 " All of your Plugins must be added before the following line
 call plug#end()            " required

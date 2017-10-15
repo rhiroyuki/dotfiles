@@ -27,10 +27,13 @@ inoremap <silent> <C-J> <%  %><Esc>2hi
 " terminals)
 " inoremap <S-BS> <C-W>
 
+nnoremap <C-v> <C-q>
+
+
 " copy paste cut
 vnoremap <C-c> "+y<Esc>:echom 'Copied to system clipboard'<CR>
-nnoremap <C-v> "+p"<Esc>:echom 'Pasted from system clipboard'<CR>
-inoremap <C-v> <Esc>"+p"<Esc>:echom 'Pasted from system clipboard'<CR>
+" nnoremap <C-S-v> "+p"<Esc>:echom 'Pasted from system clipboard'<CR>
+" inoremap <C-S-v> <Esc>"+p"<Esc>:echom 'Pasted from system clipboard'<CR>
 vnoremap <C-x> "+c<Esc>:echom 'Cutted to system clipboard'<CR>
 
 " Re-enable tmux_navigator.vim default bindings, minus <c-\>.
@@ -117,3 +120,8 @@ nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
 
 nnoremap <Leader>11 :VtrSendCommandToRunner !! <cr>
 
+" tabpages
+nnoremap th :tabnext<CR>
+nnoremap tl :tabprev<CR>
+nnoremap tn :tabnew<CR>
+nnoremap <S-t> :Texplore<CR>
