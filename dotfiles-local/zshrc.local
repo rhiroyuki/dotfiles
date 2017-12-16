@@ -1,0 +1,58 @@
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+
+bindkey -v
+
+source ~/.zplug/init.zsh
+zplug "zsh-users/zsh-history-substring-search"
+zplug "zsh-users/zsh-completions", depth:1
+zplug "junegunn/fzf-bin"
+zplug "plugins/fasd",   from:oh-my-zsh
+zplug "plugins/gitfast",   from:oh-my-zsh
+zplug "mafredri/zsh-async", from:github
+zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
+zplug load --verbose
+
+if ! zplug check; then
+    zplug install
+fi
+
+autoload -U promptinit; promptinit
+prompt pure
+
+# 'ls' pretty colors
+alias ls='ls --color=auto'
+eval `dircolors ~/dotfiles-local/dircolors`
+autoload colors && colors
+
+[[ $- != *i* ]] && return
+[[ -z "$TMUX" ]] && exec tmux
+
+# fuzzy finder
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+if type xcape &> /dev/null; then
+  # Remap CapsLock to Left-Control
+  setxkbmap -option ctrl:nocaps
+
+  # make short-pressed Ctrl behave like Escape:
+  xcape -e 'Control_L=Escape'
+fi
+
+# --files: List files that would be searched but do not search
+# --hidden: Search hidden files and folders
+# --follow: Follow symlinks
+# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+export FZF_DEFAULT_COMMAND='rg --colors line:fg:yellow      \
+   --colors line:style:bold     \
+   --colors path:fg:green       \
+   --colors path:style:bold     \
+   --colors match:fg:black      \
+   --colors match:bg:yellow     \
+   --colors match:style:nobold  \
+   --files --no-ignore --hidden --follow \
+   --glob "!{.git,node_modules,vendor}/*"'
+
+[[ -f ~/.zsh_env ]] && source ~/.zsh_env

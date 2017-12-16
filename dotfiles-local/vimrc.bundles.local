@@ -1,0 +1,27 @@
+UnPlug 'ctrlpvim/ctrlp.vim'
+
+Plug 'morhetz/gruvbox'
+Plug 'itchyny/lightline.vim'
+
+Plug 'scrooloose/nerdtree'
+Plug 'jiangmiao/auto-pairs'
+Plug 'pbrisbin/vim-mkdir'
+Plug 'jremmen/vim-ripgrep'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+
+Plug 'mattn/emmet-vim'
+Plug 'gregsexton/matchtag'
+
+Plug 'chrisbra/color_highlight'
+
+" javascript
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+
+" tmux
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-runner'
+Plug 'tmux-plugins/vim-tmux-focus-events'
+
+Plug 'thoughtbot/vim-rspec'

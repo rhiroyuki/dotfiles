@@ -1,0 +1,111 @@
+set nocompatible
+
+syntax enable
+filetype plugin on
+
+set background=dark
+colorscheme gruvbox
+
+set backspace=2
+set encoding=utf-8
+set nobackup
+set noswapfile
+set mouse=a
+set nowrap
+set autoread
+set autowrite
+set scrolloff=10
+set sidescrolloff=15
+set sidescroll=1
+set showcmd
+set ignorecase
+set smartcase
+
+set cursorline
+set cursorcolumn
+
+" enable list of completion
+set wildmode=list:longest,list:full
+set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
+set wildignore+=*vim/backups*
+set wildignore+=*sass-cache*
+set wildignore+=*DS_Store*
+set wildignore+=vendor/rails/**
+set wildignore+=vendor/cache/**
+set wildignore+=*.gem
+set wildignore+=log/**
+set wildignore+=tmp/**
+set wildignore+=*.png,*.jpg,*.gif
+
+" ================ Persistent Undo ==================
+" Keep undo history across sessions, by storing in file.
+" Only works all the time.
+if has('persistent_undo')
+  silent !mkdir ~/.vim/backups > /dev/null 2>&1
+  set undodir=~/.vim/backups
+  set undofile
+endif
+
+let g:fzf_layout = { 'down': '~40%' }
+
+" Make nerdtree look nice
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+let g:NERDTreeWinSize = 30
+let NERDTreeQuitOnOpen=1
+
+nnoremap <silent> <C-\> :NERDTreeToggle<CR>
+
+" vim-jsx
+" Allow JSX in normal JS files
+let g:jsx_ext_required = 0
+
+" Emmet
+let g:user_emmet_settings = {
+      \  'javascript.jsx' : {
+      \      'extends' : 'jsx',
+      \  },
+      \}
+
+nnoremap <silent> vv <C-w>v
+nnoremap <silent> ss <C-w>s
+nnoremap <silent> // :nohlsearch<CR>
+
+" bind 0 (zero) to the first character
+nnoremap 0 ^
+
+" vim-rspec mappings
+nnoremap <Leader>rs :call RunCurrentSpecFile()<CR>
+nnoremap <Leader>rn :call RunNearestSpec()<CR>
+nnoremap <Leader>rl :call RunLastSpec()<CR>
+nnoremap <Leader>ra :call RunAllSpecs()<CR>
+nnoremap <leader>c :VtrSendKeysRaw ^C<cr>
+
+let is_tmux = $TMUX
+if is_tmux != ""
+  autocmd VimEnter * VtrAttachToPane
+endif
+
+" Only allow those keys from tmux_navigator
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+
+if filereadable(expand("./bin/rspec"))
+  let g:rspec_command = "VtrSendCommandToRunner! ./bin/rspec {spec}"
+else
+  let g:rspec_command = "VtrSendCommandToRunner! rspec {spec}"
+endif
+
+" create <%= foo %> erb tags using Ctrl-k in edit mode
+inoremap <silent> <C-K> <%=  %><Esc>2hi
+
+" create <%= foo %> erb tags using Ctrl-j in edit mode
+inoremap <silent> <C-J> <%  %><Esc>2hi
+
+nnoremap <Leader>- :wincmd _<cr>:wincmd \|<cr>
+nnoremap <Leader>= :wincmd =<cr>
+
+nnoremap <C-p> :Files<CR>
