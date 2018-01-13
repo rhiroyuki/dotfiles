@@ -1,3 +1,5 @@
+runtime macros/matchit.vim
+
 set nocompatible
 
 syntax enable
@@ -109,3 +111,4 @@ nnoremap <Leader>- :wincmd _<cr>:wincmd \|<cr>
 nnoremap <Leader>= :wincmd =<cr>
 
 nnoremap <C-p> :Files<CR>
+let g:fzf_layout = { 'down': '~25%' }

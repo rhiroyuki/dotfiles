@@ -3,7 +3,7 @@ zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache
 
-bindkey -v
+bindkey -e
 
 source ~/.zplug/init.zsh
 zplug "zsh-users/zsh-history-substring-search"

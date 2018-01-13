@@ -13,3 +13,5 @@ alias glo='git log --oneline'
 alias gd='git diff'
 alias gf='git fetch'
 alias gc='git commit'
+alias gbclear="git fetch --all --prune; git branch --merged origin/master | grep -v \"\\*\" | grep -v \"\\  master\" | xargs -n 1 git branch -d"
+alias gpristine='git reset --hard && git clean -df'

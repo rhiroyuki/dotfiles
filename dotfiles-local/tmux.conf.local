@@ -16,6 +16,9 @@ set -g status-right '#[fg=colour233,bg=colour241,bold] %d/%m #[fg=colour233,bg=c
 set -g status-right-length 50
 set -g status-left-length 20
 
+# Kill pane without confirmation
+bind-key x kill-pane
+
 # Enable mouse mode
 set -g mouse on
 
