@@ -7,8 +7,6 @@ Plug 'scrooloose/nerdtree'
 Plug 'jiangmiao/auto-pairs'
 Plug 'pbrisbin/vim-mkdir'
 Plug 'jremmen/vim-ripgrep'
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
 
 Plug 'mattn/emmet-vim'
 Plug 'gregsexton/matchtag'

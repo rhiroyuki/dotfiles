@@ -20,8 +20,11 @@ set scrolloff=10
 set sidescrolloff=15
 set sidescroll=1
 set showcmd
-set ignorecase
-set smartcase
+
+set ignorecase "Case insensitive pattern matching
+set smartcase "Overrides ignorecase if pattern contains upcase
+set incsearch "Highligh while searching
+set hlsearch "Highlight all matchers after entering search pattern
 
 set cursorline
 set cursorcolumn
@@ -38,6 +41,7 @@ set wildignore+=*.gem
 set wildignore+=log/**
 set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.cache
 
 " ================ Persistent Undo ==================
 " Keep undo history across sessions, by storing in file.
@@ -47,8 +51,6 @@ if has('persistent_undo')
   set undodir=~/.vim/backups
   set undofile
 endif
-
-let g:fzf_layout = { 'down': '~40%' }
 
 " Make nerdtree look nice
 let NERDTreeMinimalUI = 1
@@ -110,5 +112,10 @@ inoremap <silent> <C-J> <%  %><Esc>2hi
 nnoremap <Leader>- :wincmd _<cr>:wincmd \|<cr>
 nnoremap <Leader>= :wincmd =<cr>
 
-nnoremap <C-p> :Files<CR>
-let g:fzf_layout = { 'down': '~25%' }
+if executable('rg')
+  " https://elliotekj.com/2016/11/22/setup-ctrlp-to-use-ripgrep-in-vim/
+  set grepprg=rg\ --color=never
+  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+  let g:ctrlp_use_caching = 0
+endif
+let g:ctrlp_by_filename = 1
