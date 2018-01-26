@@ -1,5 +1,3 @@
-UnPlug 'ctrlpvim/ctrlp.vim'
-
 Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
 
@@ -7,6 +5,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'jiangmiao/auto-pairs'
 Plug 'pbrisbin/vim-mkdir'
 Plug 'jremmen/vim-ripgrep'
+"Plug 'machakann/vim-highlightedyank'
 
 Plug 'mattn/emmet-vim'
 Plug 'gregsexton/matchtag'
@@ -23,3 +22,5 @@ Plug 'christoomey/vim-tmux-runner'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 
 Plug 'thoughtbot/vim-rspec'
+Plug 'kana/vim-textobj-user'
+Plug 'nelstrom/vim-textobj-rubyblock'
