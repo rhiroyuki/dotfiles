@@ -140,3 +140,7 @@ if executable('rg')
 endif
 let g:ctrlp_regexp = 1
 let g:ctrlp_match_current_file = 1
+
+let g:ale_fixers = {
+  \ 'javascript': ['eslint']
+\ }
