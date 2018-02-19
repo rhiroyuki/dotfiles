@@ -20,3 +20,5 @@ alias gcm='git commit -m'
 alias gcf='git commit --fixup'
 alias gbclear="git fetch --all --prune; git branch --merged origin/master | grep -v \"\\*\" | grep -v \"\\  master\" | xargs -n 1 git branch -d"
 alias gpristine='git reset --hard && git clean -df'
+alias gre='git reset'
+alias vim=nvim

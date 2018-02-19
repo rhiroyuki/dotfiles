@@ -1,5 +1,7 @@
 let mapleader = ' '
 
+set termguicolors
+
 set autoindent
 set autoread
 set autowrite     " Automatically :write before running commands

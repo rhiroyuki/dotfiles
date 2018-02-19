@@ -1,3 +1,22 @@
+# Disable terminal freeze <C s>
+stty -ixon
+
+export EDITOR=vim
+
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=100000
+SAVEHIST=100000
+bindkey -v
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/ricardo/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+set -k
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion:*' use-cache on
@@ -6,17 +25,8 @@ zstyle ':completion:*' cache-path ~/.zsh/cache
 bindkey -v
 export KEYTIMEOUT=1
 
-# Use vim cli mode
 bindkey '^P' up-history
 bindkey '^N' down-history
-
-# backspace and ^h working even after
-# returning from command mode
-bindkey '^?' backward-delete-char
-bindkey '^h' backward-delete-char
-
-# ctrl-w removed word backwards
-bindkey '^w' backward-kill-word
 
 function zle-line-init zle-keymap-select {
     VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
@@ -53,11 +63,12 @@ autoload colors && colors
 [[ -z "$TMUX" ]] && exec tmux
 
 # fuzzy finder
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 
 if type xcape &> /dev/null; then
   # Remap CapsLock to Left-Control
-  setxkbmap -option ctrl:nocaps
+  #setxkbmap -option ctrl:nocaps
 
   # make short-pressed Ctrl behave like Escape:
   xcape -e 'Control_L=Escape'
@@ -78,3 +89,13 @@ export FZF_DEFAULT_COMMAND='rg --colors line:fg:yellow      \
    --glob "!{.git,node_modules,vendor}/*"'
 
 [[ -f ~/.zsh_env ]] && source ~/.zsh_env
+
+# Aliases
+[[ -f ~/.aliases ]] && source ~/.aliases
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
