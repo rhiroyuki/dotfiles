@@ -16,51 +16,79 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
-# Match uppercase letter and lowercase letter
+set -k
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+
+bindkey -v
+export KEYTIMEOUT=1
+
+bindkey '^P' up-history
+bindkey '^N' down-history
+
+function zle-line-init zle-keymap-select {
+    VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
+    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}$(git_custom_status) $EPS1"
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+
+source ~/.zplug/init.zsh
+zplug "zsh-users/zsh-history-substring-search"
+zplug "zsh-users/zsh-completions", depth:1
+zplug "junegunn/fzf-bin"
+zplug "plugins/fasd",   from:oh-my-zsh
+zplug "plugins/gitfast",   from:oh-my-zsh
+zplug "mafredri/zsh-async", from:github
+zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
+zplug load --verbose
+
+if ! zplug check; then
+    zplug install
+fi
+
+autoload -U promptinit; promptinit
+prompt pure
 
 # 'ls' pretty colors
 alias ls='ls --color=auto'
-eval `dircolors ~/dotfiles/dircolors.256dark`
+eval `dircolors ~/dotfiles/dircolors.gruvbox`
 autoload colors && colors
-setopt prompt_subst
 
-source ~/dotfiles/antigen.zsh
-antigen use oh-my-zsh
-antigen theme https://gist.github.com/400461ea289d9c8bdf5f81e4fa1157e5.git peepcode-bright
-antigen bundle git
-antigen bundle command-not-found
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen apply
-
-# Tmux start every shell
-# If not running interactively, do not do anything
 [[ $- != *i* ]] && return
 [[ -z "$TMUX" ]] && exec tmux
 
-xset b off
-
-# Change all files/folders to current user
-alias bemine='sudo chown -R $USER:$USER . -R'
-
-# Show dotfiles and dotfolders
-alias lh='ls -Ad .*'
-
-alias battery='acpi --battery'
-
-source ~/.zsh_env
+# fuzzy finder
+[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 
 if type xcape &> /dev/null; then
   # Remap CapsLock to Left-Control
-  setxkbmap -option ctrl:nocaps
+  #setxkbmap -option ctrl:nocaps
 
   # make short-pressed Ctrl behave like Escape:
   xcape -e 'Control_L=Escape'
 fi
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# --files: List files that would be searched but do not search
+# --hidden: Search hidden files and folders
+# --follow: Follow symlinks
+# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+export FZF_DEFAULT_COMMAND='rg --colors line:fg:yellow      \
+   --colors line:style:bold     \
+   --colors path:fg:green       \
+   --colors path:style:bold     \
+   --colors match:fg:black      \
+   --colors match:bg:yellow     \
+   --colors match:style:nobold  \
+   --files --no-ignore --hidden --follow \
+   --glob "!{.git,node_modules,vendor}/*"'
 
-# . $HOME/.asdf/asdf.sh
-# . $HOME/.asdf/completions/asdf.bash
-export HISTTIMEFORMAT="%d/%m/%y %T "
-alias history='fc -lf -100'
+[[ -f ~/.zsh_env ]] && source ~/.zsh_env
+
+# Aliases
+[[ -f ~/.aliases ]] && source ~/.aliases
