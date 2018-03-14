@@ -22,3 +22,4 @@ alias gbclear="git fetch --all --prune; git branch --merged origin/master | grep
 alias gpristine='git reset --hard && git clean -df'
 alias gre='git reset'
 alias vim=nvim
+alias be='bundle exec'
