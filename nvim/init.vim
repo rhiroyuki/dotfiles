@@ -3,9 +3,7 @@
 set nocompatible
 
 " Load matchit.vim, but only if the user hasn't installed a newer version.
-if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-  runtime! macros/matchit.vim
-endif
+runtime plugin/matchit.vim
 
 " Set neovim to use truecolors
 set termguicolors
@@ -146,6 +144,10 @@ Plug 'janko-m/vim-test'
 " ruby plugins
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-rails'
+Plug 'nelstrom/vim-textobj-rubyblock'
+
+" 
+Plug 'kana/vim-textobj-user'
 
 " emmet plugin
 Plug 'mattn/emmet-vim', { 'for': ['javascript.jsx', 'html', 'css', 'javascript', 'eruby'] }
@@ -158,6 +160,9 @@ Plug 'autozimu/LanguageClient-neovim', {
       \ 'branch': 'next',
       \ 'do': 'bash install.sh',
       \ }
+
+" vue plugins
+Plug 'posva/vim-vue'
 
 " vimscript highlighting
 Plug 'vim-jp/syntax-vim-ex'
