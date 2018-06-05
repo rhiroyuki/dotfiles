@@ -1,7 +1,3 @@
-" Use Vim settings, rather then Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
-set nocompatible
-
 " Load matchit.vim, but only if the user hasn't installed a newer version.
 runtime plugin/matchit.vim
 
@@ -54,19 +50,16 @@ endif
 " ================ Indentation ======================
 
 set autoindent
-set smartindent
 set smarttab
 set shiftwidth=2
 set softtabstop=2
-set tabstop=2
 set expandtab
 
 " Auto indent pasted text
 nnoremap p p=`]<C-o>
 nnoremap P P=`]<C-o>
 
-filetype plugin on
-filetype indent on
+filetype plugin indent on
 
 " Display tabs and trailing spaces visually
 set list listchars=tab:\ \ ,trail:·
@@ -113,10 +106,18 @@ set hlsearch        " Highlight searches by default
 set ignorecase      " Ignore case when searching...
 set smartcase       " ...unless we type a capital
 
+if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+
 call plug#begin()
 
 " theme/lightline plugins
 Plug 'morhetz/gruvbox'
+Plug 'ajmwagar/vim-deus' 
 Plug 'itchyny/lightline.vim'
 
 " vim improvements plugins
@@ -137,14 +138,24 @@ Plug 'AndrewRadev/splitjoin.vim'
 " autocomplete suggestions plugin
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
+" LanguageClient
+Plug 'autozimu/LanguageClient-neovim', {
+      \ 'branch': 'next',
+      \ 'do': 'bash install.sh',
+      \ }
+
 " linter
 Plug 'w0rp/ale'
 
 Plug 'janko-m/vim-test'
 
+" coffescript
+Plug 'kchmck/vim-coffee-script'
+
 " ruby plugins
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-rails'
+Plug 'vim-ruby/vim-ruby' 
 Plug 'nelstrom/vim-textobj-rubyblock'
 
 " 
@@ -156,11 +167,6 @@ Plug 'mattn/emmet-vim', { 'for': ['javascript.jsx', 'html', 'css', 'javascript',
 " js/jsx plugins
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
-
-Plug 'autozimu/LanguageClient-neovim', {
-      \ 'branch': 'next',
-      \ 'do': 'bash install.sh',
-      \ }
 
 " vue plugins
 Plug 'posva/vim-vue'
@@ -178,7 +184,12 @@ call plug#end()
 set background=dark
 let g:gruvbox_italic=1
 colorscheme gruvbox
-let g:lightline = { 'colorscheme': 'gruvbox' }
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'relativepath', 'modified' ] ]
+      \ },
+      \ 'colorscheme': 'gruvbox'
+      \ }
 set noshowmode
 
 " Required for operations modifying multiple buffers like rename.
@@ -187,6 +198,7 @@ set hidden
 let g:LanguageClient_serverCommands = {
       \ 'javascript': ['javascript-typescript-stdio'],
       \ 'javascript.jsx': ['javascript-typescript-stdio'],
+      \ 'ruby': ['tcp://localhost:7658']
       \ }
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
@@ -202,6 +214,8 @@ nnoremap <Leader>rj :TestVisit<CR>
 
 " vim-test send tests to vim tmux runner
 let test#strategy = 'vtr'
+
+nnoremap <Leader>h :CtrlPMRU<CR>
 
 " haya14busa/incsearch.vim
 " keep it as map
@@ -233,12 +247,16 @@ let g:user_emmet_settings = {
       \}
 
 autocmd FileType html,css,javascript.jsx,javascript EmmetInstall
+autocmd FileType ruby setlocal omnifunc=LanguageClient#complete
 
 " Make nerdtree look nice
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let g:NERDTreeWinSize = 30
 let NERDTreeQuitOnOpen=1
+
+" Disable netrw since we are using nerdtree
+let g:loaded_netrwPlugin = 1
 
 function! NERDTreeFindToggle()
   if g:NERDTree.IsOpen()
@@ -273,6 +291,8 @@ if executable('rg')
 endif
 
 let g:ctrlp_match_current_file = 1
+
+let g:rg_window_location = 'bot'
 
 " Navigating between VIM panes
 let g:tmux_navigator_no_mappings = 1
