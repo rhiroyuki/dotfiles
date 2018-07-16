@@ -134,6 +134,7 @@ Plug 'chrisbra/Colorizer'
 Plug 'haya14busa/incsearch.vim'
 Plug 'tpope/vim-commentary'
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'skwp/greplace.vim'
 
 " autocomplete suggestions plugin
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
