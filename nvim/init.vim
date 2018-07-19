@@ -136,6 +136,9 @@ Plug 'tpope/vim-commentary'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'skwp/greplace.vim'
 
+" tmux ressurect requirement
+Plug 'tpope/vim-obsession'
+
 " autocomplete suggestions plugin
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
