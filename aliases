@@ -23,3 +23,6 @@ alias gpristine='git reset --hard && git clean -df'
 alias gre='git reset'
 alias vim=nvim
 alias be='bundle exec'
+
+alias ssstart='sudo systemctl start'
+alias ssstop='sudo systemctl stop'
