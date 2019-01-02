@@ -121,20 +121,21 @@ Plug 'ajmwagar/vim-deus'
 Plug 'itchyny/lightline.vim'
 
 " vim improvements plugins
-Plug 'scrooloose/nerdtree'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'jiangmiao/auto-pairs'
-Plug 'pbrisbin/vim-mkdir'
-Plug 'jremmen/vim-ripgrep'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-fugitive'
-Plug 'jremmen/vim-ripgrep'
-Plug 'chrisbra/Colorizer'
-Plug 'haya14busa/incsearch.vim'
-Plug 'tpope/vim-commentary'
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'skwp/greplace.vim'
+Plug 'chrisbra/Colorizer'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'gcmt/wildfire.vim'
+Plug 'haya14busa/incsearch.vim'
+Plug 'jiangmiao/auto-pairs'
+Plug 'jremmen/vim-ripgrep'
+Plug 'pbrisbin/vim-mkdir'
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'yegappan/greplace'
 
 " tmux ressurect requirement
 Plug 'tpope/vim-obsession'
@@ -172,6 +173,10 @@ Plug 'mattn/emmet-vim', { 'for': ['javascript.jsx', 'html', 'css', 'javascript',
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 
+" solidity plugins
+Plug 'sohkai/syntastic-local-solhint'
+Plug 'tomlion/vim-solidity'
+
 " vue plugins
 Plug 'posva/vim-vue'
 
@@ -195,6 +200,9 @@ let g:lightline = {
       \ 'colorscheme': 'gruvbox'
       \ }
 set noshowmode
+
+" Compatibility editorconfig and timpope fugitive
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 " Required for operations modifying multiple buffers like rename.
 set hidden
