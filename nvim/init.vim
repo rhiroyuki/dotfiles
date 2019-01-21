@@ -117,6 +117,7 @@ call plug#begin()
 
 " theme/lightline plugins
 Plug 'morhetz/gruvbox'
+" Plug 'drewtempelmeyer/palenight.vim'
 Plug 'ajmwagar/vim-deus' 
 Plug 'itchyny/lightline.vim'
 
@@ -129,6 +130,7 @@ Plug 'gcmt/wildfire.vim'
 Plug 'haya14busa/incsearch.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'jremmen/vim-ripgrep'
+Plug 'kien/rainbow_parentheses.vim'
 Plug 'pbrisbin/vim-mkdir'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
@@ -228,6 +230,35 @@ nnoremap <Leader>rj :TestVisit<CR>
 let test#strategy = 'vtr'
 
 nnoremap <Leader>h :CtrlPMRU<CR>
+
+" rainbow_parentheses
+let g:rbpt_colorpairs = [
+      \ ['brown',       'RoyalBlue3'],
+      \ ['Darkblue',    'SeaGreen3'],
+      \ ['darkgray',    'DarkOrchid3'],
+      \ ['darkgreen',   'firebrick3'],
+      \ ['darkcyan',    'RoyalBlue3'],
+      \ ['darkred',     'SeaGreen3'],
+      \ ['darkmagenta', 'DarkOrchid3'],
+      \ ['brown',       'firebrick3'],
+      \ ['gray',        'RoyalBlue3'],
+      \ ['black',       'SeaGreen3'],
+      \ ['darkmagenta', 'DarkOrchid3'],
+      \ ['Darkblue',    'firebrick3'],
+      \ ['darkgreen',   'RoyalBlue3'],
+      \ ['darkcyan',    'SeaGreen3'],
+      \ ['darkred',     'DarkOrchid3'],
+      \ ['red',         'firebrick3'],
+      \ ]
+
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+
+" rainbow_parentheses always on
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
 
 " haya14busa/incsearch.vim
 " keep it as map
