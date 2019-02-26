@@ -27,7 +27,7 @@ set hidden
 
 "turn on syntax highlighting
 if !exists("g:syntax_on")
-    syntax enable
+  syntax enable
 endif
 
 let mapleader=" "
@@ -81,6 +81,7 @@ set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
 set wildignore+=*.config/nvim/backups*
 set wildignore+=*sass-cache*
 set wildignore+=*DS_Store*
+set wildignore+=node_modules/**
 set wildignore+=vendor/rails/**
 set wildignore+=vendor/cache/**
 set wildignore+=*.gem
@@ -133,10 +134,12 @@ Plug 'jremmen/vim-ripgrep'
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'pbrisbin/vim-mkdir'
 Plug 'scrooloose/nerdtree'
+Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
 Plug 'yegappan/greplace'
 
 " tmux ressurect requirement
@@ -156,9 +159,6 @@ Plug 'w0rp/ale'
 
 Plug 'janko-m/vim-test'
 
-" coffescript
-Plug 'kchmck/vim-coffee-script'
-
 " ruby plugins
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-rails'
@@ -170,20 +170,6 @@ Plug 'kana/vim-textobj-user'
 
 " emmet plugin
 Plug 'mattn/emmet-vim', { 'for': ['javascript.jsx', 'html', 'css', 'javascript', 'eruby'] }
-
-" js/jsx plugins
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-
-" solidity plugins
-Plug 'sohkai/syntastic-local-solhint'
-Plug 'tomlion/vim-solidity'
-
-" vue plugins
-Plug 'posva/vim-vue'
-
-" vimscript highlighting
-Plug 'vim-jp/syntax-vim-ex'
 
 " tmux plugins
 Plug 'christoomey/vim-tmux-navigator'
