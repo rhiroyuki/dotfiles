@@ -7,6 +7,27 @@ export EDITOR=vim
 HISTFILE=~/.histfile
 HISTSIZE=100000
 SAVEHIST=100000
+
+setopt interactive_comments # Allow comments even in interactive shells (especially for Muness)
+
+# ===== Changing Directories
+setopt auto_cd # If you type foo, and it isn't a command, and it is a directory in your cdpath, go there
+
+# ===== History
+setopt append_history # Allow multiple terminal sessions to all append to one zsh command history
+setopt extended_history # save timestamp of command and duration
+setopt inc_append_history # Add comamnds as they are typed, don't wait until shell exit
+setopt hist_expire_dups_first # when trimming history, lose oldest duplicates first
+setopt hist_ignore_dups # Do not write events to history that are duplicates of previous events
+setopt hist_ignore_space # remove command line from history list when first character on the line is a space
+setopt hist_find_no_dups # When searching history don't display results already cycled through twice
+setopt hist_reduce_blanks # Remove extra blanks from each command line being added to history
+setopt hist_verify # don't execute, just expand history
+setopt share_history # imports new commands and appends typed commands to history
+
+# Enable ^, see https://github.com/robbyrussell/oh-my-zsh/issues/449#issuecomment-6973326
+setopt NO_NOMATCH
+
 bindkey -v
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
@@ -36,6 +57,12 @@ bindkey '^N' down-history
 # 
 # zle -N zle-line-init
 # zle -N zle-keymap-select
+
+# check for tmux plugin manager
+if [[ ! -d ~/.tmux/plugins/tpm ]];
+then
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
 
 if [[ ! -d ~/.zplug ]];
 then
@@ -105,6 +132,7 @@ export FZF_DEFAULT_COMMAND='rg --colors line:fg:yellow      \
    --colors match:style:nobold  \
    --files --no-ignore --hidden --follow \
    --glob "!{.git,node_modules,vendor}/*"'
+
 
 [[ -f ~/.zsh_env ]] && source ~/.zsh_env
 
