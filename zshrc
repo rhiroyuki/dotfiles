@@ -37,7 +37,18 @@ function zle-line-init zle-keymap-select {
 zle -N zle-line-init
 zle -N zle-keymap-select
 
-source ~/.zplug/init.zsh
+if [[ ! -d ~/.zplug ]];
+then
+    git clone https://github.com/zplug/zplug ~/.zplug
+    source ~/.zplug/init.zsh && zplug update --self
+else
+    source ~/.zplug/init.zsh
+fi
+
+if ! zplug check; then
+    zplug install
+fi
+
 zplug "zsh-users/zsh-history-substring-search"
 zplug "zsh-users/zsh-completions", depth:1
 zplug "junegunn/fzf-bin"
@@ -45,11 +56,18 @@ zplug "plugins/fasd",   from:oh-my-zsh
 zplug "plugins/gitfast",   from:oh-my-zsh
 zplug "mafredri/zsh-async", from:github
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
-zplug load --verbose
 
-if ! zplug check; then
-    zplug install
+# Install packages that have not been installed yet
+if ! zplug check --verbose; then
+    printf "Install missing plugins? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    else
+        echo
+    fi
 fi
+
+zplug load --verbose
 
 autoload -U promptinit; promptinit
 prompt pure
