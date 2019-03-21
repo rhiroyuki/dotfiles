@@ -162,6 +162,7 @@ Plug 'janko-m/vim-test'
 " ruby plugins
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-rails'
+Plug 'tpope/vim-bundler'
 Plug 'vim-ruby/vim-ruby' 
 Plug 'nelstrom/vim-textobj-rubyblock'
 
@@ -217,36 +218,7 @@ let test#strategy = 'vtr'
 
 nnoremap <Leader>h :CtrlPMRU<CR>
 
-" rainbow parenthesis
 let g:rainbow_active = 1
-" " rainbow_parentheses
-" let g:rbpt_colorpairs = [
-"       \ ['brown',       'RoyalBlue3'],
-"       \ ['Darkblue',    'SeaGreen3'],
-"       \ ['darkgray',    'DarkOrchid3'],
-"       \ ['darkgreen',   'firebrick3'],
-"       \ ['darkcyan',    'RoyalBlue3'],
-"       \ ['darkred',     'SeaGreen3'],
-"       \ ['darkmagenta', 'DarkOrchid3'],
-"       \ ['brown',       'firebrick3'],
-"       \ ['gray',        'RoyalBlue3'],
-"       \ ['black',       'SeaGreen3'],
-"       \ ['darkmagenta', 'DarkOrchid3'],
-"       \ ['Darkblue',    'firebrick3'],
-"       \ ['darkgreen',   'RoyalBlue3'],
-"       \ ['darkcyan',    'SeaGreen3'],
-"       \ ['darkred',     'DarkOrchid3'],
-"       \ ['red',         'firebrick3'],
-"       \ ]
-
-" let g:rbpt_max = 16
-" let g:rbpt_loadcmd_toggle = 0
-
-" " rainbow_parentheses always on
-" au VimEnter * RainbowParenthesesToggle
-" au Syntax * RainbowParenthesesLoadRound
-" au Syntax * RainbowParenthesesLoadSquare
-" au Syntax * RainbowParenthesesLoadBraces
 
 " haya14busa/incsearch.vim
 " keep it as map
@@ -310,6 +282,7 @@ augroup END
 let g:ale_linters = {'jsx': ['stylelint', 'eslint']}
 let g:ale_linter_aliases = {'jsx': 'css'}
 let g:ale_fixers = { 'javascript': ['eslint'] }
+let g:ale_completion_enabled = 0
 
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
@@ -342,6 +315,10 @@ nnoremap tp :tabprev<CR>
 nnoremap tl :tablast<CR>
 nnoremap tt :tabnew<CR>
 nnoremap tx :tabclose<CR>
+
+" Manage Vim config more easily
+nnoremap <leader>ve :vsplit $MYVIMRC<cr>
+nnoremap <leader>vr :source $MYVIMRC<cr>
 
 " Easy splits
 nnoremap vv <C-w>v
