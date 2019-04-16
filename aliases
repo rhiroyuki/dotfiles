@@ -4,6 +4,7 @@ alias gstp='git stash pop'
 alias gsta='git stash apply'
 alias ga='git add'
 alias gaa='git add -A'
+alias gam='git ls-files --modified | xargs git add' # git add modified files only
 alias gco='git checkout'
 alias gcom='git checkout master'
 alias gr='git rebase'
@@ -28,3 +29,6 @@ alias be='bundle exec'
 
 alias ssstart='sudo systemctl start'
 alias ssstop='sudo systemctl stop'
+
+# Ruby/Rails
+alias migrate="bundle exec rake db:migrate db:rollback && bundle exec rake db:migrate db:test:prepare"
