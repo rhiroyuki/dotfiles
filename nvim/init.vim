@@ -16,6 +16,7 @@ set visualbell                  "No sounds
 set autoread                    "Reload files changed outside vim
 set mouse=a                     "Enable mouse interaction with vim
 set colorcolumn=81		"Enable colored column
+set hidden                      "Required for operations modifying multiple buffers like rename.
 
 " Open new split panes to right and bottom, which feels more natural
 set splitbelow
@@ -108,212 +109,14 @@ set hlsearch        " Highlight searches by default
 set ignorecase      " Ignore case when searching...
 set smartcase       " ...unless we type a capital
 
-if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
-  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
+source ~/.config/nvim/plugins.vim
 
-
-call plug#begin()
-
-" theme/lightline plugins
-Plug 'morhetz/gruvbox'
-" Plug 'drewtempelmeyer/palenight.vim'
-Plug 'ajmwagar/vim-deus' 
-Plug 'itchyny/lightline.vim'
-
-" vim improvements plugins
-Plug 'AndrewRadev/splitjoin.vim'
-Plug 'chrisbra/Colorizer'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'gcmt/wildfire.vim'
-Plug 'haya14busa/incsearch.vim'
-Plug 'jiangmiao/auto-pairs'
-Plug 'jremmen/vim-ripgrep'
-Plug 'luochen1990/rainbow'
-Plug 'pbrisbin/vim-mkdir'
-Plug 'scrooloose/nerdtree'
-Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
-Plug 'yegappan/greplace'
-
-" tmux ressurect requirement
-Plug 'tpope/vim-obsession'
-
-" autocomplete suggestions plugin
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-
-" LanguageClient
-Plug 'autozimu/LanguageClient-neovim', {
-      \ 'branch': 'next',
-      \ 'do': 'bash install.sh',
-      \ }
-
-" linter
-Plug 'w0rp/ale'
-
-Plug 'janko-m/vim-test'
-
-" ruby plugins
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-rails'
-Plug 'tpope/vim-bundler'
-Plug 'vim-ruby/vim-ruby' 
-Plug 'nelstrom/vim-textobj-rubyblock'
-
-" 
-Plug 'kana/vim-textobj-user'
-
-" emmet plugin
-Plug 'mattn/emmet-vim', { 'for': ['javascript.jsx', 'html', 'css', 'javascript', 'eruby'] }
-
-" tmux plugins
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'christoomey/vim-tmux-runner'
-Plug 'tmux-plugins/vim-tmux-focus-events'
-
-call plug#end()
-
-set background=dark
-let g:gruvbox_italic=1
-colorscheme gruvbox
-let g:lightline = {
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'relativepath', 'modified' ] ]
-      \ },
-      \ 'colorscheme': 'gruvbox'
-      \ }
-set noshowmode
-
-" Colorizer
-let g:colorizer_auto_color = 1
-
-" Compatibility editorconfig and timpope fugitive
-let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-
-" Required for operations modifying multiple buffers like rename.
-set hidden
-
-let g:LanguageClient_serverCommands = {
-      \ 'javascript': ['javascript-typescript-stdio'],
-      \ 'javascript.jsx': ['javascript-typescript-stdio'],
-      \ 'ruby': ['tcp://localhost:7658']
-      \ }
-
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-
-" vim-test mappings
-nnoremap <Leader>rs :TestFile<CR>
-nnoremap <Leader>rn :TestNearest<CR>
-nnoremap <Leader>rl :TestLast<CR>
-nnoremap <Leader>ra :TestSuite<CR>
-nnoremap <Leader>rj :TestVisit<CR>
-
-" vim-test send tests to vim tmux runner
-let test#strategy = 'vtr'
-
-nnoremap <Leader>h :CtrlPMRU<CR>
-
-let g:rainbow_active = 1
-
-" haya14busa/incsearch.vim
-" keep it as map
-let g:incsearch#auto_nohlsearch = 1
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-
-map n  <Plug>(incsearch-nohl-n)
-map N  <Plug>(incsearch-nohl-N)
-map *  <Plug>(incsearch-nohl-*)
-map #  <Plug>(incsearch-nohl-#)
-map g* <Plug>(incsearch-nohl-g*)
-map g# <Plug>(incsearch-nohl-g#)
-
-
-let is_tmux = $TMUX
-if is_tmux != ""
-  autocmd VimEnter * VtrAttachToPane
-endif
-
-" Emmet configurations
-" extends jsx and let it create jsx tags
-" example: <div className="popup"></div>
-let g:user_emmet_settings = {
-      \  'javascript.jsx' : {
-      \      'extends' : 'jsx',
-      \  },
-      \}
-
-autocmd FileType html,css,javascript.jsx,javascript EmmetInstall
-autocmd FileType ruby setlocal omnifunc=LanguageClient#complete
-
-" Make nerdtree look nice
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
-let g:NERDTreeWinSize = 30
-let NERDTreeQuitOnOpen=1
-
-" Disable netrw since we are using nerdtree
-let g:loaded_netrwPlugin = 1
-
-function! NERDTreeFindToggle()
-  if g:NERDTree.IsOpen()
-    NERDTreeFind
-    q
-  else
-    NERDTreeFind
-  endif
-endfunction
-
-" Open the project tree and expose current file in the nerdtree with Ctrl-\
-command! LocalNERDTreeToggle call NERDTreeFindToggle()
-nnoremap <silent> <C-\> :LocalNERDTreeToggle<cr>
+source ~/.config/nvim/settings.vim
 
 augroup FiletypeGroup
   autocmd!
   au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
 augroup END
-
-let g:ale_linters = {
-      \'jsx': ['stylelint', 'eslint'],
-      \'ruby': ['standard', 'reek']
-      \}
-let g:ale_linter_aliases = {'jsx': 'css'}
-let g:ale_fixers = { 'javascript': ['eslint'] }
-let g:ale_completion_enabled = 0
-
-" Use deoplete.
-let g:deoplete#enable_at_startup = 1
-
-if executable('rg')
-  " https://elliotekj.com/2016/11/22/setup-ctrlp-to-use-ripgrep-in-vim/
-  set grepprg=rg\ --color=never
-  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-  let g:ctrlp_use_caching = 0
-endif
-
-let g:ctrlp_match_current_file = 1
-
-let g:rg_window_location = 'bot'
-
-" Navigating between VIM panes
-let g:tmux_navigator_no_mappings = 1
-nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
-nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
-nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
-nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
-
-" don't let tmux zoom out if you try to go out of bounds
-let g:tmux_navigator_disable_when_zoomed = 1
 
 " Tab Shortcuts
 nnoremap tf :tabfirst<CR>
