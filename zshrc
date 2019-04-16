@@ -113,7 +113,7 @@ autoload colors && colors
 
 if type xcape &> /dev/null; then
   # Remap CapsLock to Left-Control
-  #setxkbmap -option ctrl:nocaps
+  setxkbmap -option ctrl:nocaps
 
   # make short-pressed Ctrl behave like Escape:
   xcape -e 'Control_L=Escape'
