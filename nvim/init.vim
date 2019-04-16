@@ -1,7 +1,7 @@
 " Load matchit.vim, but only if the user hasn't installed a newer version.
 runtime plugin/matchit.vim
 
-" Set neovim to use truecolors
+"Set neovim to use truecolors
 set termguicolors
 
 " ================ General Config ====================
@@ -15,6 +15,7 @@ set gcr=a:blinkon0              "Disable cursor blink
 set visualbell                  "No sounds
 set autoread                    "Reload files changed outside vim
 set mouse=a                     "Enable mouse interaction with vim
+set colorcolumn=81		"Enable colored column
 
 " Open new split panes to right and bottom, which feels more natural
 set splitbelow
@@ -190,6 +191,9 @@ let g:lightline = {
       \ }
 set noshowmode
 
+" Colorizer
+let g:colorizer_auto_color = 1
+
 " Compatibility editorconfig and timpope fugitive
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
@@ -279,7 +283,10 @@ augroup FiletypeGroup
   au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
 augroup END
 
-let g:ale_linters = {'jsx': ['stylelint', 'eslint']}
+let g:ale_linters = {
+      \'jsx': ['stylelint', 'eslint'],
+      \'ruby': ['standard', 'reek']
+      \}
 let g:ale_linter_aliases = {'jsx': 'css'}
 let g:ale_fixers = { 'javascript': ['eslint'] }
 let g:ale_completion_enabled = 0
