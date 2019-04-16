@@ -138,6 +138,3 @@ nnoremap <Leader>- :wincmd _<cr>:wincmd \|<cr>
 nnoremap <Leader>= :wincmd =<cr>
 nnoremap <leader><leader> <C-^>
 nnoremap 0 ^
-
-inoremap <silent> <C-K> <%=  %><Esc>2hi
-inoremap <silent> <C-J> <%  %><Esc>2hi
