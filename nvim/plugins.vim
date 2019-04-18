@@ -37,13 +37,15 @@ Plug 'yegappan/greplace'
 Plug 'tpope/vim-obsession'
 
 " autocomplete suggestions plugin
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " LanguageClient
-Plug 'autozimu/LanguageClient-neovim', {
-      \ 'branch': 'next',
-      \ 'do': 'bash install.sh',
-      \ }
+" Plug 'autozimu/LanguageClient-neovim', {
+"       \ 'branch': 'next',
+"       \ 'do': 'bash install.sh',
+"       \ }
+
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 
 " linter
 Plug 'w0rp/ale'
