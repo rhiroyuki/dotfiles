@@ -1,5 +1,6 @@
-pry
 gem-ctags
-rubycritic
-rubocop
 parity
+pry
+rubocop
+rubycritic
+solargraph
