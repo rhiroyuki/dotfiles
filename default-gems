@@ -1,6 +1,7 @@
 gem-ctags
 parity
 pry
+flog
 rubocop
 rubycritic
 solargraph
