@@ -113,6 +113,15 @@ source ~/.config/nvim/plugins.vim
 
 source ~/.config/nvim/settings.vim
 
+augroup git_commit
+  autocmd!
+
+  autocmd BufReadPost *
+        \  if &filetype == 'gitcommit'
+        \|     execute 'normal $'
+        \| endif
+augroup end
+
 augroup FiletypeGroup
   autocmd!
   au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
