@@ -8,4 +8,4 @@ Default settings for personal use.
 
 ## Installation
 
-`$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/rhiroyuki/dotfiles/master/install.sh)"`
+`$ bash -c "$(curl -fsSL https://raw.githubusercontent.com/rhiroyuki/dotfiles/master/install.sh)"`

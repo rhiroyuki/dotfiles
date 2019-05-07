@@ -1,25 +1,24 @@
 #! /usr/bin/env bash
 
-set -euo pipefail
+set -eu pipefail
 
 install_nvim () {
-  source_full_path="$HOME/dotfiles/nvim/init.vim"
-  target_full_path="$HOME/.config/nvim/init.vim"
+  source_full_path="$HOME/dotfiles/nvim/*"
+  target_full_path="$HOME/.config/nvim/"
 
-  # create directory if doesnt exists
-  mkdir -p "$HOME/.config/nvim"
-
-  # checking if file exists to move it if necessary
-  if [ -e "$target_full_path" ]; then
-    mv "$target_full_path" "${target_full_path}_backup_$(date +%s%3N)"
+  # checking if folder already exists
+  if [ -e "$HOME/.config/nvim" ]; then
+    mv "$HOME/.config/nvim" "$HOME/.config/nvim_backup_$(date +%s%3N)"
   fi
 
-  # symbolic linking file
-  ln -s "$source_full_path" "$target_full_path"
+  mkdir -p "$HOME/.config/nvim"
+
+  # symbolic linking all files
+  ln -s "$HOME/dotfiles/nvim/"* "$HOME/.config/nvim/"
 }
 
 install_dotfiles () {
-  dotfiles=( asdfrc default-gems gemrc tmux.conf zshrc aliases gitignore solargraph.yml )
+  dotfiles=( asdfrc default-gems gemrc tmux.conf zshrc aliases gitignore solargraph.yml reek.yml )
 
   for dotfile in "${dotfiles[@]}";
   do
@@ -41,13 +40,10 @@ ln_file_to_home_directory () {
 }
 
 main () {
-  original_location=$PWD
-
   git clone https://github.com/rhiroyuki/dotfiles.git "$HOME/dotfiles"
   install_dotfiles
   install_nvim
 
-  cd "$original_location"
   echo "Finished installation"
 }
 
