@@ -147,3 +147,9 @@ nnoremap <Leader>- :wincmd _<cr>:wincmd \|<cr>
 nnoremap <Leader>= :wincmd =<cr>
 nnoremap <leader><leader> <C-^>
 nnoremap 0 ^
+
+" Setting up Vim Hyperbolic Time Chamber 💪
+nnoremap j j:sleep 500m<cr>
+nnoremap k k:sleep 500m<cr>
+nnoremap l l:sleep 500m<cr>
+nnoremap h h:sleep 500m<cr>
