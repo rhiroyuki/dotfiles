@@ -149,7 +149,21 @@ nnoremap <leader><leader> <C-^>
 nnoremap 0 ^
 
 " Setting up Vim Hyperbolic Time Chamber 💪
-nnoremap j j:sleep 500m<cr>
-nnoremap k k:sleep 500m<cr>
-nnoremap l l:sleep 500m<cr>
-nnoremap h h:sleep 500m<cr>
+
+function! DelayKeyPressRepetition(key)
+  execute "nnoremap <silent> " . a:key . " :silent! call redraw<cr>"
+  call jobstart(['bash', '-c', 'sleep 0.5'], extend({'key': a:key}, s:keypress_callbacks))
+endfunction
+
+function! s:RemapKey(job_id, data, event) dict
+  execute "nnoremap <silent> " . self.key . " " . self.key . ":call DelayKeyPressRepetition(\"" . self.key . "\")<cr>"
+endfunction
+
+let s:keypress_callbacks = {
+      \ 'on_exit': function('s:RemapKey')
+      \ }
+
+nnoremap <silent> j j:call DelayKeyPressRepetition("j")<cr>
+nnoremap <silent> k k:call DelayKeyPressRepetition("k")<cr>
+nnoremap <silent> l l:call DelayKeyPressRepetition("l")<cr>
+nnoremap <silent> h h:call DelayKeyPressRepetition("h")<cr>
