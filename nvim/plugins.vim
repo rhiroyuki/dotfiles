@@ -31,7 +31,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'yegappan/greplace'
+Plug 'stefandtw/quickfix-reflector.vim'
 
 " tmux ressurect requirement
 Plug 'tpope/vim-obsession'
