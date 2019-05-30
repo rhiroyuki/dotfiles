@@ -7,6 +7,8 @@ set termguicolors
 " ================ General Config ====================
 
 set number                      "Line numbers are good
+set numberwidth=4
+set relativenumber              "Make line number relative to the current row
 set backspace=indent,eol,start  "Allow backspace in insert mode
 set history=1000                "Store lots of :cmdline history
 set showcmd                     "Show incomplete cmds down the bottom
