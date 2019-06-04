@@ -94,10 +94,10 @@ if ! zplug check --verbose; then
     fi
 fi
 
-zplug load --verbose
+zplug load
 
 autoload -U promptinit; promptinit
-prompt pure
+# prompt pure
 
 # 'ls' pretty colors
 alias ls='ls --color=auto'
@@ -105,7 +105,7 @@ eval `dircolors ~/dotfiles/dircolors.gruvbox`
 autoload colors && colors
 
 [[ $- != *i* ]] && return
-[[ -z "$TMUX" ]] && exec tmux
+[[ -z "$TMUX" ]] && tmux new-session -A -s main
 
 # fuzzy finder
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
