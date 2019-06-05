@@ -30,13 +30,6 @@ setopt NO_NOMATCH
 
 bindkey -v
 # End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/ricardo/.zshrc'
-
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
-
 set -k
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' accept-exact '*(N)'
@@ -64,40 +57,18 @@ then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-if [[ ! -d ~/.zplug ]];
+if [[ ! -d ~/.zplugin ]];
 then
-    git clone https://github.com/zplug/zplug ~/.zplug
-    source ~/.zplug/init.zsh && zplug update --self
-else
-    source ~/.zplug/init.zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
 fi
 
-if ! zplug check; then
-    zplug install
-fi
-
-zplug "zsh-users/zsh-history-substring-search"
-zplug "zsh-users/zsh-completions", depth:1
-zplug "junegunn/fzf-bin"
-zplug "plugins/fasd",   from:oh-my-zsh
-zplug "plugins/gitfast",   from:oh-my-zsh
-zplug "mafredri/zsh-async", from:github
-zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
-
-# Install packages that have not been installed yet
-if ! zplug check --verbose; then
-    printf "Install missing plugins? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    else
-        echo
-    fi
-fi
-
-zplug load
+zplugin ice wait'!0' lucid; zplugin load zsh-users/zsh-completions
+zplugin ice from"gh-r" as"program"; zplugin load junegunn/fzf-bin
+zplugin ice wait"!0" lucid; zplugin snippet OMZ::plugins/fasd/fasd.plugin.zsh
+zplugin ice svn wait"!0" lucid; zplugin snippet OMZ::plugins/gitfast
+zplugin ice pick"async.zsh" src"pure.zsh"; zplugin load sindresorhus/pure
 
 autoload -U promptinit; promptinit
-# prompt pure
 
 # 'ls' pretty colors
 alias ls='ls --color=auto'
@@ -138,3 +109,12 @@ export FZF_DEFAULT_COMMAND='rg --colors line:fg:yellow      \
 
 # Aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
+
+# # The following lines were added by compinstall
+zstyle :compinstall filename '/home/ricardo/.zshrc'
+
+autoload -Uz compinit
+compinit
+# # End of lines added by compinstall
+
+zplugin cdreplay -q
