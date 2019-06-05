@@ -82,12 +82,16 @@ autoload colors && colors
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 
+# should be place in .xinitrc
 if type xcape &> /dev/null; then
   # Remap CapsLock to Left-Control
   setxkbmap -option ctrl:nocaps
 
   # make short-pressed Ctrl behave like Escape:
-  xcape -e 'Control_L=Escape'
+  if [ "$(ps aux | grep 'xcape -e Control_L Escape' | wc -l)" -eq "1" ];
+  then
+    xcape -e 'Control_L=Escape'
+  fi
 fi
 
 # --files: List files that would be searched but do not search
