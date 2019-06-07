@@ -32,6 +32,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'stefandtw/quickfix-reflector.vim'
+Plug 'godlygeek/tabular'
 
 " tmux ressurect requirement
 Plug 'tpope/vim-obsession'
