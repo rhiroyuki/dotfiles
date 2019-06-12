@@ -169,3 +169,5 @@ nnoremap <silent> j j:call DelayKeyPressRepetition("j")<cr>
 nnoremap <silent> k k:call DelayKeyPressRepetition("k")<cr>
 nnoremap <silent> l l:call DelayKeyPressRepetition("l")<cr>
 nnoremap <silent> h h:call DelayKeyPressRepetition("h")<cr>
+
+inoremap <S-Tab> <C-d>

@@ -24,7 +24,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'jremmen/vim-ripgrep'
 Plug 'luochen1990/rainbow'
 Plug 'pbrisbin/vim-mkdir'
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'commit': '67fa9b3116948466234978aa6287649f98e666bd' }
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
@@ -33,6 +33,10 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'godlygeek/tabular'
+
+" snippets
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 " tmux ressurect requirement
 Plug 'tpope/vim-obsession'
