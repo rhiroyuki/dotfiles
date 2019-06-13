@@ -12,6 +12,7 @@ if has_key(g:plugs, 'nerdtree')
     if g:NERDTree.IsOpen()
       NERDTreeFind
       q
+      wincmd p
     else
       try
         NERDTreeFind
