@@ -33,6 +33,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'godlygeek/tabular'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 " snippets
 Plug 'SirVer/ultisnips'

@@ -152,22 +152,41 @@ nnoremap 0 ^
 
 " Setting up Vim Hyperbolic Time Chamber 💪
 
-function! DelayKeyPressRepetition(key)
-  execute "nnoremap <silent> " . a:key . " :silent! call redraw<cr>"
-  call jobstart(['bash', '-c', 'sleep 0.5'], extend({'key': a:key}, s:keypress_callbacks))
-endfunction
+" function! DelayKeyPressRepetition(key)
+"   execute "nnoremap <silent> " . a:key . " :silent! call redraw<cr>"
+"   call jobstart(['bash', '-c', 'sleep 0.5'], extend({'key': a:key}, s:keypress_callbacks))
+" endfunction
 
-function! s:RemapKey(job_id, data, event) dict
-  execute "nnoremap <silent> " . self.key . " " . self.key . ":call DelayKeyPressRepetition(\"" . self.key . "\")<cr>"
-endfunction
+" function! s:RemapKey(job_id, data, event) dict
+"   execute "nnoremap <silent> " . self.key . " " . self.key . ":call DelayKeyPressRepetition(\"" . self.key . "\")<cr>"
+" endfunction
 
-let s:keypress_callbacks = {
-      \ 'on_exit': function('s:RemapKey')
-      \ }
+" let s:keypress_callbacks = {
+"       \ 'on_exit': function('s:RemapKey')
+"       \ }
 
-nnoremap <silent> j j:call DelayKeyPressRepetition("j")<cr>
-nnoremap <silent> k k:call DelayKeyPressRepetition("k")<cr>
-nnoremap <silent> l l:call DelayKeyPressRepetition("l")<cr>
-nnoremap <silent> h h:call DelayKeyPressRepetition("h")<cr>
+" nnoremap <silent> j j:call DelayKeyPressRepetition("j")<cr>
+" nnoremap <silent> k k:call DelayKeyPressRepetition("k")<cr>
+" nnoremap <silent> l l:call DelayKeyPressRepetition("l")<cr>
+" nnoremap <silent> h h:call DelayKeyPressRepetition("h")<cr>
+
+com! FormatJSON :%!jq '.'
+com! MinifyJSON :%!jq -c '.'
+
+" command! -bang -nargs=* Rg
+"       \ call fzf#vim#grep(
+"       \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+"       \   <bang>0 ? fzf#vim#with_preview('up:60%')
+"       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+"       \   <bang>0)
+
+command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
+      \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+      \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
+      \   <bang>0)
+
+nnoremap <C-f> :Rg!<cr>
 
 inoremap <S-Tab> <C-d>
