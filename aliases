@@ -1,3 +1,4 @@
+alias gclone='git clone'
 alias gs='git status'
 alias gst='git stash'
 alias gstp='git stash pop'
@@ -29,9 +30,14 @@ alias current_branch='git rev-parse --abbrev-ref HEAD'
 
 alias vim=nvim
 alias be='bundle exec'
+alias berrspec='bundle exec rubocop && bundle exec rspec'
+alias rebocop='git diff-tree -r --no-commit-id --name-only HEAD | xargs ls -1 2>/dev/null | grep '\.rb$' | xargs bundle exec rubocop'
 
 alias ssstart='sudo systemctl start'
 alias ssstop='sudo systemctl stop'
+
+alias doc=docker
+alias docom=docker-compose
 
 # Ruby/Rails
 alias migrate="bundle exec rake db:migrate db:rollback && bundle exec rake db:migrate db:test:prepare"
