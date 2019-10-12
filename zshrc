@@ -62,6 +62,15 @@ then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
 fi
 
+if [[ ! -d ~/.asdf ]]
+then
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.4
+fi
+
+. $HOME/.asdf/asdf.sh
+
+source ~/.zplugin/bin/zplugin.zsh
+
 zplugin ice wait'!0' lucid; zplugin load zsh-users/zsh-completions
 zplugin ice from"gh-r" as"program"; zplugin load junegunn/fzf-bin
 zplugin ice wait"!0" lucid; zplugin snippet OMZ::plugins/fasd/fasd.plugin.zsh

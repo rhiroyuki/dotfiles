@@ -55,7 +55,7 @@ Plug 'tpope/vim-obsession'
 Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 
 " linter
-Plug 'w0rp/ale'
+" Plug 'w0rp/ale'
 
 " ruby plugins
 Plug 'tpope/vim-endwise'
