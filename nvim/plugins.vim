@@ -43,7 +43,7 @@ Plug 'honza/vim-snippets'
 Plug 'tpope/vim-obsession'
 
 " autocomplete suggestions plugin
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " LanguageClient
 " Plug 'autozimu/LanguageClient-neovim', {
@@ -59,6 +59,7 @@ Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 " ruby plugins
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-rails'
+Plug 'kremso/vim-spectator' " allow usage of :A to create the spec file
 Plug 'tpope/vim-bundler'
 Plug 'vim-ruby/vim-ruby' 
 Plug 'nelstrom/vim-textobj-rubyblock'

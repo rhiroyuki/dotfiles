@@ -24,6 +24,8 @@ set hidden                      "Required for operations modifying multiple buff
 set splitbelow
 set splitright
 
+set diffopt+=vertical
+
 " This makes vim act like all other editors, buffers can
 " exist in the background without being in a window.
 " http://items.sjbach.com/319/configuring-vim-right
@@ -60,8 +62,8 @@ set softtabstop=2
 set expandtab
 
 " Auto indent pasted text
-nnoremap p p=`]<C-o>
-nnoremap P P=`]<C-o>
+" nnoremap p p=`]<C-o>
+" nnoremap P P=`]<C-o>
 
 filetype plugin indent on
 
@@ -190,3 +192,8 @@ command! -bang -nargs=* Rg
 nnoremap <C-f> :Rg!<cr>
 
 inoremap <S-Tab> <C-d>
+
+" Activate preview when using search and replace aka: %s
+if has('nvim')
+  set inccommand=split
+endif
