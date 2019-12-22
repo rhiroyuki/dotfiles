@@ -23,7 +23,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'jremmen/vim-ripgrep'
 Plug 'luochen1990/rainbow'
 Plug 'pbrisbin/vim-mkdir'
-Plug 'scrooloose/nerdtree', { 'commit': '67fa9b3116948466234978aa6287649f98e666bd' }
+Plug 'scrooloose/nerdtree'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
@@ -34,9 +34,10 @@ Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'godlygeek/tabular'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'psliwka/vim-smoothie'
 
 " snippets
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 " tmux ressurect requirement
@@ -46,12 +47,12 @@ Plug 'tpope/vim-obsession'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " LanguageClient
-" Plug 'autozimu/LanguageClient-neovim', {
-"       \ 'branch': 'next',
-"       \ 'do': 'bash install.sh',
-"       \ }
+Plug 'autozimu/LanguageClient-neovim', {
+      \ 'branch': 'next',
+      \ 'do': 'bash install.sh',
+      \ }
 
-Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " linter
 " Plug 'w0rp/ale'
@@ -59,7 +60,6 @@ Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 " ruby plugins
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-rails'
-Plug 'kremso/vim-spectator' " allow usage of :A to create the spec file
 Plug 'tpope/vim-bundler'
 Plug 'vim-ruby/vim-ruby' 
 Plug 'nelstrom/vim-textobj-rubyblock'
