@@ -41,3 +41,6 @@ alias docom=docker-compose
 
 # Ruby/Rails
 alias migrate="bundle exec rake db:migrate db:rollback && bundle exec rake db:migrate db:test:prepare"
+
+# Tmuxinator
+alias tmuxinator=mux
