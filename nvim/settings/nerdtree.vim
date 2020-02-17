@@ -14,12 +14,7 @@ if has_key(g:plugs, 'nerdtree')
       q
       wincmd p
     else
-      try
-        NERDTreeFind
-      catch /^Vim\%((\a\+)\)\=:E716/
-        NERDTreeFocus | execute 'normal R' | wincmd p
-        NERDTreeFind
-      endtry
+      NERDTreeFind
     endif
   endfunction
 
