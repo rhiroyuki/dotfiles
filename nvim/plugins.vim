@@ -58,15 +58,16 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'w0rp/ale'
 
 " ruby plugins
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-rails'
+Plug 'tpope/vim-endwise', { 'for': ['ruby', 'eruby'] }
+Plug 'tpope/vim-rails', { 'for': ['ruby', 'eruby'] }
 Plug 'tpope/vim-bundler'
-Plug 'vim-ruby/vim-ruby' 
-Plug 'nelstrom/vim-textobj-rubyblock'
+Plug 'vim-ruby/vim-ruby'
+Plug 'nelstrom/vim-textobj-rubyblock', { 'for': ['ruby', 'eruby'] }
 Plug 'kana/vim-textobj-user'
 
 " elixir plugins
-Plug 'elixir-editors/vim-elixir'
+Plug 'mhinz/vim-mix-format', { 'for': ['elixir', 'eelixir'] }
+Plug 'elixir-editors/vim-elixir', { 'for': ['elixir', 'eelixir'] }
 
 " emmet plugin
 Plug 'mattn/emmet-vim', { 'for': ['javascript.jsx', 'html', 'css', 'javascript', 'eruby'] }
