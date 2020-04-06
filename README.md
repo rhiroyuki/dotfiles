@@ -2,7 +2,7 @@
 
 Default settings for personal use.
 
-- [zplugin](https://github.com/zdharma/zplugin) to manage zsh themes and plugins
+- [zinit](https://github.com/zdharma/zinit) to manage zsh themes and plugins
 - [vim-plug](https://github.com/junegunn/vim-plug) to manage neovim plugins
 - [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) to manage tmux plugins
 

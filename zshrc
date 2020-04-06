@@ -57,9 +57,9 @@ then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-if [[ ! -d ~/.zplugin ]];
+if [[ ! -d ~/.zinit ]];
 then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
 fi
 
 if [[ ! -d ~/.asdf ]]
@@ -69,13 +69,13 @@ fi
 
 . $HOME/.asdf/asdf.sh
 
-source ~/.zplugin/bin/zplugin.zsh
+source ~/.zinit/bin/zinit.zsh
 
-zplugin ice wait'!0' lucid; zplugin load zsh-users/zsh-completions
-zplugin ice from"gh-r" as"program"; zplugin load junegunn/fzf-bin
-zplugin ice wait"!0" lucid; zplugin snippet OMZ::plugins/fasd/fasd.plugin.zsh
-zplugin ice svn wait"!0" lucid; zplugin snippet OMZ::plugins/gitfast
-zplugin ice pick"async.zsh" src"pure.zsh"; zplugin load sindresorhus/pure
+zinit ice wait'!0' lucid; zinit load zsh-users/zsh-completions
+zinit ice from"gh-r" as"program"; zinit load junegunn/fzf-bin
+zinit ice wait"!0" lucid; zinit snippet OMZ::plugins/fasd/fasd.plugin.zsh
+zinit ice svn wait"!0" lucid; zinit snippet OMZ::plugins/gitfast
+zinit ice pick"async.zsh" src"pure.zsh"; zinit load sindresorhus/pure
 
 autoload -U promptinit; promptinit
 
@@ -130,4 +130,6 @@ autoload -Uz compinit
 compinit
 # # End of lines added by compinstall
 
-zplugin cdreplay -q
+zinit cdreplay -q
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
