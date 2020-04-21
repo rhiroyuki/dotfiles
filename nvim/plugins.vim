@@ -24,7 +24,6 @@ Plug 'jremmen/vim-ripgrep'
 Plug 'luochen1990/rainbow'
 Plug 'pbrisbin/vim-mkdir'
 Plug 'scrooloose/nerdtree'
-Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
@@ -44,7 +43,7 @@ Plug 'honza/vim-snippets'
 Plug 'tpope/vim-obsession'
 
 " autocomplete suggestions plugin
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " LanguageClient
 Plug 'autozimu/LanguageClient-neovim', {
@@ -58,7 +57,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'w0rp/ale'
 
 " ruby plugins
-Plug 'tpope/vim-endwise', { 'for': ['ruby', 'eruby'] }
+Plug 'tpope/vim-endwise', { 'for': ['ruby', 'eruby', 'elixir', 'eelixir'] }
 Plug 'tpope/vim-rails', { 'for': ['ruby', 'eruby'] }
 Plug 'tpope/vim-bundler'
 Plug 'vim-ruby/vim-ruby'
@@ -76,5 +75,6 @@ Plug 'mattn/emmet-vim', { 'for': ['javascript.jsx', 'html', 'css', 'javascript',
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'sheerun/vim-polyglot'
 
 call plug#end()
