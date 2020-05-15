@@ -1,7 +1,7 @@
 # Disable terminal freeze <C s>
 stty -ixon
 
-export EDITOR=vim
+export EDITOR=nvim
 
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
@@ -75,7 +75,9 @@ zinit ice wait'!0' lucid; zinit load zsh-users/zsh-completions
 zinit ice from"gh-r" as"program"; zinit load junegunn/fzf-bin
 zinit ice wait"!0" lucid; zinit snippet OMZ::plugins/fasd/fasd.plugin.zsh
 zinit ice svn wait"!0" lucid; zinit snippet OMZ::plugins/gitfast
-zinit ice pick"async.zsh" src"pure.zsh"; zinit load sindresorhus/pure
+# zinit ice pick"async.zsh" src"pure.zsh"; zinit load sindresorhus/pure
+zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
+zinit light sindresorhus/pure
 
 autoload -U promptinit; promptinit
 
