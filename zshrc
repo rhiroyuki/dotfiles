@@ -74,7 +74,7 @@ source ~/.zinit/bin/zinit.zsh
 zinit ice wait'!0' lucid; zinit load zsh-users/zsh-completions
 zinit ice from"gh-r" as"program"; zinit load junegunn/fzf-bin
 zinit ice wait"!0" lucid; zinit snippet OMZ::plugins/fasd/fasd.plugin.zsh
-zinit ice svn wait"!0" lucid; zinit snippet OMZ::plugins/gitfast
+# zinit ice svn wait"!0" lucid; zinit snippet OMZ::plugins/gitfast
 # zinit ice pick"async.zsh" src"pure.zsh"; zinit load sindresorhus/pure
 zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
 zinit light sindresorhus/pure
@@ -94,16 +94,16 @@ autoload colors && colors
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 
 # should be place in .xinitrc
-if type xcape &> /dev/null; then
-  # Remap CapsLock to Left-Control
-  setxkbmap -option ctrl:nocaps
+# if type xcape &> /dev/null; then
+#   # Remap CapsLock to Left-Control
+#   setxkbmap -option ctrl:nocaps
 
-  # make short-pressed Ctrl behave like Escape:
-  if [ "$(ps aux | grep 'xcape -e Control_L Escape' | wc -l)" -eq "1" ];
-  then
-    xcape -e 'Control_L=Escape'
-  fi
-fi
+#   # make short-pressed Ctrl behave like Escape:
+#   if [ "$(ps aux | grep 'xcape -e Control_L Escape' | wc -l)" -eq "1" ];
+#   then
+#     xcape -e 'Control_L=Escape'
+#   fi
+# fi
 
 # --files: List files that would be searched but do not search
 # --hidden: Search hidden files and folders
