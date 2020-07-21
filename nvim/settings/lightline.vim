@@ -3,6 +3,6 @@ if has_key(g:plugs, 'lightline.vim')
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'relativepath', 'modified' ] ]
         \ },
-        \ 'colorscheme': 'gruvbox'
+        \ 'colorscheme': 'onedark'
         \ }
 endif

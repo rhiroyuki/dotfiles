@@ -6,9 +6,10 @@ endif
 call plug#begin()
 
 " theme/lightline plugins
-Plug 'morhetz/gruvbox'
+" Plug 'morhetz/gruvbox'
 " Plug 'drewtempelmeyer/palenight.vim'
-Plug 'ajmwagar/vim-deus' 
+Plug 'ajmwagar/vim-deus'
+Plug 'ajmwagar/lightline-deus'
 Plug 'itchyny/lightline.vim'
 
 " vim improvements plugins
@@ -23,7 +24,8 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'jremmen/vim-ripgrep'
 Plug 'luochen1990/rainbow'
 Plug 'pbrisbin/vim-mkdir'
-Plug 'scrooloose/nerdtree'
+" Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
@@ -34,6 +36,7 @@ Plug 'godlygeek/tabular'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'psliwka/vim-smoothie'
+Plug 'nathanaelkane/vim-indent-guides'
 
 " snippets
 " Plug 'SirVer/ultisnips'

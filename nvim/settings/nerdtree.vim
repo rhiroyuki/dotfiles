@@ -27,8 +27,8 @@ if has_key(g:plugs, 'nerdtree')
 else
   let g:netrw_banner       = 0
   let g:netrw_liststyle    = 3
-  let g:netrw_winsize      = 20
-  let g:netrw_browse_split = 2
+  let g:netrw_winsize      = 18
+  let g:netrw_browse_split = 0
 
   let g:NetrwIsOpen=0
 
