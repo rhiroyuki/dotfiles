@@ -6,6 +6,7 @@ endif
 call plug#begin()
 
 " theme/lightline plugins
+Plug 'arcticicestudio/nord-vim'
 Plug 'morhetz/gruvbox'
 " Plug 'drewtempelmeyer/palenight.vim'
 Plug 'ajmwagar/vim-deus' 
@@ -13,8 +14,8 @@ Plug 'itchyny/lightline.vim'
 
 " vim improvements plugins
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'chrisbra/Colorizer'
-Plug 'ctrlpvim/ctrlp.vim'
+Plug 'rhiroyuki/Colorizer'
+" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'gcmt/wildfire.vim'
 Plug 'haya14busa/incsearch.vim'

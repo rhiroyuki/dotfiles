@@ -190,6 +190,8 @@ command! -bang -nargs=* Rg
       \   <bang>0)
 
 nnoremap <C-f> :Rg!<cr>
+nnoremap <Leader><C-p> :GFiles<CR>
+nnoremap <C-p> :Files<CR>
 
 inoremap <S-Tab> <C-d>
 
