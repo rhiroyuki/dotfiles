@@ -18,7 +18,7 @@ install_nvim () {
 }
 
 install_dotfiles () {
-  dotfiles=( asdfrc default-gems gemrc tmux.conf zshrc aliases gitignore solargraph.yml reek.yml )
+  dotfiles=( asdfrc default-gems gemrc tmux.conf zshrc aliases gitignore solargraph.yml reek.yml gitattributes )
 
   for dotfile in "${dotfiles[@]}";
   do
