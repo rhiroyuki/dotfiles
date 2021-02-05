@@ -6,19 +6,20 @@ set termguicolors
 
 " ================ General Config ====================
 
-set number                      "Line numbers are good
+set number
 set numberwidth=4
-set relativenumber              "Make line number relative to the current row
+set norelativenumber
 set backspace=indent,eol,start  "Allow backspace in insert mode
 set history=1000                "Store lots of :cmdline history
 set showcmd                     "Show incomplete cmds down the bottom
 set showmode                    "Show current mode down the bottom
 set gcr=a:blinkon0              "Disable cursor blink
-set visualbell                  "No sounds
+set visualbell
 set autoread                    "Reload files changed outside vim
 set mouse=a                     "Enable mouse interaction with vim
-set colorcolumn=81		"Enable colored column
+set colorcolumn=81
 set hidden                      "Required for operations modifying multiple buffers like rename.
+set lazyredraw
 
 " Open new split panes to right and bottom, which feels more natural
 set splitbelow
@@ -104,7 +105,7 @@ set sidescroll=1
 " ================ Cursor Position ==================
 
 set cursorline
-set cursorcolumn
+set nocursorcolumn
 
 " ================ Search ===========================
 
@@ -151,26 +152,6 @@ nnoremap <Leader>- :wincmd _<cr>:wincmd \|<cr>
 nnoremap <Leader>= :wincmd =<cr>
 nnoremap <leader><leader> <C-^>
 nnoremap 0 ^
-
-" Setting up Vim Hyperbolic Time Chamber 💪
-
-" function! DelayKeyPressRepetition(key)
-"   execute "nnoremap <silent> " . a:key . " :silent! call redraw<cr>"
-"   call jobstart(['bash', '-c', 'sleep 0.5'], extend({'key': a:key}, s:keypress_callbacks))
-" endfunction
-
-" function! s:RemapKey(job_id, data, event) dict
-"   execute "nnoremap <silent> " . self.key . " " . self.key . ":call DelayKeyPressRepetition(\"" . self.key . "\")<cr>"
-" endfunction
-
-" let s:keypress_callbacks = {
-"       \ 'on_exit': function('s:RemapKey')
-"       \ }
-
-" nnoremap <silent> j j:call DelayKeyPressRepetition("j")<cr>
-" nnoremap <silent> k k:call DelayKeyPressRepetition("k")<cr>
-" nnoremap <silent> l l:call DelayKeyPressRepetition("l")<cr>
-" nnoremap <silent> h h:call DelayKeyPressRepetition("h")<cr>
 
 com! FormatJSON :%!jq '.'
 com! MinifyJSON :%!jq -c '.'
