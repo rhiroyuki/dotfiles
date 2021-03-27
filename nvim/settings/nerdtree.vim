@@ -13,9 +13,7 @@ if has_key(g:plugs, 'nerdtree')
 
   function! NERDTreeFindToggle()
     if g:NERDTree.IsOpen()
-      NERDTreeFind
-      q
-      wincmd p
+      NERDTreeClose
     else
       NERDTreeFind
     endif
