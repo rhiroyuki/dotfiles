@@ -75,7 +75,7 @@ Plug 'elixir-editors/vim-elixir', { 'for': ['elixir', 'eelixir'] }
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " emmet plugin
-Plug 'mattn/emmet-vim', { 'for': ['javascript.jsx', 'html', 'css', 'javascript', 'eruby'] }
+Plug 'mattn/emmet-vim', { 'for': ['javascript.jsx', 'html', 'css', 'javascript', 'eruby', 'eelixir'] }
 
 " tmux plugins
 Plug 'christoomey/vim-tmux-navigator'
