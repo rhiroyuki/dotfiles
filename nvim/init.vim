@@ -1,9 +1,6 @@
 " Load matchit.vim, but only if the user hasn't installed a newer version.
 runtime plugin/matchit.vim
 
-" Disable Perl support
-let g:loaded_perl_provider = 0
-
 "Set neovim to use truecolors
 set termguicolors
 

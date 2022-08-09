@@ -5,14 +5,16 @@ if has_key(g:plugs, 'coc.nvim')
   nmap <silent> gi <Plug>(coc-implementation)
   nmap <silent> gr <Plug>(coc-references)
 
-  " Use K for show documentation in preview window
+  " Use K to show documentation in preview window.
   nnoremap <silent> K :call <SID>show_documentation()<CR>
 
   function! s:show_documentation()
-    if &filetype == 'vim'
+    if (index(['vim','help'], &filetype) >= 0)
       execute 'h '.expand('<cword>')
+    elseif (coc#rpc#ready())
+      call CocActionAsync('doHover')
     else
-      call CocAction('doHover')
+      execute '!' . &keywordprg . " " . expand('<cword>')
     endif
   endfunction
 

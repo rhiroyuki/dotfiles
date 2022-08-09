@@ -3,6 +3,8 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+let g:polyglot_disabled = ['elixir']
+
 call plug#begin()
 
 " theme/lightline plugins
@@ -70,9 +72,6 @@ Plug 'kana/vim-textobj-user'
 " elixir plugins
 Plug 'mhinz/vim-mix-format', { 'for': ['elixir', 'eelixir'] }
 Plug 'elixir-editors/vim-elixir', { 'for': ['elixir', 'eelixir'] }
-
-" go plugins
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " emmet plugin
 Plug 'mattn/emmet-vim', { 'for': ['javascript.jsx', 'html', 'css', 'javascript', 'eruby', 'eelixir'] }

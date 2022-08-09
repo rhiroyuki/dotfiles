@@ -57,10 +57,9 @@ then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-export ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-if [[ ! -d $ZINIT_HOME ]];
+if [[ ! -d ~/.zinit ]];
 then
-    sh -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
 fi
 
 if [[ ! -d ~/.asdf ]]
@@ -70,7 +69,7 @@ fi
 
 . $HOME/.asdf/asdf.sh
 
-source "${ZINIT_HOME}/zinit.zsh"
+source ~/.zinit/bin/zinit.zsh
 
 zinit ice wait'!0' lucid; zinit load zsh-users/zsh-completions
 zinit ice from"gh-r" as"program"; zinit load junegunn/fzf-bin
@@ -95,16 +94,16 @@ autoload colors && colors
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 
 # should be place in .xinitrc
-# if type xcape &> /dev/null; then
-#   # Remap CapsLock to Left-Control
-#   setxkbmap -option ctrl:nocaps
+if type xcape &> /dev/null; then
+  # Remap CapsLock to Left-Control
+  setxkbmap -option ctrl:nocaps
 
-#   # make short-pressed Ctrl behave like Escape:
-#   if [ "$(ps aux | grep 'xcape -e Control_L Escape' | wc -l)" -eq "1" ];
-#   then
-#     xcape -e 'Control_L=Escape'
-#   fi
-# fi
+  # make short-pressed Ctrl behave like Escape:
+  if [ "$(ps aux | grep 'xcape -e Control_L Escape' | wc -l)" -eq "1" ];
+  then
+    xcape -e 'Control_L=Escape'
+  fi
+fi
 
 # --files: List files that would be searched but do not search
 # --hidden: Search hidden files and folders
