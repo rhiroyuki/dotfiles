@@ -57,9 +57,9 @@ then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-if [[ ! -d ~/.zinit ]];
+if [[ ! -d ~/.local/share/zinit ]];
 then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
+  sh -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 fi
 
 if [[ ! -d ~/.asdf ]]
@@ -69,9 +69,10 @@ fi
 
 . $HOME/.asdf/asdf.sh
 
-source ~/.zinit/bin/zinit.zsh
+# source ~/.zinit/bin/zinit.zsh
 
-zinit ice wait'!0' lucid; zinit load zsh-users/zsh-completions
+zinit light zsh-users/zsh-completions
+# zinit ice wait'!0' lucid; zinit load zsh-users/zsh-completions
 zinit ice from"gh-r" as"program"; zinit load junegunn/fzf-bin
 zinit ice wait"!0" lucid; zinit snippet OMZ::plugins/fasd/fasd.plugin.zsh
 # zinit ice svn wait"!0" lucid; zinit snippet OMZ::plugins/gitfast
@@ -134,4 +135,5 @@ compinit
 
 zinit cdreplay -q
 
+[ -d ~/.fzf/bin ] && export PATH="$HOME/.fzf/bin:$PATH"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
