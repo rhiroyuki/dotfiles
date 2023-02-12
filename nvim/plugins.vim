@@ -27,7 +27,10 @@ Plug 'haya14busa/incsearch.vim'
 Plug 'janko-m/vim-test'
 Plug 'jremmen/vim-ripgrep'
 Plug 'pbrisbin/vim-mkdir'
-Plug 'scrooloose/nerdtree'
+
+" Plug 'scrooloose/nerdtree'
+Plug 'nvim-tree/nvim-tree.lua'
+
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'

@@ -118,6 +118,62 @@ source ~/.config/nvim/plugins.vim
 
 source ~/.config/nvim/settings.vim
 
+lua <<EOF
+-- examples for your init.lua
+
+-- disable netrw at the very start of your init.lua (strongly advised)
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- set termguicolors to enable highlight groups
+vim.opt.termguicolors = true
+
+-- empty setup using defaults
+require("nvim-tree").setup()
+
+-- OR setup with some options
+require("nvim-tree").setup({
+  sort_by = "case_sensitive",
+  view = {
+    adaptive_size = true,
+    mappings = {
+      list = {
+        { key = "u", action = "dir_up" },
+      },
+    },
+  },
+  open_file = {
+    quit_on_open = true,
+  },
+  renderer = {
+    group_empty = true,
+    icons = {
+      show = {
+        file = false,
+        folder = false,
+        folder_arrow = false,
+        git = false,
+        }
+      }
+  },
+  filters = {
+    dotfiles = true,
+  },
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  nested = true,
+  callback = function()
+    if #vim.api.nvim_list_wins() == 1 and require("nvim-tree.utils").is_nvim_tree_buf() then
+      vim.cmd "quit"
+    end
+  end
+})
+EOF
+
+
+nnoremap <silent> <C-\> :NvimTreeFindFileToggle<cr>
+
 augroup git_commit
   autocmd!
 
