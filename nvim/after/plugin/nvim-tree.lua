@@ -30,5 +30,5 @@ if packer_plugins["nvim-tree.lua"] and packer_plugins["nvim-tree.lua"].loaded th
       },
     })
 
-  vim.keymap.set('n', '<C-\\>', ':NvimTreeFindFileToggle<cr>')
+  vim.keymap.set('n', '<C-\\>', ':NvimTreeFindFileToggle<cr>', { noremap = true, silent = true })
 end
