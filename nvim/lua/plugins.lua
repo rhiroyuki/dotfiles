@@ -18,7 +18,22 @@ return require('packer').startup(function(use)
   use 'jiangmiao/auto-pairs'
   use 'AndrewRadev/splitjoin.vim'
   use 'chrisbra/Colorizer'
+
+
+  use 'nvim-lua/plenary.nvim'
+  use {
+      'nvim-treesitter/nvim-treesitter',
+      run = function()
+          local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+          ts_update()
+      end,
+  }
   use 'ctrlpvim/ctrlp.vim'
+  use {
+    'nvim-telescope/telescope.nvim', tag = '0.1.1',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  }
+
   use 'editorconfig/editorconfig-vim'
   use 'gcmt/wildfire.vim'
   use 'janko-m/vim-test'
@@ -60,4 +75,28 @@ return require('packer').startup(function(use)
   use 'christoomey/vim-tmux-navigator'
   use 'christoomey/vim-tmux-runner'
   use 'sheerun/vim-polyglot'
+
+  -- lsp
+  use {
+  'VonHeikemen/lsp-zero.nvim',
+  branch = 'v1.x',
+  requires = {
+    -- LSP Support
+    {'neovim/nvim-lspconfig'},             -- Required
+    {'williamboman/mason.nvim'},           -- Optional
+    {'williamboman/mason-lspconfig.nvim'}, -- Optional
+
+    -- Autocompletion
+    {'hrsh7th/nvim-cmp'},         -- Required
+    {'hrsh7th/cmp-nvim-lsp'},     -- Required
+    {'hrsh7th/cmp-buffer'},       -- Optional
+    {'hrsh7th/cmp-path'},         -- Optional
+    {'saadparwaiz1/cmp_luasnip'}, -- Optional
+    {'hrsh7th/cmp-nvim-lua'},     -- Optional
+
+    -- Snippets
+    {'L3MON4D3/LuaSnip'},             -- Required
+    {'rafamadriz/friendly-snippets'}, -- Optional
+  }
+}
 end)
