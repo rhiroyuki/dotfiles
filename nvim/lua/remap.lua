@@ -15,7 +15,7 @@ vim.keymap.set('n', '<leader>vr', ':source $MYVIMRC<cr>', { noremap = true })
 -- Easy splits
 vim.keymap.set('n', 'vv', '<C-w>v', { noremap = true })
 vim.keymap.set('n', 'ss', '<C-w>s', { noremap = true })
-vim.keymap.set('n', '<leader>-', ':wincmd _<cr>:wincmd \\|<cr>', { noremap = true })
+vim.keymap.set('n', '<leader>-', ':wincmd _<cr>:wincmd |<cr>', { noremap = true })
 vim.keymap.set('n', '<leader>=', ':wincmd =<cr>', { noremap = true })
 vim.keymap.set('n', '<leader><leader>', '<C-^>', { noremap = true })
 
