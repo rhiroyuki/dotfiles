@@ -69,7 +69,7 @@ fi
 
 . $HOME/.asdf/asdf.sh
 
-# source ~/.zinit/bin/zinit.zsh
+source ~/.zinit/bin/zinit.zsh
 
 zinit light zsh-users/zsh-completions
 # zinit ice wait'!0' lucid; zinit load zsh-users/zsh-completions

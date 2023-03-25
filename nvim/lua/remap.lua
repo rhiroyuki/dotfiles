@@ -1,6 +1,5 @@
+-- Only non-plugin dependent remaps
 -- Tab Shortcuts
-vim.g.mapleader = ' '
-
 vim.keymap.set('n', 'tf', ':tabfirst<cr>', { noremap = true })
 vim.keymap.set('n', 'tn', ':tabnext<cr>', { noremap = true })
 vim.keymap.set('n', 'tp', ':tabprev<cr>', { noremap = true })
