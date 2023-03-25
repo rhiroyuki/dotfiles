@@ -8,5 +8,6 @@ return {
     vim.keymap.set('n', '<leader>rj', ':TestVisit<cr>', { noremap = true })
 
     vim.g['test#strategy'] = 'vtr'
+    vim.g['test#preserve_screen'] = 1
   end
 }

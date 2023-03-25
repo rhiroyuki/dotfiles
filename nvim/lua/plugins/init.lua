@@ -2,14 +2,13 @@
 
 return {
   -- vim qol plugins
-  'nathanaelkane/vim-indent-guides',
+  'andymass/vim-matchup',
   'luochen1990/rainbow',
   'jiangmiao/auto-pairs',
   'AndrewRadev/splitjoin.vim',
   'chrisbra/Colorizer',
   'nvim-lua/plenary.nvim',
   'editorconfig/editorconfig-vim',
-  'gcmt/wildfire.vim',
   'jremmen/vim-ripgrep',
   'pbrisbin/vim-mkdir',
   'tpope/vim-vinegar',
@@ -22,22 +21,22 @@ return {
   { 'junegunn/fzf', build = ":call fzf#install()" },
   { 'junegunn/fzf.vim', dependencies = { 'junegunn/fzf' }},
   'psliwka/vim-smoothie',
-  'sheerun/vim-polyglot',
+  -- 'sheerun/vim-polyglot',
 
   -- tmux ressurect requirement
   'tpope/vim-obsession',
 
   -- ruby plugins
   'tpope/vim-endwise',
-  'tpope/vim-rails',
-  'tpope/vim-bundler',
-  'vim-ruby/vim-ruby',
-  { 'nelstrom/vim-textobj-rubyblock', dependencies = { 'kana/vim-textobj-user' } },
-  'kana/vim-textobj-user',
+  { 'tpope/vim-rails', ft = { 'ruby', 'eruby' } },
+  { 'tpope/vim-bundler', ft = { 'ruby', 'eruby' } },
+  { 'vim-ruby/vim-ruby', ft = { 'ruby', 'eruby' } },
+  -- 'kana/vim-textobj-user',
+  -- { 'nelstrom/vim-textobj-rubyblock', dependencies = { 'kana/vim-textobj-user' }, ft = { 'ruby', 'eruby' } },
 
   -- elixir plugins
-  'mhinz/vim-mix-format',
-  'elixir-editors/vim-elixir',
+  { 'mhinz/vim-mix-format', ft = { 'elixir', 'eelixir' } },
+  { 'elixir-editors/vim-elixir', ft = { 'elixir', 'eelixir' } },
 
   'mattn/emmet-vim',
   'christoomey/vim-tmux-runner'
