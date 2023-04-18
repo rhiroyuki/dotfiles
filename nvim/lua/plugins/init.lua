@@ -2,6 +2,7 @@
 
 return {
   -- vim qol plugins
+  'haya14busa/is.vim',
   'andymass/vim-matchup',
   'luochen1990/rainbow',
   'jiangmiao/auto-pairs',
@@ -11,7 +12,7 @@ return {
   'editorconfig/editorconfig-vim',
   'jremmen/vim-ripgrep',
   'pbrisbin/vim-mkdir',
-  'tpope/vim-vinegar',
+  -- 'tpope/vim-vinegar',
   'tpope/vim-commentary',
   'tpope/vim-fugitive',
   'tpope/vim-repeat',

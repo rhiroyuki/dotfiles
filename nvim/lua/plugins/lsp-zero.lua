@@ -2,14 +2,16 @@ return {
   {'hrsh7th/nvim-cmp'},
   {'hrsh7th/cmp-nvim-lsp'},
   {'neovim/nvim-lspconfig'},
+  {'williamboman/mason.nvim'},
+  {'williamboman/mason-lspconfig.nvim'},
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v1.x',
     dependencies = {
       -- LSP Support
       {'neovim/nvim-lspconfig'},             -- Required
-      -- {'williamboman/mason.nvim'},           -- Optional
-      -- {'williamboman/mason-lspconfig.nvim'}, -- Optional
+      {'williamboman/mason.nvim'},           -- Optional
+      {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
       -- Autocompletion
       {'hrsh7th/nvim-cmp'},         -- Required
