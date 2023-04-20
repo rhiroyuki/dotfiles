@@ -2,6 +2,9 @@
 stty -ixon
 
 export EDITOR=nvim
+export XMODIFIERS=@im=ibus
+
+setopt COMBINING_CHARS
 
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
@@ -47,7 +50,7 @@ bindkey '^N' down-history
 #     RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}$(git_custom_status) $EPS1"
 #     zle reset-prompt
 # }
-# 
+#
 # zle -N zle-line-init
 # zle -N zle-keymap-select
 
@@ -69,7 +72,7 @@ fi
 
 . $HOME/.asdf/asdf.sh
 
-source ~/.zinit/bin/zinit.zsh
+# source ~/.zinit/bin/zinit.zsh
 
 zinit light zsh-users/zsh-completions
 # zinit ice wait'!0' lucid; zinit load zsh-users/zsh-completions

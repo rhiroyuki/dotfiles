@@ -1,0 +1,10 @@
+include "%L"
+
+<dead_cedilla> <c> : "ç"
+<Multi_key> <comma> <c> : "ç"
+<Multi_key> <c> <comma> : "ç"
+<Multi_key> <cedilla> <c> : "ç"
+<dead_acute> <c> : "ç"
+<Multi_key> <acute> <c> : "ç"
+<Multi_key> <apostrophe> <c> : "ç"
+<Multi_key> <c> <apostrophe> : "ç"
