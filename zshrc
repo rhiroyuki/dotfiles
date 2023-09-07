@@ -4,7 +4,7 @@ stty -ixon
 export EDITOR=nvim
 export XMODIFIERS=@im=ibus
 
-setopt COMBINING_CHARS
+setopt COMBINING_CHARS # combine zero-length punctuation characters (accents) with the base character
 
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
@@ -45,24 +45,10 @@ export KEYTIMEOUT=1
 bindkey '^P' up-history
 bindkey '^N' down-history
 
-# function zle-line-init zle-keymap-select {
-#     VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
-#     RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}$(git_custom_status) $EPS1"
-#     zle reset-prompt
-# }
-#
-# zle -N zle-line-init
-# zle -N zle-keymap-select
-
 # check for tmux plugin manager
 if [[ ! -d ~/.tmux/plugins/tpm ]];
 then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-fi
-
-if [[ ! -d ~/.local/share/zinit ]];
-then
-  sh -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 fi
 
 if [[ ! -d ~/.asdf ]]
@@ -71,19 +57,6 @@ then
 fi
 
 . $HOME/.asdf/asdf.sh
-
-# source ~/.zinit/bin/zinit.zsh
-
-zinit light zsh-users/zsh-completions
-# zinit ice wait'!0' lucid; zinit load zsh-users/zsh-completions
-zinit ice from"gh-r" as"program"; zinit load junegunn/fzf-bin
-zinit ice wait"!0" lucid; zinit snippet OMZ::plugins/fasd/fasd.plugin.zsh
-# zinit ice svn wait"!0" lucid; zinit snippet OMZ::plugins/gitfast
-# zinit ice pick"async.zsh" src"pure.zsh"; zinit load sindresorhus/pure
-zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
-zinit light sindresorhus/pure
-
-autoload -U promptinit; promptinit
 
 # 'ls' pretty colors
 alias ls='ls --color=auto'
@@ -125,18 +98,45 @@ export FZF_DEFAULT_COMMAND='rg --colors line:fg:yellow      \
 
 
 [[ -f ~/.zsh_env ]] && source ~/.zsh_env
-
-# Aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
 
-# # The following lines were added by compinstall
 zstyle :compinstall filename '/home/ricardo/.zshrc'
 
-autoload -Uz compinit
-compinit
-# # End of lines added by compinstall
+# ZSH "extensions"
 
-zinit cdreplay -q
+# git-completion or ohmyzsh::gitfast
+if [[ ! -d ~/.zsh/git-completion ]]
+then
+  git clone https://github.com/felipec/git-completion.git "$HOME/.zsh/git-completion"
+  (cd $HOME/.zsh/git-completion && make install)
+fi
+fpath+=(~/.local/share/git-completion/zsh)
+source ~/.local/share/git-completion/prompt.sh
+
+# zsh-completions
+if [[ ! -d ~/.zsh/zsh-completions ]]
+then
+  git clone https://github.com/zsh-users/zsh-completions.git "$HOME/.zsh/zsh-completions"
+  rm -f ~/.zcompdump
+fi
+fpath+=($HOME/.zsh/zsh-completions/src)
+
+# pure theme/prompt
+if [[ ! -d ~/.zsh/pure ]]
+then
+  git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
+fi
+fpath+=($HOME/.zsh/pure)
+
+autoload -Uz compinit promptinit; promptinit
+
+# Check zcompdump once a day: https://gist.github.com/ctechols/ca1035271ad134841284
+if [ "$(find ~/.zcompdump -mtime 1)" ] ; then
+  compinit
+else
+  compinit -C
+fi
+
+prompt pure
 
 [ -d ~/.fzf/bin ] && export PATH="$HOME/.fzf/bin:$PATH"
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
