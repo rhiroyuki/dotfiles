@@ -1,48 +1,68 @@
 return {
-  {'hrsh7th/nvim-cmp'},
-  {'hrsh7th/cmp-nvim-lsp'},
-  {'neovim/nvim-lspconfig'},
-  {'williamboman/mason.nvim'},
-  {'williamboman/mason-lspconfig.nvim'},
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v1.x',
+    branch = 'v2.x',
+    lazy = true,
+    config = function()
+      -- This is where you modify the settings for lsp-zero
+      -- Note: autocompletion settings will not take effect
+
+      require('lsp-zero.settings').preset({})
+    end
+  },
+
+  -- Autocompletion
+  {
+    'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
     dependencies = {
-      -- LSP Support
-      {'neovim/nvim-lspconfig'},             -- Required
-      {'williamboman/mason.nvim'},           -- Optional
-      {'williamboman/mason-lspconfig.nvim'}, -- Optional
-
-      -- Autocompletion
-      {'hrsh7th/nvim-cmp'},         -- Required
-      {'hrsh7th/cmp-nvim-lsp'},     -- Required
-      -- {'hrsh7th/cmp-buffer'},       -- Optional
-      -- {'hrsh7th/cmp-path'},         -- Optional
-      -- {'saadparwaiz1/cmp_luasnip'}, -- Optional
-      -- {'hrsh7th/cmp-nvim-lua'},     -- Optional
-
-      -- Snippets
-      {'L3MON4D3/LuaSnip'},             -- Required
-      -- {'rafamadriz/friendly-snippets'}, -- Optional
+      {'L3MON4D3/LuaSnip'},
     },
     config = function()
-      local lsp = require('lsp-zero').preset({
-          name = 'minimal',
-          set_lsp_keymaps = true,
-          manage_nvim_cmp = true,
-          suggest_lsp_servers = false,
-        })
+      require('lsp-zero.cmp').extend()
+
+      -- And you can configure cmp even more, if you want to.
+      local cmp = require('cmp')
+      -- local cmp_action = require('lsp-zero.cmp').action()
+
+      cmp.setup({
+        mapping = {
+          -- ['<M-l>'] = cmp.mapping.complete(),
+          -- ['<Tab>'] = cmp_action.luasnip_supertab(),
+          -- ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
+          ['<CR>'] = cmp.mapping.confirm({ select = false })
+        },
+    sources = {
+      { name = 'copilot', keyword_length = 0 },
+      { name = 'nvim_lsp' },
+    }
+      })
+    end
+  },
+
+  -- LSP
+  {
+    'neovim/nvim-lspconfig',
+    cmd = 'LspInfo',
+    event = {'BufReadPre', 'BufNewFile'},
+    dependencies = {
+      {'hrsh7th/cmp-nvim-lsp'},
+      {'williamboman/mason-lspconfig.nvim'},
+      {'williamboman/mason.nvim'},
+    },
+    config = function()
+      -- This is where all the LSP shenanigans will live
+
+      local lsp = require('lsp-zero')
+
+      lsp.on_attach(function(client, bufnr)
+        -- see :help lsp-zero-keybindings
+        -- to learn the available actions
+        lsp.default_keymaps({buffer = bufnr})
+      end)
 
       -- (Optional) Configure lua language server for neovim
-      lsp.nvim_workspace()
-
-      -- Don't preselect first match
-      lsp.setup_nvim_cmp({
-        preselect = 'none',
-        completion = {
-          completeopt = 'menu,menuone,noinsert,noselect'
-        },
-      })
+      require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
       lsp.setup()
     end

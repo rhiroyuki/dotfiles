@@ -33,6 +33,7 @@ set.undofile = true
 
 set.autoindent = true
 set.smarttab = true
+set.expandtab = true
 set.shiftwidth = 2
 
 vim.cmd('filetype plugin indent on')
@@ -99,6 +100,12 @@ vim.g.loaded_netrwPlugin = 1
 
 vim.g.mapleader = ' '
 
+-- =============== Diagnostics =======================
+-- vim.diagnostic.config({
+--   virtual_text = false,
+-- })
+
+-- =============== Plugins ===========================
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -112,5 +119,9 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup('plugins')
+require('lazy').setup('plugins', {
+  change_detection = {
+    notify = false
+  }
+})
 require('remap')
