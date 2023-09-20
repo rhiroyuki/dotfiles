@@ -34,11 +34,14 @@ return {
         },
     sources = {
       { name = 'copilot', keyword_length = 0 },
+      { name = 'nvim_lsp_signature_help' },
       { name = 'nvim_lsp' },
     }
       })
     end
   },
+
+  {'hrsh7th/cmp-nvim-lsp-signature-help'},
 
   -- LSP
   {
