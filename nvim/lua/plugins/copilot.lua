@@ -5,14 +5,14 @@ return {
     event = "InsertEnter",
     config = function()
       require("copilot").setup({
-	suggestion = {enabled = false, auto_trigger = false},
-	panel = {enabled = false}
+        suggestion = { enabled = false, auto_trigger = false },
+        panel = { enabled = false }
       })
     end,
   },
   {
     "zbirenbaum/copilot-cmp",
-    config = function ()
+    config = function()
       require("copilot_cmp").setup()
     end
   },

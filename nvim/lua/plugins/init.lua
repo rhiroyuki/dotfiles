@@ -19,8 +19,8 @@ return {
   'tpope/vim-surround',
   'stefandtw/quickfix-reflector.vim',
   'godlygeek/tabular',
-  { 'junegunn/fzf', build = ":call fzf#install()" },
-  { 'junegunn/fzf.vim', dependencies = { 'junegunn/fzf' }},
+  { 'junegunn/fzf',     build = ":call fzf#install()" },
+  { 'junegunn/fzf.vim', dependencies = { 'junegunn/fzf' } },
   'psliwka/vim-smoothie',
   -- 'sheerun/vim-polyglot',
 
@@ -29,17 +29,16 @@ return {
 
   -- ruby plugins
   'tpope/vim-endwise',
-  { 'tpope/vim-rails', ft = { 'ruby', 'eruby' } },
-  { 'tpope/vim-bundler', ft = { 'ruby', 'eruby' } },
-  { 'vim-ruby/vim-ruby', ft = { 'ruby', 'eruby' } },
+  { 'tpope/vim-rails',           ft = { 'ruby', 'eruby' } },
+  { 'tpope/vim-bundler',         ft = { 'ruby', 'eruby' } },
+  { 'vim-ruby/vim-ruby',         ft = { 'ruby', 'eruby' } },
   -- 'kana/vim-textobj-user',
   -- { 'nelstrom/vim-textobj-rubyblock', dependencies = { 'kana/vim-textobj-user' }, ft = { 'ruby', 'eruby' } },
 
   -- elixir plugins
-  { 'mhinz/vim-mix-format', ft = { 'elixir', 'eelixir' } },
+  { 'mhinz/vim-mix-format',      ft = { 'elixir', 'eelixir' } },
   { 'elixir-editors/vim-elixir', ft = { 'elixir', 'eelixir' } },
 
   'mattn/emmet-vim',
   'christoomey/vim-tmux-runner'
 }
-

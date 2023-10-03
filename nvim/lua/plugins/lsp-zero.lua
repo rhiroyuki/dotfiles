@@ -16,7 +16,7 @@ return {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
     dependencies = {
-      {'L3MON4D3/LuaSnip'},
+      { 'L3MON4D3/LuaSnip' },
     },
     config = function()
       require('lsp-zero.cmp').extend()
@@ -32,26 +32,26 @@ return {
           -- ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
           ['<CR>'] = cmp.mapping.confirm({ select = false })
         },
-    sources = {
-      { name = 'copilot', keyword_length = 0 },
-      { name = 'nvim_lsp_signature_help' },
-      { name = 'nvim_lsp' },
-    }
+        sources = {
+          { name = 'copilot',                keyword_length = 0 },
+          { name = 'nvim_lsp_signature_help' },
+          { name = 'nvim_lsp' },
+        }
       })
     end
   },
 
-  {'hrsh7th/cmp-nvim-lsp-signature-help'},
+  { 'hrsh7th/cmp-nvim-lsp-signature-help' },
 
   -- LSP
   {
     'neovim/nvim-lspconfig',
     cmd = 'LspInfo',
-    event = {'BufReadPre', 'BufNewFile'},
+    event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
-      {'hrsh7th/cmp-nvim-lsp'},
-      {'williamboman/mason-lspconfig.nvim'},
-      {'williamboman/mason.nvim'},
+      { 'hrsh7th/cmp-nvim-lsp' },
+      { 'williamboman/mason-lspconfig.nvim' },
+      { 'williamboman/mason.nvim' },
     },
     config = function()
       -- This is where all the LSP shenanigans will live
@@ -61,7 +61,7 @@ return {
       lsp.on_attach(function(client, bufnr)
         -- see :help lsp-zero-keybindings
         -- to learn the available actions
-        lsp.default_keymaps({buffer = bufnr})
+        lsp.default_keymaps({ buffer = bufnr })
       end)
 
       -- (Optional) Configure lua language server for neovim
