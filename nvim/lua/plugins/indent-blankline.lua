@@ -1,19 +1,17 @@
 return {
   'lukas-reineke/indent-blankline.nvim',
   config = function()
-    vim.g.indent_guides_auto_colors = 0
-
-    require('indent_blankline').setup {
-      char = "",
-      char_highlight_list = {
-        'IndentGuidesOdd',
-        'IndentGuidesEven',
+    local highlight = {
+      "CursorColumn",
+      "Whitespace",
+    }
+    require("ibl").setup {
+      indent = { highlight = highlight, char = "" },
+      whitespace = {
+        highlight = highlight,
+        remove_blankline_trail = false,
       },
-      space_char_highlight_list = {
-        'IndentGuidesOdd',
-        'IndentGuidesEvent',
-      },
-      show_trailing_blankline_indent = false,
+      scope = { enabled = false },
     }
   end
 }
