@@ -1,6 +1,7 @@
 return {
   {
     'ajmwagar/vim-deus',
+    lazy = false,
     priority = 1000,
     config = function()
       vim.opt.background = 'dark'
