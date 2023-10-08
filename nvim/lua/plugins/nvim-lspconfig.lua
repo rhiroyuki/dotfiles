@@ -15,6 +15,7 @@ return {
 
       local default_setup = function(server)
         lspconfig[server].setup({
+          autostart = false,
           capabilities = lsp_capabilities
         })
       end
