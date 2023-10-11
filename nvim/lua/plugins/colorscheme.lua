@@ -8,6 +8,6 @@ return {
       vim.cmd.colorscheme('deus')
     end
   },
-  'ajmwagar/lightline-deus',
-  'itchyny/lightline.vim'
+  -- 'ajmwagar/lightline-deus',
+  -- 'itchyny/lightline.vim'
 }

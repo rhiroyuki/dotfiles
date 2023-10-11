@@ -1,5 +1,7 @@
 return {
   'nvim-telescope/telescope.nvim',
+  lazy = true,
+  event = "VeryLazy",
   tag = '0.1.1',
   dependencies = { 'nvim-lua/plenary.nvim' },
   config = function()

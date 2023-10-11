@@ -1,7 +1,15 @@
 return {
   'nvim-treesitter/nvim-treesitter',
-  build = function()
-    local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
-    ts_update()
+  build = ":TSUpdate",
+  event = "VeryLazy",
+  config = function()
+    require("nvim-treesitter.configs").setup({
+      ensure_installed = {
+        "ruby"
+      },
+      highlight = {
+        enable = true
+      }
+    })
   end
 }

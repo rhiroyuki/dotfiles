@@ -13,5 +13,7 @@ return {
       },
       scope = { enabled = false },
     }
-  end
+  end,
+  lazy = true,
+  event = "VeryLazy"
 }

@@ -1,8 +1,8 @@
 return {
-  { 'hrsh7th/cmp-nvim-lsp-signature-help' },
+  { 'hrsh7th/cmp-nvim-lsp-signature-help', event = 'VeryLazy' },
   {
     'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
+    event = 'VeryLazy',
     dependencies = {
       { 'L3MON4D3/LuaSnip' },
       { 'saadparwaiz1/cmp_luasnip' }
@@ -47,7 +47,13 @@ return {
               fallback()
             end
           end, { "i", "s" }),
-          ['<CR>'] = cmp.mapping.confirm({ select = false }),
+          ['<CR>'] = function(fallback)
+            if cmp.visible() and cmp.get_selected_entry() then
+              cmp.confirm({ select = false })
+            else
+              fallback()
+            end
+          end,
           ['<C-p>'] = cmp.mapping(function()
             if cmp.visible() then
               cmp.select_prev_item(select_opts)
