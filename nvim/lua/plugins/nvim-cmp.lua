@@ -18,8 +18,6 @@ return {
         return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
       end
 
-      local select_opts = { behavior = cmp.SelectBehavior.Select }
-
       local cmp_config = {
         snippet = {
           expand = function(args)
@@ -56,18 +54,25 @@ return {
           end,
           ['<C-p>'] = cmp.mapping(function()
             if cmp.visible() then
-              cmp.select_prev_item(select_opts)
+              cmp.select_prev_item()
             else
               cmp.complete()
             end
           end),
           ['<C-n>'] = cmp.mapping(function()
             if cmp.visible() then
-              cmp.select_next_item(select_opts)
+              cmp.select_next_item()
             else
               cmp.complete()
             end
           end),
+          ['<Esc>'] = function(fallback)
+            if cmp.get_selected_entry() then
+              cmp.abort()
+            else
+              fallback()
+            end
+          end
         },
         formatting = {
           fields = { 'abbr', 'menu', 'kind' },
@@ -94,6 +99,9 @@ return {
           { name = 'nvim_lsp_signature_help' },
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
+        },
+        experimental = {
+          ghost_text = true
         }
       }
 

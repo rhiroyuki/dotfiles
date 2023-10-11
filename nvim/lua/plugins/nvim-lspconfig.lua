@@ -27,7 +27,7 @@ return {
           vim.schedule(function()
             local root_path = vim.fs.dirname(vim.fs.find({ 'Gemfile' }, { upward = true })[1])
             local grep_command = "grep -E -i \"gem.*standard[\\\"'].*\""
-            local grep_result = vim.fn.system(table.concat({ grep_command, " ", root_path, "/Gemfile" }))
+            local grep_result = vim.fn.system(table.concat({ grep_command, " ", root_path or "", "/Gemfile" }))
             if grep_result == nil or grep_result == '' then
               lsp_server_setup("solargraph")
               vim.cmd("LspStart solargraph")
