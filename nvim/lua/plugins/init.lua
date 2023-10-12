@@ -1,26 +1,19 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
-
 return {
+  { 'AndrewRadev/splitjoin.vim' },
+  { 'andymass/vim-matchup',            event = 'VeryLazy' },
+  { 'christoomey/vim-tmux-runner' },
+  { 'editorconfig/editorconfig-vim' },
+  { 'godlygeek/tabular',               event = 'VeryLazy' },
   { 'haya14busa/is.vim' },
-  { 'andymass/vim-matchup', event = "VeryLazy" },
-  'luochen1990/rainbow',
-  { 'windwp/nvim-autopairs',       opts = {} },
-  'AndrewRadev/splitjoin.vim',
-  { 'norcalli/nvim-colorizer.lua', event = "VeryLazy" },
-  'nvim-lua/plenary.nvim',
-  'editorconfig/editorconfig-vim',
-  'jremmen/vim-ripgrep',
+  { 'mattn/emmet-vim',                 event = 'VeryLazy' },
+  { 'norcalli/nvim-colorizer.lua',     event = 'VeryLazy' },
   { 'pbrisbin/vim-mkdir' },
+  { 'psliwka/vim-smoothie' },
+  { 'stefandtw/quickfix-reflector.vim' },
   { 'tpope/vim-commentary' },
-  { 'tpope/vim-fugitive',  event = "VeryLazy" },
+  { 'tpope/vim-endwise' },
+  { 'tpope/vim-fugitive',              event = 'VeryLazy' },
   { 'tpope/vim-repeat' },
   { 'tpope/vim-surround' },
-  { 'tpope/vim-endwise' },
-  'stefandtw/quickfix-reflector.vim',
-  { 'godlygeek/tabular',          event = "VeryLazy" },
-  { 'junegunn/fzf',               build = ":call fzf#install()" },
-  { 'junegunn/fzf.vim',           dependencies = { 'junegunn/fzf' } },
-  { 'psliwka/vim-smoothie' },
-  { 'mattn/emmet-vim',            event = "VeryLazy" },
-  { 'christoomey/vim-tmux-runner' }
+  { 'windwp/nvim-autopairs',           opts = {} }
 }

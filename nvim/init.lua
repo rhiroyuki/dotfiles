@@ -115,6 +115,7 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.mapleader = ' '
 
 -- =============== Diagnostics =======================
+
 -- vim.diagnostic.config({
 --   virtual_text = false,
 -- })

@@ -1,27 +1,49 @@
 return {
-  'nvim-telescope/telescope.nvim',
-  lazy = true,
-  event = "VeryLazy",
-  tag = '0.1.1',
-  dependencies = { 'nvim-lua/plenary.nvim' },
-  config = function()
-    local actions = require('telescope.actions')
+  {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    build = 'make',
+    event = 'VeryLazy'
+  },
+  {
+    'nvim-telescope/telescope.nvim',
+    lazy = true,
+    event = 'VeryLazy',
+    tag = '0.1.4',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'jremmen/vim-ripgrep',
+      'nvim-telescope/telescope-fzf-native.nvim'
+    },
+    config = function()
+      local telescope = require('telescope')
+      local actions = require('telescope.actions')
 
-    require('telescope').setup({
-      defaults = {
-        mappings = {
-          i = {
-            ["<C-j>"] = actions.move_selection_next,
-            ["<C-k>"] = actions.move_selection_previous,
+      telescope.setup({
+        defaults = {
+          mappings = {
+            i = {
+              ["<C-j>"] = actions.move_selection_next,
+              ["<C-k>"] = actions.move_selection_previous,
+            }
+          }
+        },
+        extensions = {
+          fzf = {
+            fuzzy = true,                   -- false will only do exact matching
+            override_generic_sorter = true, -- override the generic sorter
+            override_file_sorter = true,    -- override the file sorter
+            case_mode = "smart_case",       -- or "ignore_case" or "respect_case". default is "smart_case"
           }
         }
-      }
-    })
+      })
 
-    local builtin = require('telescope.builtin')
+      telescope.load_extension('fzf')
 
-    vim.keymap.set('n', '<C-p>', builtin.find_files, { noremap = true })
-    vim.keymap.set('n', '<leader>fg', builtin.live_grep, { noremap = true })
-    vim.keymap.set('n', '<leader>h', builtin.oldfiles, { noremap = true })
-  end
+      local builtin = require('telescope.builtin')
+
+      vim.keymap.set('n', '<C-p>', builtin.find_files, { noremap = true })
+      vim.keymap.set('n', '<leader>fg', builtin.live_grep, { noremap = true })
+      vim.keymap.set('n', '<leader>h', builtin.oldfiles, { noremap = true })
+    end
+  }
 }

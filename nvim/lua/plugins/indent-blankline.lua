@@ -15,5 +15,5 @@ return {
     }
   end,
   lazy = true,
-  event = "VeryLazy"
+  event = 'VeryLazy'
 }
