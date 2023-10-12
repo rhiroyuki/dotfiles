@@ -1,11 +1,11 @@
 return {
-  { 'hrsh7th/cmp-nvim-lsp-signature-help', event = 'VeryLazy' },
   {
     'hrsh7th/nvim-cmp',
     event = 'VeryLazy',
     dependencies = {
       { 'L3MON4D3/LuaSnip' },
-      { 'saadparwaiz1/cmp_luasnip' }
+      { 'saadparwaiz1/cmp_luasnip' },
+      { 'hrsh7th/cmp-nvim-lsp-signature-help' },
     },
     config = function()
       local cmp = require('cmp')
@@ -25,6 +25,8 @@ return {
           end,
         },
         mapping = {
+          ['<C-b>'] = cmp.mapping.scroll_docs(-3),
+          ['<C-f>'] = cmp.mapping.scroll_docs(3),
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()

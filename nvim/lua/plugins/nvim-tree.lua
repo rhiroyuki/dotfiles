@@ -1,6 +1,6 @@
 return {
   'nvim-tree/nvim-tree.lua',
-  event = "VimEnter",
+  event = "UIEnter",
   config = function()
     local function on_attach(bufnr)
       local api = require('nvim-tree.api')
@@ -93,14 +93,14 @@ return {
       },
     })
 
-    local function open_nvim_tree(data)
-      local directory = vim.fn.isdirectory(data.file) == 1
+    local function open_nvim_tree(event)
+      local directory = vim.fn.isdirectory(event.file) == 1
 
       if not directory then
         return
       end
 
-      vim.cmd.cd(data.file)
+      vim.cmd.cd(event.file)
 
       require("nvim-tree.api").tree.open()
     end

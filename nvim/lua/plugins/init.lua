@@ -11,9 +11,8 @@ return {
   { 'psliwka/vim-smoothie' },
   { 'stefandtw/quickfix-reflector.vim' },
   { 'tpope/vim-commentary' },
-  { 'tpope/vim-endwise' },
   { 'tpope/vim-fugitive',              event = 'VeryLazy' },
   { 'tpope/vim-repeat' },
   { 'tpope/vim-surround' },
-  { 'windwp/nvim-autopairs',           opts = {} }
+  { 'windwp/nvim-autopairs',           opts = {} },
 }
