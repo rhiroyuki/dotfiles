@@ -1,3 +1,5 @@
+# vim: set ft=sh:
+
 alias gclone='git clone'
 alias gs='git status'
 alias gst='git stash'
@@ -6,7 +8,6 @@ alias gsta='git stash apply'
 alias ga='git add'
 alias gaa='git add -A'
 alias gam='git ls-files --modified | xargs git add' # git add modified files only
-# alias gco='git checkout'
 alias gcom='git checkout master'
 alias gr='git rebase'
 alias gra='git rebase --abort'
@@ -26,8 +27,7 @@ alias gbclear="git fetch --all --prune; git branch --merged origin/master | grep
 alias gpristine='git reset --hard && git clean -df'
 alias gre='git reset'
 alias gcherry='git cherry pick'
-
-alias current_branch='git rev-parse --abbrev-ref HEAD'
+alias cbranch='git rev-parse --abbrev-ref HEAD'
 
 alias vim=nvim
 alias be='bundle exec'
@@ -40,8 +40,8 @@ alias ssstop='sudo systemctl stop'
 alias doc=docker
 alias docom=docker-compose
 
-# Ruby/Rails
 alias migrate="bundle exec rake db:migrate db:rollback && bundle exec rake db:migrate db:test:prepare"
 
-# Tmuxinator
 alias mux=tmuxinator
+
+alias editd="vim ~/dotfiles"

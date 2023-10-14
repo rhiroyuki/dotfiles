@@ -1,0 +1,17 @@
+#! /bin/sh
+
+chosen=$(printf "  Power Off\n  Restart\n  Suspend\n  Hibernate\n󰍃  Log Out\n  Lock" | rofi -p "😴 Powermenu:" -dmenu -i)
+
+lock() {
+  i3lock
+}
+
+case "$chosen" in
+  "  Power Off") poweroff ;;
+  "  Restart") reboot ;;
+  "  Suspend") lock && systemctl suspend-then-hibernate ;;
+  "  Hibernate") lock && systemctl hibernate ;;
+  "󰍃  Log Out") i3-msg exit ;;
+  "  Lock") lock ;;
+  *) exit 1 ;;
+esac

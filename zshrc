@@ -140,3 +140,4 @@ fi
 prompt pure
 
 [ -d ~/.fzf/bin ] && export PATH="$HOME/.fzf/bin:$PATH"
+[ -d ~/.cargo/bin ] && export PATH="$HOME/.cargo/bin:$PATH"

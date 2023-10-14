@@ -6,7 +6,6 @@ return {
   { 'godlygeek/tabular',               event = 'VeryLazy' },
   { 'haya14busa/is.vim' },
   { 'mattn/emmet-vim',                 event = 'VeryLazy' },
-  { 'norcalli/nvim-colorizer.lua',     event = 'VeryLazy' },
   { 'pbrisbin/vim-mkdir' },
   { 'psliwka/vim-smoothie' },
   { 'stefandtw/quickfix-reflector.vim' },
