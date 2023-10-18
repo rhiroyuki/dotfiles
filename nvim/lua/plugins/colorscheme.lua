@@ -8,11 +8,8 @@ return {
         transparent_background = true,
         integrations = {
           cmp = true,
-          gitsigns = true,
           nvimtree = true,
           treesitter = true,
-          notify = false,
-          mini = false,
           telescope = {
             enabled = true
           },

@@ -44,4 +44,4 @@ alias migrate="bundle exec rake db:migrate db:rollback && bundle exec rake db:mi
 
 alias mux=tmuxinator
 
-alias editd="vim ~/dotfiles"
+alias editd="cd ~/dotfiles && vim ."

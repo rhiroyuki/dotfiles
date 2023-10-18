@@ -55,9 +55,9 @@ exec --no-startup-id pa-applet
 exec --no-startup-id blueman-applet
 
 exec --no-startup-id xset r rate 191 40
+exec --no-startup-id ~/.screenlayout/default.sh
 exec --no-startup-id feh --bg-fill --randomize ~/dotfiles/wallpapers/*
 exec --no-startup-id picom -b
-exec --no-startup-id ~/.screenlayout/default.sh
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
