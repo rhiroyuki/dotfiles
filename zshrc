@@ -60,7 +60,6 @@ fi
 
 # 'ls' pretty colors
 alias ls='ls --color=auto'
-eval `dircolors ~/dotfiles/dircolors.gruvbox`
 autoload colors && colors
 
 [[ $- != *i* ]] && return

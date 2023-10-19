@@ -47,9 +47,9 @@ main () {
   install_dotfiles
   install_config "nvim"
   install_config "i3"
-  install_config "i3status"
   install_config "rofi"
   install_config "picom"
+  install_config "polybar"
   install_dunst_conf
 
   echo "Finished installation"
