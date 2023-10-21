@@ -91,7 +91,7 @@ set.wildignore = {
 
 -- ================ Scrolling ========================
 
-set.scrolloff = 10
+set.scrolloff = 999
 set.sidescrolloff = 15
 set.sidescroll = 1
 

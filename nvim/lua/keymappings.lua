@@ -1,39 +1,58 @@
--- Tab Shortcuts
-vim.keymap.set('n', 'tf', ':tabfirst<cr>', { noremap = true })
-vim.keymap.set('n', 'tn', ':tabnext<cr>', { noremap = true })
-vim.keymap.set('n', 'tp', ':tabprev<cr>', { noremap = true })
-vim.keymap.set('n', 'tl', ':tablast<cr>', { noremap = true })
-vim.keymap.set('n', 'tt', ':tabnew<cr>', { noremap = true })
-vim.keymap.set('n', 'tx', ':tabclose<cr>', { noremap = true })
+local map = function(mode, key, command, opts)
+  local merged_opts = vim.tbl_deep_extend('force', { noremap = true, silent = true }, opts or {})
+  vim.api.nvim_set_keymap(mode, key, command, merged_opts)
+end
 
--- Manage Vim config more easily
-vim.keymap.set('n', '<leader>ve', ':vsplit $MYVIMRC<cr>', { noremap = true })
-vim.keymap.set('n', '<leader>vr', ':source $MYVIMRC<cr>', { noremap = true })
+-- Tab Shortcuts
+map('n', 'tf', ':tabfirst<CR>')
+map('n', 'tn', ':tabnext<CR>')
+map('n', 'tp', ':tabprev<CR>')
+map('n', 'tl', ':tablast<CR>')
+map('n', 'tt', ':tabnew<CR>')
+map('n', 'tx', ':tabclose<CR>')
 
 -- LSP
-vim.keymap.set('n', 'K', ':lua vim.lsp.buf.hover()<CR>', { noremap = true })
-vim.keymap.set('n', '[d', ':lua vim.diagnostic.goto_prev()<CR>', { noremap = true })
-vim.keymap.set('n', ']d', ':lua vim.diagnostic.goto_next()<CR>', { noremap = true })
-vim.keymap.set('n', 'gl', ':lua vim.diagnostic.open_float()<CR>', { noremap = true })
-vim.keymap.set('n', 'gs', ':lua vim.lsp.buf.signature_help()<CR>', { noremap = true })
-vim.keymap.set('n', 'gr', ':lua vim.lsp.buf.references()<CR>', { noremap = true })
-vim.keymap.set('n', 'go', ':lua vim.lsp.buf.type_definition()<CR>', { noremap = true })
-vim.keymap.set('n', 'gi', ':lua vim.lsp.buf.implementation()<CR>', { noremap = true })
-vim.keymap.set('n', 'gD', ':lua vim.lsp.buf.declaration()<CR>', { noremap = true })
-vim.keymap.set('n', 'gd', ':lua vim.lsp.buf.definition()<CR>', { noremap = true })
-vim.keymap.set('n', '<leader>lc', ':lua vim.lsp.buf.code_action()<CR>', { noremap = true })
-vim.keymap.set('n', '<leader>la', ':lua vim.lsp.buf.format({async = true})<CR>', { noremap = true })
-vim.keymap.set('n', '<leader>lr', ':lua vim.lsp.buf.rename()<CR>', { noremap = true })
+map('n', 'K', ':lua vim.lsp.buf.hover()<CR>')
+map('n', '[d', ':lua vim.diagnostic.goto_prev()<CR>')
+map('n', ']d', ':lua vim.diagnostic.goto_next()<CR>')
+map('n', 'gl', ':lua vim.diagnostic.open_float()<CR>')
+map('n', 'gs', ':lua vim.lsp.buf.signature_help()<CR>')
+map('n', 'gr', ':lua vim.lsp.buf.references()<CR>')
+map('n', 'go', ':lua vim.lsp.buf.type_definition()<CR>')
+map('n', 'gi', ':lua vim.lsp.buf.implementation()<CR>')
+map('n', 'gD', ':lua vim.lsp.buf.declaration()<CR>')
+map('n', 'gd', ':lua vim.lsp.buf.definition()<CR>')
+map('n', '<leader>lc', ':lua vim.lsp.buf.code_action()<CR>')
+map('n', '<leader>la', ':lua vim.lsp.buf.format({async = true})<CR>')
+map('n', '<leader>lr', ':lua vim.lsp.buf.rename()<CR>')
+
+local apply_import = function()
+  vim.lsp.buf.code_action(
+    {
+      filter = function(a)
+        return string.find(a.title, "import")
+      end,
+      apply = true
+    }
+  )
+end
+
+vim.api.nvim_create_user_command("ApplyImport", apply_import, {})
+
+map('n', '<C-Space>', ':ApplyImport<CR>')
+
+-- map('n', '<C-u>', '<cmd>call smoothie#do("zz")<CR><cmd>call smoothie#do("\\<C-u>")<CR>')
+-- map('n', '<C-d>', '<cmd>call smoothie#do("zz")<CR><cmd>call smoothie#do("\\<C-d>")<CR>')
 
 -- Easy splits
-vim.keymap.set('n', 'vv', '<C-w>v', { noremap = true })
-vim.keymap.set('n', 'ss', '<C-w>s', { noremap = true })
-vim.keymap.set('n', '<leader>-', ':wincmd _<cr>:wincmd |<cr>', { noremap = true })
-vim.keymap.set('n', '<leader>=', ':wincmd =<cr>', { noremap = true })
-vim.keymap.set('n', '<leader><leader>', '<C-^>', { noremap = true })
+map('n', 'vv', '<C-w>v')
+map('n', 'ss', '<C-w>s')
+map('n', '<leader>-', ':wincmd _<cr>:wincmd |<CR>')
+map('n', '<leader>=', ':wincmd =<cr>')
+map('n', '<leader><leader>', '<C-^>')
 
 vim.cmd('com! FormatJSON :%!jq \'.\'')
 vim.cmd('com! MinifyJSON :%!jq -c \'.\'')
 
 -- Colorizer
-vim.keymap.set('n', '<leader>ct', ':ColorizerToggle<CR>', { noremap = true })
+map('n', '<leader>ct', ':ColorizerToggle<CR>')
