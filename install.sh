@@ -15,12 +15,16 @@ install_config () {
   local source_full_path="$HOME/dotfiles/$1"
   local target_full_path="$HOME/.config/$1"
 
-  if [ -e "$target_full_path" ]; then
+  if [ -e "$target_full_path/.dotfile" ]; then
+    echo "Removing existing $target_full_path folder"
+    rm -rf "$target_full_path"
+  elif [ -d "$target_full_path" ]; then
     echo "Backing up existing $target_full_path folder"
     mv "$target_full_path" "$target_full_path"_backup_"$(date +%s%3N)"
   fi
 
   mkdir -p "$target_full_path"
+  touch "$target_full_path"/.dotfile
 
   ln -s "${source_full_path}"/* "${target_full_path}/"
 }
@@ -28,6 +32,11 @@ install_config () {
 ln_file_to_home_directory () {
   source_full_path="$HOME/dotfiles/$1"
   target_full_path=${2:-"$HOME/.$1"}
+
+  if [ -L "$target_full_path" ]; then
+    echo "Removing existing symlink $target_full_path"
+    rm "$target_full_path"
+  fi
 
   if [ -e "$target_full_path" ]; then
     echo "backing up $target_full_path"
@@ -43,13 +52,17 @@ install_dunst_conf () {
 }
 
 main () {
-  [ ! -d "$HOME/dotfiles" ] && git clone https://github.com/rhiroyuki/dotfiles.git "$HOME/dotfiles"
+  if [ ! -d "$HOME/dotfiles" ]; then
+    git clone https://github.com/rhiroyuki/dotfiles.git "$HOME/dotfiles"
+  fi
+
   install_dotfiles
   install_config "nvim"
   install_config "i3"
   install_config "rofi"
   install_config "picom"
   install_config "polybar"
+  install_config "redshift"
   install_dunst_conf
 
   echo "Finished installation"
