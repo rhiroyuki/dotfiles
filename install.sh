@@ -12,7 +12,7 @@ install_dotfiles () {
 }
 
 install_config () {
-  local source_full_path="$HOME/dotfiles/$1"
+  local source_full_path="$HOME/dotfiles/config/$1"
   local target_full_path="$HOME/.config/$1"
 
   if [ -e "$target_full_path/.dotfile" ]; then
@@ -57,12 +57,11 @@ main () {
   fi
 
   install_dotfiles
-  install_config "nvim"
-  install_config "i3"
-  install_config "rofi"
-  install_config "picom"
-  install_config "polybar"
-  install_config "redshift"
+
+  for dir in "$HOME/dotfiles/config"/*; do
+    echo "Installing $(basename "$dir")"
+    install_config "$(basename "$dir")"
+  done
   install_dunst_conf
 
   echo "Finished installation"
