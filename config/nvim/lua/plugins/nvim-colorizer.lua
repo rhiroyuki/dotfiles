@@ -1,6 +1,6 @@
 return {
   {
-    'norcalli/nvim-colorizer.lua',
+    "norcalli/nvim-colorizer.lua",
     cmd = { "ColorizerToggle" },
     ft = {
       "html",

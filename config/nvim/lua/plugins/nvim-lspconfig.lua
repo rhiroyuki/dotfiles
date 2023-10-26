@@ -1,19 +1,24 @@
 return {
   {
-    'neovim/nvim-lspconfig',
-    cmd = 'LspInfo',
-    event = { 'BufReadPre', 'BufNewFile' },
+    "neovim/nvim-lspconfig",
+    cmd = "LspInfo",
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      { 'hrsh7th/cmp-nvim-lsp' },
-      { 'williamboman/mason.nvim' },
-      { 'williamboman/mason-lspconfig.nvim' },
+      { "hrsh7th/cmp-nvim-lsp" },
+      { "williamboman/mason.nvim" },
+      { "williamboman/mason-lspconfig.nvim" },
     },
     config = function()
-      local lspconfig = require('lspconfig')
-      local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+      local lspconfig = require("lspconfig")
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      -- Enabling folding for nvim-ufo
+      capabilities.textDocument.foldingRange = {
+          dynamicRegistration = false,
+          lineFoldingOnly = true
+      }
       local group = vim.api.nvim_create_augroup("DetectWhichLspRubyToStart", { clear = true })
 
-      local default_opt = { autostart = true, capabilities = lsp_capabilities }
+      local default_opt = { autostart = true, capabilities = capabilities }
 
       local lsp_server_setup = function(server, opt)
         lspconfig[server].setup(vim.tbl_deep_extend("force", default_opt, opt or {}))
@@ -42,8 +47,8 @@ return {
         end
       })
 
-      require('mason').setup({ autostart = false })
-      require('mason-lspconfig').setup({
+      require("mason").setup({ autostart = false })
+      require("mason-lspconfig").setup({
         ensure_installed = {},
         handlers = {
           lsp_server_setup,
@@ -54,10 +59,10 @@ return {
               settings = {
                 Lua = {
                   runtime = {
-                    version = 'LuaJIT'
+                    version = "LuaJIT"
                   },
                   diagnostics = {
-                    globals = { 'vim' },
+                    globals = { "vim" },
                   },
                   workspace = {
                     library = {

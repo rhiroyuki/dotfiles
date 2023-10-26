@@ -57,11 +57,11 @@ bindsym $mod2+l exec --no-startup-id i3lock --nofork
 exec --no-startup-id nm-applet
 exec --no-startup-id pa-applet
 exec --no-startup-id blueman-applet
+exec --no-startup-id redshift-gtk
 
 exec_always --no-startup-id setxkbmap -layout 'us(intl)' -option ctrl:nocaps
 exec_always --no-startup-id xset r rate 191 40
-exec --no-startup-id ~/.screenlayout/default.sh
-exec --no-startup-id feh --bg-fill --randomize ~/dotfiles/wallpapers/*
+exec --no-startup-id feh --bg-fill --randomize $HOME/dotfiles/wallpapers/*
 exec --no-startup-id picom -b
 
 # Use pactl to adjust volume in PulseAudio.
@@ -216,3 +216,4 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 exec_always --no-startup-id $HOME/.config/i3/bin/polybar
+exec_always --no-startup-id $HOME/.screenlayout/default.sh

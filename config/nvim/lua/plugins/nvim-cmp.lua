@@ -1,16 +1,16 @@
 return {
   {
-    'hrsh7th/nvim-cmp',
-    event = 'VeryLazy',
+    "hrsh7th/nvim-cmp",
+    event = "VeryLazy",
     dependencies = {
-      { 'L3MON4D3/LuaSnip' },
-      { 'saadparwaiz1/cmp_luasnip' },
-      { 'hrsh7th/cmp-nvim-lsp-signature-help' },
+      { "L3MON4D3/LuaSnip" },
+      { "saadparwaiz1/cmp_luasnip" },
+      { "hrsh7th/cmp-nvim-lsp-signature-help" },
     },
     config = function()
-      local cmp = require('cmp')
-      local luasnip = require('luasnip')
-      local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+      local cmp = require("cmp")
+      local luasnip = require("luasnip")
+      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 
       local has_words_before = function()
         unpack = unpack or table.unpack
@@ -25,8 +25,8 @@ return {
           end,
         },
         mapping = {
-          ['<C-b>'] = cmp.mapping.scroll_docs(-3),
-          ['<C-f>'] = cmp.mapping.scroll_docs(3),
+          ["<C-b>"] = cmp.mapping.scroll_docs(-3),
+          ["<C-f>"] = cmp.mapping.scroll_docs(3),
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
@@ -47,28 +47,28 @@ return {
               fallback()
             end
           end, { "i", "s" }),
-          ['<CR>'] = function(fallback)
+          ["<CR>"] = function(fallback)
             if cmp.visible() and cmp.get_selected_entry() then
               cmp.confirm({ select = false })
             else
               fallback()
             end
           end,
-          ['<C-p>'] = cmp.mapping(function()
+          ["<C-p>"] = cmp.mapping(function()
             if cmp.visible() then
               cmp.select_prev_item()
             else
               cmp.complete()
             end
           end),
-          ['<C-n>'] = cmp.mapping(function()
+          ["<C-n>"] = cmp.mapping(function()
             if cmp.visible() then
               cmp.select_next_item()
             else
               cmp.complete()
             end
           end),
-          ['<Esc>'] = function(fallback)
+          ["<Esc>"] = function(fallback)
             if cmp.get_selected_entry() then
               cmp.abort()
             else
@@ -77,11 +77,11 @@ return {
           end
         },
         formatting = {
-          fields = { 'abbr', 'menu', 'kind' },
+          fields = { "abbr", "menu", "kind" },
           format = function(entry, item)
             local short_name = {
-              nvim_lsp = 'LSP',
-              nvim_lua = 'nvim'
+              nvim_lsp = "LSP",
+              nvim_lua = "nvim"
             }
 
             local menu_name = short_name[entry.source.name] or entry.source.name
@@ -97,10 +97,10 @@ return {
           }
         },
         sources = {
-          { name = 'copilot',                keyword_length = 0 },
-          { name = 'nvim_lsp_signature_help' },
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
+          { name = "copilot",                keyword_length = 0 },
+          { name = "nvim_lsp_signature_help" },
+          { name = "nvim_lsp" },
+          { name = "luasnip" },
         },
         experimental = {
           ghost_text = true
@@ -108,7 +108,7 @@ return {
       }
 
       cmp.event:on(
-        'confirm_done',
+        "confirm_done",
         cmp_autopairs.on_confirm_done()
       )
 

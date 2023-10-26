@@ -20,9 +20,11 @@ set.splitright = true
 set.diffopt:append('vertical')
 set.hidden = true
 
-if vim.g.syntax_on then
-  vim.cmd("syntax enable")
-end
+-- Let tree-sitter handle syntax highlighting
+vim.cmd("syntax off")
+-- if vim.g.syntax_on then
+--   vim.cmd("syntax enable")
+-- end
 
 set.swapfile = false
 set.backup = false
@@ -39,9 +41,9 @@ set.shiftwidth = 2
 vim.cmd('filetype plugin indent on')
 
 -- Speed up loading ruby files
--- /usr/share/nvim/runtime/ftplugin/runtime/ftplugin/ruby.vim and runtime/autoload/provider/ruby.vim
+-- /usr/share/nvim/runtime/ftplugin/ruby.vim and runtime/autoload/provider/ruby.vim
 vim.g.ruby_host_prog = os.getenv("HOME") .. "/.asdf/shims/neovim-ruby-host"
--- vim.g.ruby_path = {}
+vim.g.ruby_path = {}
 
 local group = vim.api.nvim_create_augroup("DisableRubyFiletypePlugin", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
@@ -64,8 +66,11 @@ set.linebreak = true
 --- " ================ Folds ============================
 
 set.foldmethod = 'indent'
-set.foldnestmax = 3
-set.foldenable = false
+set.foldnestmax = 2
+set.foldcolumn = '0'
+set.foldlevel = 99
+set.foldlevelstart = 99
+set.foldenable = true
 
 --- " ================ Completion =======================
 
@@ -140,3 +145,17 @@ require('lazy').setup('plugins', {
   }
 })
 require('keymappings')
+
+local function open_nvim_tree(event)
+  local directory = vim.fn.isdirectory(vim.api.nvim_buf_get_name(0)) == 1
+
+  if not directory then
+    return
+  end
+
+  vim.schedule(function()
+    vim.cmd("NvimTreeFindFileToggle")
+  end)
+end
+
+vim.api.nvim_create_autocmd("User", { pattern = "NvimTreeLoaded", callback = open_nvim_tree })
