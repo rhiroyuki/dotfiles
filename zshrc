@@ -101,7 +101,7 @@ export FZF_DEFAULT_COMMAND='rg --colors line:fg:yellow      \
 
 zstyle :compinstall filename '/home/ricardo/.zshrc'
 
-# ZSH "extensions"
+# ZSH extensions
 
 # git-completion or ohmyzsh::gitfast
 if [[ ! -d ~/.zsh/git-completion ]]
@@ -126,6 +126,13 @@ then
   git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
 fi
 fpath+=($HOME/.zsh/pure)
+
+# fish-like autosuggestions
+if [[ ! -d ~/.zsh/zsh-autosuggestions ]]
+then
+  git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+fi
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 autoload -Uz compinit promptinit; promptinit
 
