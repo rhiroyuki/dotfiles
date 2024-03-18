@@ -17,7 +17,7 @@ config.color_scheme = 'Catppuccin Macchiato'
 
 config.hide_tab_bar_if_only_one_tab = true
 
-config.window_background_opacity = .95
+config.window_background_opacity = 1
 
 config.window_padding = {
   left = 0,
