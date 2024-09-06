@@ -30,19 +30,24 @@ return {
         group = group,
         callback = function()
           vim.schedule(function()
-            local root_path = vim.fs.dirname(vim.fs.find({ 'Gemfile' }, { upward = true })[1])
-            local grep_command = "grep -E -i \"gem.*standard[\\\"'].*\""
-            local grep_result = vim.fn.system(table.concat({ grep_command, " ", root_path or "", "/Gemfile" }))
-            if grep_result == nil or grep_result == '' then
-              lsp_server_setup("solargraph")
-              vim.cmd("LspStart solargraph")
-            else
-              lsp_server_setup("solargraph", { handlers = { ['textDocument/publishDiagnostics'] = function() end } })
-              lsp_server_setup("standardrb")
+            -- Handles which LSP to start
+            -- local root_path = vim.fs.dirname(vim.fs.find({ 'Gemfile' }, { upward = true })[1])
+            -- local grep_command = "grep -E -i \"gem.*standard[\\\"'].*\""
+            -- local grep_result = vim.fn.system(table.concat({ grep_command, " ", root_path or "", "/Gemfile" }))
+            --
+            -- if grep_result == nil or grep_result == '' then
+            --   lsp_server_setup("solargraph")
+            --   vim.cmd("LspStart solargraph")
+            -- else
+            --   lsp_server_setup("solargraph", { handlers = { ['textDocument/publishDiagnostics'] = function() end } })
+            --   lsp_server_setup("standardrb")
+            --
+            --   vim.cmd("LspStart solargraph")
+            --   vim.cmd("LspStart standardrb")
+            -- end
 
-              vim.cmd("LspStart solargraph")
-              vim.cmd("LspStart standardrb")
-            end
+            lsp_server_setup("ruby_lsp")
+            vim.cmd("LspStart ruby_lsp")
           end)
         end
       })
