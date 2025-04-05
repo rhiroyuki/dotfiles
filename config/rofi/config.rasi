@@ -151,7 +151,7 @@ configuration {
       directories-first: true;
       sorting-method:    "name";
   }
-  modi: "run,drun,window,calc,emoji,clipboard:greenclip print";
+  modi: "run,drun,window,clipboard:greenclip print";
   icon-theme: "Oranchelo";
   show-icons: true;
   terminal: "wezterm";
@@ -164,7 +164,6 @@ configuration {
   display-window: "󰕰  Window";
   display-calc: "➗ Calc";
   display-Network: "󰤨  Network";
-  display-emoji: "☺ Emoji";
   display-clipboard: "🗒 Clipboard";
   sidebar-mode: true;
 }

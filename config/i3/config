@@ -31,6 +31,10 @@ client.urgent            $peach    $base $peach $overlay0  $peach
 client.placeholder       $overlay0 $base $text  $overlay0  $overlay0
 client.background        $base
 
+# Mod1 is Alt
+# Mod2 is Meta/Windows key
+# Mod3 is AltGr
+# Mod4 is Super/Windows key
 set $mod Mod1
 set $mod2 Mod4
 
@@ -45,8 +49,11 @@ gaps outer 0
 smart_gaps off
 smart_borders on
 
+# Shift + $mod + space to toggle floating
+
+for_window [class="Xfce4-appfinder"] floating enable
 for_window [class="Yad" title="yad-calendar"] floating enable
-# for_window [class="Blueman-manager"] floating enable
+for_window [class="Blueman-manager"] floating enable
 
 # Start XDG autostart .desktop files using dex. See also https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
@@ -60,7 +67,7 @@ exec --no-startup-id blueman-applet
 exec --no-startup-id redshift-gtk
 
 exec_always --no-startup-id setxkbmap -layout 'us(intl)' -option ctrl:nocaps
-exec_always --no-startup-id xset r rate 191 40
+exec_always --no-startup-id xset r rate 300 30
 exec --no-startup-id feh --bg-fill --randomize $HOME/dotfiles/wallpapers/*
 exec --no-startup-id picom -b
 
