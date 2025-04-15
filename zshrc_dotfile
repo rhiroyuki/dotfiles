@@ -1,4 +1,3 @@
-# Disable terminal freeze <C s>
 stty -ixon
 
 export EDITOR=nvim
@@ -51,12 +50,19 @@ then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-if [[ ! -d ~/.asdf ]]
+if [[ ! -d ~/.asdf ]];
 then
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.4
-fi
+  if type go &> /dev/null;
+  then
+    go install github.com/asdf-vm/asdf/cmd/asdf@v0.16.0
+  else
+    echo "Please install Go to install asdf"
+  fi
+else
+  export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
-. $HOME/.asdf/asdf.sh
+  fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
+fi
 
 # 'ls' pretty colors
 alias ls='ls --color=auto'
@@ -68,6 +74,10 @@ autoload colors && colors
 # fuzzy finder
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+
+if type fzf &> /dev/null; then
+  source <(fzf --zsh)
+fi
 
 # should be place in .xinitrc
 if type xcape &> /dev/null; then
@@ -134,6 +144,7 @@ then
 fi
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
+autoload bashcompinit && bashcompinit
 autoload -Uz compinit promptinit; promptinit
 
 # Check zcompdump once a day: https://gist.github.com/ctechols/ca1035271ad134841284

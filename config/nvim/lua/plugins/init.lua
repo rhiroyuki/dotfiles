@@ -12,4 +12,5 @@ return {
   { "tpope/vim-repeat" },
   { "tpope/vim-surround",               event = "VeryLazy" },
   { "windwp/nvim-autopairs",            event = "InsertEnter", opts = {} },
+  { 'MeanderingProgrammer/render-markdown.nvim', event = "VeryLazy", opts = {} },
 }

@@ -3,7 +3,7 @@
 set -eu pipefail
 
 install_dotfiles () {
-  dotfiles=( asdfrc default-gems gemrc tmux.conf zshrc aliases gitignore solargraph.yml reek.yml gitattributes wezterm.lua XCompose )
+  dotfiles=( asdfrc default-gems gemrc tmux.conf aliases gitignore solargraph.yml reek.yml gitattributes wezterm.lua XCompose )
 
   for dotfile in "${dotfiles[@]}";
   do
@@ -51,6 +51,18 @@ install_dunst_conf () {
   wget "https://raw.githubusercontent.com/catppuccin/dunst/b0b838d38f134136322ad3df2b6dc57c4ca118cf/src/macchiato.conf" -O ~/.config/dunst/dunstrc
 }
 
+add_source_to_zshrc() {
+  local zshrc_file="$HOME/.zshrc"
+  local source_line="source ~/dotfiles/zshrc_dotfile"
+
+  if ! grep -Fxq "$source_line" "$zshrc_file"; then
+    echo "Adding source line to .zshrc"
+    echo "$source_line" >> "$zshrc_file"
+  else
+    echo "Source line already present in .zshrc"
+  fi
+}
+
 main () {
   if [ ! -d "$HOME/dotfiles" ]; then
     git clone https://github.com/rhiroyuki/dotfiles.git "$HOME/dotfiles"
@@ -63,6 +75,8 @@ main () {
     install_config "$(basename "$dir")"
   done
   install_dunst_conf
+
+  add_source_to_zshrc
 
   echo "Finished installation"
 }
