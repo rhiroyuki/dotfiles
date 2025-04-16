@@ -53,14 +53,15 @@ then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-if [[ ! -d ~/.asdf ]];
+if [[ ! -d "${ASDF_DATA_DIR:-$HOME/.asdf}" ]];
 then
-  if type go &> /dev/null;
-  then
-    go install github.com/asdf-vm/asdf/cmd/asdf@v0.16.0
-  else
-    echo "Please install Go to install asdf"
+  if [[ ! -f /usr/local/bin/asdf ]]; then
+    wget -qO- https://github.com/asdf-vm/asdf/releases/download/v0.16.7/asdf-v0.16.7-linux-amd64.tar.gz | sudo tar -xz -C /usr/local/bin/
+
+    mkdir -p "${ASDF_DATA_DIR:-$HOME/.asdf}/completions"
+    /usr/local/bin/asdf completion zsh > "${ASDF_DATA_DIR:-$HOME/.asdf}/completions/_asdf"
   fi
+  export PATH="/usr/local/bin/:$PATH"
 else
   export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
