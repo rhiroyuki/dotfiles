@@ -1,3 +1,6 @@
+# vim: filetype=zsh
+
+# Disable terminal freeze <C s>
 stty -ixon
 
 export EDITOR=nvim
@@ -72,6 +75,7 @@ autoload colors && colors
 [[ -z "$TMUX" ]] && tmux new-session -A -s main
 
 # fuzzy finder
+source <(fzf --zsh)
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 
@@ -82,7 +86,9 @@ fi
 # should be place in .xinitrc
 if type xcape &> /dev/null; then
   # Remap CapsLock to Left-Control
-  setxkbmap -option ctrl:nocaps
+  if type setxkbmap &> /dev/null; then
+    setxkbmap -option ctrl:nocaps
+  fi
 
   # make short-pressed Ctrl behave like Escape:
   if [ "$(ps aux | grep 'xcape -e Control_L Escape' | wc -l)" -eq "1" ];
