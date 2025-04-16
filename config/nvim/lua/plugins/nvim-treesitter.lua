@@ -85,6 +85,25 @@ return {
           additional_vim_regex_highlighting = false
         }
       })
+
+      local function is_treesitter_active()
+        local ts_parsers = require("nvim-treesitter.parsers")
+        local ft = vim.bo.filetype
+        return ts_parsers.has_parser(ft)
+      end
+
+
+      local group = vim.api.nvim_create_augroup("is_treesitter_active", { clear = true })
+
+      vim.api.nvim_create_autocmd("FileType", {
+        once = true,
+        group = group,
+        callback = function()
+          if not is_treesitter_active() then
+            vim.cmd("syntax enable")
+          end
+        end
+      })
     end
   }
 }

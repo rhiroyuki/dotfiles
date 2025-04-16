@@ -20,7 +20,7 @@ set.splitright = true
 set.diffopt:append('vertical')
 set.hidden = true
 
--- Let tree-sitter handle syntax highlighting
+-- Keep it off, let treesitter handle it
 vim.cmd("syntax off")
 -- if vim.g.syntax_on then
 --   vim.cmd("syntax enable")
