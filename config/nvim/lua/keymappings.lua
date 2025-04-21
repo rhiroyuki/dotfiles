@@ -11,20 +11,26 @@ map("n", "tt", ":tabnew<CR>")
 map("n", "tx", ":tabclose<CR>")
 
 -- LSP
-map("n", "K", ":lua vim.lsp.buf.hover()<CR>")
-map("n", "[d", ":lua vim.diagnostic.goto_prev()<CR>")
-map("n", "]d", ":lua vim.diagnostic.goto_next()<CR>")
-map("n", "gl", ":lua vim.diagnostic.open_float()<CR>")
-map("n", "gs", ":lua vim.lsp.buf.signature_help()<CR>")
-map("n", "gr", ":lua vim.lsp.buf.references()<CR>")
-map("n", "go", ":lua vim.lsp.buf.type_definition()<CR>")
-map("n", "gi", ":lua vim.lsp.buf.implementation()<CR>")
-map("n", "gD", ":lua vim.lsp.buf.declaration()<CR>")
-map("n", "gd", ":lua vim.lsp.buf.definition()<CR>")
-map("n", "<leader>lc", ":lua vim.lsp.buf.code_action()<CR>")
-map("n", "<leader>la", ":lua vim.lsp.buf.format({async = true})<CR>")
-map("n", "<leader>lr", ":lua vim.lsp.buf.rename()<CR>")
+map("n", "K", vim.lsp.buf.hover)
+map("n", "gp", function () vim.diagnostic.jump({ count = -1, float = true }) end)
+map("n", "gn", function () vim.diagnostic.jump({ count = 1, float = true }) end)
+map("n", "gl", vim.diagnostic.open_float)
+map("n", "go", vim.lsp.buf.type_definition)
+map("n", "gD", vim.lsp.buf.declaration)
+map("n", "gd", vim.lsp.buf.definition)
+map("n", "grn", vim.lsp.buf.rename)
+map("n", "gra", vim.lsp.buf.code_action)
+map("n", "grr", vim.lsp.buf.references)
+map("n", "gri", vim.lsp.buf.implementation)
+map("n", "gO", vim.lsp.buf.document_symbol)
+map("n", "<C-S>", vim.lsp.buf.signature_help)
+map("n", "gaf", function() vim.lsp.buf.format({ async = true }) end)
 
+
+--- Applies an LSP code action that matches the word "import" in its title.
+-- This function filters available code actions provided by the LSP client,
+-- selecting only those whose title contains the word "import", and then
+-- automatically applies the selected action.
 local apply_import = function()
   vim.lsp.buf.code_action(
     {
@@ -39,9 +45,6 @@ end
 vim.api.nvim_create_user_command("ApplyImport", apply_import, {})
 
 map("n", "<C-Space>", ":ApplyImport<CR>")
-
--- map("n", "<C-u>", "<cmd>call smoothie#do("zz")<CR><cmd>call smoothie#do("\\<C-u>")<CR>")
--- map("n", "<C-d>", "<cmd>call smoothie#do("zz")<CR><cmd>call smoothie#do("\\<C-d>")<CR>")
 
 -- Easy splits
 map("n", "vv", "<C-w>v")
