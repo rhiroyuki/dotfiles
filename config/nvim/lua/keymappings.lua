@@ -14,10 +14,10 @@ map("n", "tx", ":tabclose<CR>")
 map("n", "K", vim.lsp.buf.hover)
 map("n", "gp", function () vim.diagnostic.jump({ count = -1, float = true }) end)
 map("n", "gn", function () vim.diagnostic.jump({ count = 1, float = true }) end)
-map("n", "gl", vim.diagnostic.open_float)
+map("n", "<C-W>d", vim.diagnostic.open_float)
 map("n", "go", vim.lsp.buf.type_definition)
 map("n", "gD", vim.lsp.buf.declaration)
-map("n", "gd", vim.lsp.buf.definition)
+map("n", "<C-]>", vim.lsp.buf.definition)
 map("n", "grn", vim.lsp.buf.rename)
 map("n", "gra", vim.lsp.buf.code_action)
 map("n", "grr", vim.lsp.buf.references)
@@ -25,7 +25,6 @@ map("n", "gri", vim.lsp.buf.implementation)
 map("n", "gO", vim.lsp.buf.document_symbol)
 map("n", "<C-S>", vim.lsp.buf.signature_help)
 map("n", "gaf", function() vim.lsp.buf.format({ async = true }) end)
-
 
 --- Applies an LSP code action that matches the word "import" in its title.
 -- This function filters available code actions provided by the LSP client,
