@@ -26,6 +26,21 @@ map("n", "gO", vim.lsp.buf.document_symbol)
 map("n", "<C-S>", vim.lsp.buf.signature_help)
 map("n", "gaf", function() vim.lsp.buf.format({ async = true }) end)
 
+-- Organize imports
+-- Temporary for go files, until I find a better solution
+local organize_imports = function()
+  vim.lsp.buf.code_action(
+    {
+      filter = function(a)
+        return string.find(a.title, "Organize")
+      end,
+      apply = true
+    }
+  )
+end
+vim.api.nvim_create_user_command("OrganizeImport", organize_imports, {})
+map("n", "<C-o>", ":OrganizeImport<CR>")
+
 --- Applies an LSP code action that matches the word "import" in its title.
 -- This function filters available code actions provided by the LSP client,
 -- selecting only those whose title contains the word "import", and then
@@ -57,3 +72,6 @@ vim.cmd('com! MinifyJSON :%!jq -c \'.\'')
 
 -- Colorizer
 map("n", "<leader>ct", ":ColorizerToggle<CR>")
+
+-- RenderMarkdown
+map("n", "<leader>rmt", ":RenderMarkdown toggle<CR>")
