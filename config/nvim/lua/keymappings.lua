@@ -39,7 +39,7 @@ local organize_imports = function()
   )
 end
 vim.api.nvim_create_user_command("OrganizeImport", organize_imports, {})
-map("n", "<C-o>", ":OrganizeImport<CR>")
+map("n", "<C-O>", ":OrganizeImport<CR>")
 
 --- Applies an LSP code action that matches the word "import" in its title.
 -- This function filters available code actions provided by the LSP client,
