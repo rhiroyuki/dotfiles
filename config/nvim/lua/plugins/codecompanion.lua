@@ -1,6 +1,7 @@
 return {
   "olimorris/codecompanion.nvim",
   opts = {},
+  event = "VeryLazy",
   config = function ()
     require("codecompanion").setup({
       strategies = {

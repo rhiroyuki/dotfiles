@@ -1,6 +1,7 @@
-local utils = require("utils")
+vim.cmd('com! FormatJSON :%!jq \'.\'')
+vim.cmd('com! MinifyJSON :%!jq -c \'.\'')
 
-local map = utils.map
+local map = require("utils").map
 
 -- Tab Shortcuts
 map("n", "tf", ":tabfirst<CR>")
@@ -28,18 +29,18 @@ map("n", "gaf", function() vim.lsp.buf.format({ async = true }) end)
 
 -- Organize imports
 -- Temporary for go files, until I find a better solution
-local organize_imports = function()
-  vim.lsp.buf.code_action(
-    {
-      filter = function(a)
-        return string.find(a.title, "Organize")
-      end,
-      apply = true
-    }
-  )
-end
-vim.api.nvim_create_user_command("OrganizeImport", organize_imports, {})
-map("n", "<C-O>", ":OrganizeImport<CR>")
+-- local organize_imports = function()
+--   vim.lsp.buf.code_action(
+--     {
+--       filter = function(a)
+--         return string.find(a.title, "Organize")
+--       end,
+--       apply = true
+--     }
+--   )
+-- end
+-- vim.api.nvim_create_user_command("OrganizeImport", organize_imports, {})
+-- map("n", "<C-O>", ":OrganizeImport<CR>")
 
 --- Applies an LSP code action that matches the word "import" in its title.
 -- This function filters available code actions provided by the LSP client,
@@ -66,9 +67,6 @@ map("n", "ss", "<C-w>s")
 map("n", "<leader>-", ":wincmd _<cr>:wincmd |<CR>")
 map("n", "<leader>=", ":wincmd =<cr>")
 map("n", "<leader><leader>", "<C-^>")
-
-vim.cmd('com! FormatJSON :%!jq \'.\'')
-vim.cmd('com! MinifyJSON :%!jq -c \'.\'')
 
 -- Colorizer
 map("n", "<leader>ct", ":ColorizerToggle<CR>")
