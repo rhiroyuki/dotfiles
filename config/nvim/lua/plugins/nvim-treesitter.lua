@@ -6,7 +6,7 @@ return {
       "nvim-treesitter/nvim-treesitter-textobjects"
     },
     build = ":TSUpdate",
-    event = "VeryLazy",
+    lazy = false,
     config = function()
       require("nvim-treesitter.configs").setup({
         textobjects = {

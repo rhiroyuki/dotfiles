@@ -1,7 +1,10 @@
 return {
+  { "saadparwaiz1/cmp_luasnip", lazy = true, event = "InsertEnter" },
+  { "hrsh7th/cmp-nvim-lsp-signature-help", lazy = true, event = "InsertEnter" },
   {
     "hrsh7th/nvim-cmp",
-    event = "VeryLazy",
+    event = "InsertEnter",
+    lazy = true,
     dependencies = {
       { "L3MON4D3/LuaSnip" },
       { "saadparwaiz1/cmp_luasnip" },
@@ -115,5 +118,10 @@ return {
 
       cmp.setup(cmp_config)
     end
+  },
+  {
+    "hrsh7th/cmp-nvim-lsp",
+    lazy = true,
+    event = "InsertEnter",
   },
 }

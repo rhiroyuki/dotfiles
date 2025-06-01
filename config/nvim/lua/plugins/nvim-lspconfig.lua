@@ -1,16 +1,25 @@
 return {
   {
+    "williamboman/mason.nvim",
+    lazy = true,
+  },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    lazy = true,
+  },
+  {
     "neovim/nvim-lspconfig",
+    lazy = true,
     cmd = "LspInfo",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      { "hrsh7th/cmp-nvim-lsp" },
       { "williamboman/mason.nvim" },
       { "williamboman/mason-lspconfig.nvim" },
     },
     config = function()
       local lspconfig = require("lspconfig")
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local utils = require("utils")
+      local capabilities = utils.setup_capabilities({})
       -- Enabling folding for nvim-ufo
       capabilities.textDocument.foldingRange = {
           dynamicRegistration = false,
@@ -20,7 +29,21 @@ return {
       local default_opt = { autostart = true, capabilities = capabilities }
 
       local lsp_server_setup = function(server, opt)
-        lspconfig[server].setup(vim.tbl_deep_extend("force", default_opt, opt or {}))
+        local built_capabilities = opt and opt.capabilities or {}
+
+        local merge_capabilities = vim.tbl_deep_extend("force", built_capabilities, opt or {})
+
+        if utils.module_exists("lsp" .. server) then
+          local lsp_capabilities = require("lsp." .. server)
+
+          merge_capabilities = vim.tbl_deep_extend("force", merge_capabilities, lsp_capabilities)
+        end
+
+        lspconfig[server].setup(
+          vim.tbl_deep_extend("force", default_opt, {
+            capabilities = merge_capabilities,
+          })
+        )
       end
 
       require("mason").setup({ autostart = false })
@@ -30,26 +53,7 @@ return {
           lsp_server_setup,
           standardrb = function() end,
           rubocop = function() end,
-          ruby_lsp = function() end,
-          lua_ls = function()
-            lspconfig.lua_ls.setup({
-              settings = {
-                Lua = {
-                  runtime = {
-                    version = "LuaJIT"
-                  },
-                  diagnostics = {
-                    globals = { "vim" },
-                  },
-                  workspace = {
-                    library = {
-                      vim.env.VIMRUNTIME,
-                    }
-                  }
-                }
-              }
-            })
-          end,
+          ruby_lsp = function() end
         },
       })
     end

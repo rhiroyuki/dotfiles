@@ -1,7 +1,8 @@
 return {
   "olimorris/codecompanion.nvim",
   opts = {},
-  event = "VeryLazy",
+  cmd = { "CodeCompanion", "CodeCompanionActions", "CodeCompanionChat", "CodeCompanionCmd" },
+  lazy = true,
   config = function ()
     require("codecompanion").setup({
       strategies = {

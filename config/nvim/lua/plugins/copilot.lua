@@ -2,7 +2,8 @@ return {
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
-    event = "VeryLazy",
+    lazy = true,
+    event = "InsertEnter",
     config = function()
       require("copilot").setup({
         suggestion = { enabled = false, auto_trigger = false },
@@ -39,7 +40,8 @@ return {
   {
     "zbirenbaum/copilot-cmp",
     dependencies = { "zbirenbaum/copilot.lua" },
-    event = "VeryLazy",
+    lazy = true,
+    event = "InsertEnter",
     config = function()
       require("copilot_cmp").setup()
     end
