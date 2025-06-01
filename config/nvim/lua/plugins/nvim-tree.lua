@@ -94,8 +94,6 @@ return {
       },
     })
 
-    vim.keymap.set("n", '<C-\\>', ":NvimTreeFindFileToggle<CR>", { noremap = true, silent = true })
-
     vim.cmd("doautocmd User NvimTreeLoaded")
   end
 }

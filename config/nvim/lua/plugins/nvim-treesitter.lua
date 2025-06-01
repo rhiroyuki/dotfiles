@@ -92,7 +92,6 @@ return {
         return ts_parsers.has_parser(ft)
       end
 
-
       local group = vim.api.nvim_create_augroup("is_treesitter_active", { clear = true })
 
       vim.api.nvim_create_autocmd("FileType", {

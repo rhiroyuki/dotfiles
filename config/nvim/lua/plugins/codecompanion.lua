@@ -1,7 +1,12 @@
 return {
   "olimorris/codecompanion.nvim",
   opts = {},
-  cmd = { "CodeCompanion", "CodeCompanionActions", "CodeCompanionChat", "CodeCompanionCmd" },
+  cmd = {
+    "CodeCompanion",
+    "CodeCompanionActions",
+    "CodeCompanionChat",
+    "CodeCompanionCmd"
+  },
   lazy = true,
   config = function ()
     require("codecompanion").setup({
@@ -17,14 +22,6 @@ return {
         }
       },
     })
-
-    local map = require("utils").map
-
-    map("n", "<leader>aa", ":CodeCompanionActions<CR>")
-    map("n", "<leader>at", ":CodeCompanion<CR>")
-    map("n", "<leader>act", ":CodeCompanionChat Toggle<CR>")
-    -- 
-    map("n", "<leader>acc", ":CodeCompanionCmd")
   end,
   dependencies = {
     "nvim-lua/plenary.nvim",

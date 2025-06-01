@@ -73,3 +73,21 @@ map("n", "<leader>ct", ":ColorizerToggle<CR>")
 
 -- RenderMarkdown
 map("n", "<leader>rmt", ":RenderMarkdown toggle<CR>")
+
+-- CodeCompanion Keymaps
+map("n", "<leader>cca", ":CodeCompanionActions<CR>")
+map("n", "<leader>ccp", ":CodeCompanion<CR>")
+map("n", "<leader>ccc", ":CodeCompanionChat Toggle<CR>")
+
+-- NvimTree Keymaps
+map("n", '<C-\\>', ":NvimTreeFindFileToggle<CR>")
+
+-- Other.nvim Keymaps
+
+map("n", "<leader>ll", "<cmd>:Other<CR>")
+map("n", "<leader>ltn", "<cmd>:OtherTabNew<CR>")
+map("n", "<leader>lp", "<cmd>:OtherSplit<CR>")
+map("n", "<leader>lv", "<cmd>:OtherVSplit<CR>")
+map("n", "<leader>lc", "<cmd>:OtherClear<CR>")
+map("n", "<leader>lt", "<cmd>:Other test<CR>")
+map("n", "<leader>ls", "<cmd>:Other scss<CR>")
