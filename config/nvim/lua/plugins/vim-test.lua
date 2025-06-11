@@ -10,6 +10,8 @@ return {
 
     vim.g["test#strategy"] = "vtr"
     vim.g["test#preserve_screen"] = 1
+
+    vim.g["test#elixir#exunit#options"] = "--trace"
   end,
   event = "VeryLazy"
 }
