@@ -10,7 +10,7 @@ local M = {}
 --- @param command string|function: The command or Lua function to execute when the key is pressed.
 --- @param opts table|nil: A table of options for the keymap (optional).
 M.map = function(mode, key, command, opts)
-  local merged_opts = vim.tbl_deep_extend("force", { noremap = true, silent = true }, opts or {})
+  local merged_opts = vim.tbl_deep_extend("force", { noremap = true, silent = true }, opts or {desc = "Description not provided"})
   vim.keymap.set(mode, key, command, merged_opts)
 end
 

@@ -3,29 +3,63 @@ vim.cmd('com! MinifyJSON :%!jq -c \'.\'')
 
 local map = require("utils").map
 
--- Tab Shortcuts
-map("n", "tf", ":tabfirst<CR>")
-map("n", "tn", ":tabnext<CR>")
-map("n", "tp", ":tabprev<CR>")
-map("n", "tl", ":tablast<CR>")
-map("n", "tt", ":tabnew<CR>")
-map("n", "tx", ":tabclose<CR>")
-
 -- LSP
-map("n", "K", vim.lsp.buf.hover)
-map("n", "gp", function () vim.diagnostic.jump({ count = -1, float = true }) end)
-map("n", "gn", function () vim.diagnostic.jump({ count = 1, float = true }) end)
-map("n", "<C-W>d", vim.diagnostic.open_float)
-map("n", "go", vim.lsp.buf.type_definition)
-map("n", "gD", vim.lsp.buf.declaration)
-map("n", "<C-]>", vim.lsp.buf.definition)
-map("n", "grn", vim.lsp.buf.rename)
-map("n", "gra", vim.lsp.buf.code_action)
-map("n", "grr", vim.lsp.buf.references)
-map("n", "gri", vim.lsp.buf.implementation)
-map("n", "gO", vim.lsp.buf.document_symbol)
-map("n", "<C-S>", vim.lsp.buf.signature_help)
-map("n", "gaf", function() vim.lsp.buf.format({ async = true }) end)
+map("n", "gp", function () vim.diagnostic.jump({ count = -1, float = true }) end, { desc = "Previous diagnostic" })
+map("n", "gn", function () vim.diagnostic.jump({ count = 1, float = true }) end, { desc = "Next diagnostic" })
+map("n", "gaf", function() vim.lsp.buf.format({ async = true }) end, { desc = "Format file" })
+map("n", "K", vim.lsp.buf.hover,                         { desc = "LSP Hover" })
+map("n", "<C-W>d", vim.diagnostic.open_float,            { desc = "Show diagnostic float" })
+map("n", "go", vim.lsp.buf.type_definition,              { desc = "Go to type definition" })
+map("n", "gD", vim.lsp.buf.declaration,                  { desc = "Go to declaration" })
+map("n", "<C-]>", vim.lsp.buf.definition,                { desc = "Go to definition" })
+map("n", "grn", vim.lsp.buf.rename,                      { desc = "LSP Rename" })
+map("n", "gra", vim.lsp.buf.code_action,                 { desc = "LSP Code Action" })
+map("n", "grr", vim.lsp.buf.references,                  { desc = "LSP References" })
+map("n", "gri", vim.lsp.buf.implementation,              { desc = "Go to implementation" })
+map("n", "gO", vim.lsp.buf.document_symbol,              { desc = "Document symbols" })
+map("n", "<C-S>", vim.lsp.buf.signature_help,            { desc = "Signature help" })
+
+-- Tab Shortcuts
+map("n", "tf", ":tabfirst<CR>",                          { desc = "Go to first tab"    } )
+map("n", "tn", ":tabnext<CR>",                           { desc = "Go to next tab"     } )
+map("n", "tp", ":tabprev<CR>",                           { desc = "Go to previous tab" } )
+map("n", "tl", ":tablast<CR>",                           { desc = "Go to last tab"     } )
+map("n", "tt", ":tabnew<CR>",                            { desc = "Open new tab"       } )
+map("n", "tx", ":tabclose<CR>",                          { desc = "Close current tab"  } )
+
+-- Easy splits
+map("n", "vv", "<C-w>v",                                 { desc = "Vertical split" })
+map("n", "ss", "<C-w>s",                                 { desc = "Horizontal split" })
+map("n", "<leader>-", ":wincmd _<cr>:wincmd |<CR>",      { desc = "Maximize split" })
+map("n", "<leader>=", ":wincmd =<cr>",                   { desc = "Equalize splits" })
+map("n", "<leader><leader>", "<C-^>",                    { desc = "Switch to alternate file" })
+
+-- Colorizer
+map("n", "<leader>ct", ":ColorizerToggle<CR>",           { desc = "Toggle Colorizer" })
+
+-- RenderMarkdown
+map("n", "<leader>rmt", ":RenderMarkdown toggle<CR>",    { desc = "Toggle RenderMarkdown" })
+
+-- CodeCompanion Keymaps
+map("n", "<leader>cca", ":CodeCompanionActions<CR>",     { desc = "CodeCompanion Actions" })
+map("n", "<leader>ccp", ":CodeCompanion<CR>",            { desc = "Open CodeCompanion" })
+map("n", "<leader>ccc", ":CodeCompanionChat Toggle<CR>", { desc = "Toggle CodeCompanion Chat" })
+
+-- NvimTree Keymaps
+map("n", '<C-\\>', ":NvimTreeFindFileToggle<CR>",        { desc = "Toggle NvimTree" })
+
+-- Other.nvim Keymaps
+map("n", "<leader>ll", "<cmd>:Other<CR>",                { desc = "Other" })
+map("n", "<leader>ltn", "<cmd>:OtherTabNew<CR>",         { desc = "Other Tab New" })
+map("n", "<leader>lp", "<cmd>:OtherSplit<CR>",           { desc = "Other Split" })
+map("n", "<leader>lv", "<cmd>:OtherVSplit<CR>",          { desc = "Other VSplit" })
+map("n", "<leader>lc", "<cmd>:OtherClear<CR>",           { desc = "Other Clear" })
+map("n", "<leader>lt", "<cmd>:Other test<CR>",           { desc = "Other test" })
+map("n", "<leader>ls", "<cmd>:Other scss<CR>",           { desc = "Other scss" })
+
+-- Lazy Nvim keymaps
+map("n", "<leader>lp", "<cmd>:Lazy profile<CR>",         { desc = "Lazy profile" })
+map("n", "<leader>lu", "<cmd>:Lazy update<CR>",          { desc = "Lazy update" })
 
 -- Organize imports
 -- Temporary for go files, until I find a better solution
@@ -59,35 +93,5 @@ end
 
 vim.api.nvim_create_user_command("ApplyImport", apply_import, {})
 
-map("n", "<C-Space>", ":ApplyImport<CR>")
+map("n", "<C-Space>", ":ApplyImport<CR>", { desc = "Apply import code action" })
 
--- Easy splits
-map("n", "vv", "<C-w>v")
-map("n", "ss", "<C-w>s")
-map("n", "<leader>-", ":wincmd _<cr>:wincmd |<CR>")
-map("n", "<leader>=", ":wincmd =<cr>")
-map("n", "<leader><leader>", "<C-^>")
-
--- Colorizer
-map("n", "<leader>ct", ":ColorizerToggle<CR>")
-
--- RenderMarkdown
-map("n", "<leader>rmt", ":RenderMarkdown toggle<CR>")
-
--- CodeCompanion Keymaps
-map("n", "<leader>cca", ":CodeCompanionActions<CR>")
-map("n", "<leader>ccp", ":CodeCompanion<CR>")
-map("n", "<leader>ccc", ":CodeCompanionChat Toggle<CR>")
-
--- NvimTree Keymaps
-map("n", '<C-\\>', ":NvimTreeFindFileToggle<CR>")
-
--- Other.nvim Keymaps
-
-map("n", "<leader>ll", "<cmd>:Other<CR>")
-map("n", "<leader>ltn", "<cmd>:OtherTabNew<CR>")
-map("n", "<leader>lp", "<cmd>:OtherSplit<CR>")
-map("n", "<leader>lv", "<cmd>:OtherVSplit<CR>")
-map("n", "<leader>lc", "<cmd>:OtherClear<CR>")
-map("n", "<leader>lt", "<cmd>:Other test<CR>")
-map("n", "<leader>ls", "<cmd>:Other scss<CR>")
