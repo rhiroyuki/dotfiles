@@ -96,4 +96,13 @@ M.module_exists = function (name)
   return false
 end
 
+M.log_to_file = function (msg)
+  local log_path = vim.fn.stdpath("cache") .. "/nvim_autocmd.log"
+  local fd = vim.uv.fs_open(log_path, "a", 420) -- 0644
+  if fd then
+    vim.uv.fs_write(fd, os.date("%Y-%m-%d %H:%M:%S ") .. msg .. "\n")
+    vim.uv.fs_close(fd)
+  end
+end
+
 return M
