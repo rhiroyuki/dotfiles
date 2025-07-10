@@ -13,17 +13,3 @@ end
 vim.api.nvim_create_autocmd("User", { pattern = "NvimTreeLoaded", callback = open_nvim_tree })
 
 local group = vim.api.nvim_create_augroup("CodeCompanionHooks", {})
-
-vim.api.nvim_create_autocmd({ "User" }, {
-  pattern = "CodeCompanionRequest*",
-  group = group,
-  callback = function(request)
-    if request.match == "CodeCompanionRequestStarted" then
-      require('cmp').setup.buffer { enabled = false }
-    end
-
-    if request.match == "CodeCompanionRequestFinished" then
-      require('cmp').setup.buffer { enabled = true }
-    end
-  end,
-})
