@@ -95,3 +95,4 @@ vim.api.nvim_create_user_command("ApplyImport", apply_import, {})
 
 map("n", "<C-Space>", ":ApplyImport<CR>", { desc = "Apply import code action" })
 
+map("n", "<Space>bg", ":suspend<CR>", { desc = "Suspend Neovim" })

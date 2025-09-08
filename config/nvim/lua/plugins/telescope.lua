@@ -39,9 +39,9 @@ return {
 
       local builtin = require("telescope.builtin")
 
-      vim.keymap.set("n", "<C-p>", builtin.find_files, { noremap = true })
-      vim.keymap.set("n", "<leader>fg", builtin.live_grep, { noremap = true })
-      vim.keymap.set("n", "<leader>h", builtin.oldfiles, { noremap = true })
+      vim.keymap.set("n", "<C-p>", builtin.find_files, { noremap = true, desc = "Find files" })
+      vim.keymap.set("n", "<leader>fg", builtin.live_grep, { noremap = true, desc = "Live grep" })
+      vim.keymap.set("n", "<leader>h", builtin.oldfiles, { noremap = true, desc = "Recent files" })
     end
   }
 }

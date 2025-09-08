@@ -1,8 +1,10 @@
 return {
   "rgroli/other.nvim",
   event = "VeryLazy",
+  dev = true,
   config = function()
     require("other-nvim").setup({
+      rememberBuffers = false,
       mappings = {
         "livewire",
         "angular",

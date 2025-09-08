@@ -8,7 +8,7 @@ return {
   { "psliwka/vim-smoothie",                      event = "VeryLazy" },
   { "stefandtw/quickfix-reflector.vim",          event = "VeryLazy" },
   { "tpope/vim-fugitive",                        lazy = true, cmd = "Git" },
-  { "tpope/vim-repeat" },
+  { "tpope/vim-repeat",                          event = "VeryLazy" },
   { "tpope/vim-surround",                        event = "VeryLazy" },
   { "windwp/nvim-autopairs",                     event = "InsertEnter", opts = {} },
   { "MeanderingProgrammer/render-markdown.nvim", lazy = true, ft = { "markdown", "codecompanion" }, opts = {} }

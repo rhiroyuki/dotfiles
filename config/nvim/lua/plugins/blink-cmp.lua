@@ -7,9 +7,11 @@ return {
   },
   {
     'giuxtaposition/blink-cmp-copilot',
+    lazy = true
   },
   {
     'saghen/blink.cmp',
+    event =  'VeryLazy',
     dependencies = {
       'rafamadriz/friendly-snippets',
       'giuxtaposition/blink-cmp-copilot',
