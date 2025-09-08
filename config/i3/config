@@ -95,7 +95,7 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+control+t exec wezterm
+bindsym $mod+control+t exec allacrity
 # bindsym $mod+Return exec wezterm
 
 # file explorer
