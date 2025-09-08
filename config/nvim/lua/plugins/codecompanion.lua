@@ -17,59 +17,62 @@ return {
       }
 
       require('codecompanion').setup({
-        ["Feature-to-Code Workflow"] = {
-          strategy = "workflow",
-          description = "Read feature spec, generate tests & code, ensure tests pass",
-          opts = {
-            index = 1,     -- defines its position in palette
-            is_default = false,
-            short_name = "ftc",
-          },
-          prompts = {
-            -- Step 1: Read spec & generate tests
-            {
-              {
-                name = "Generate Tests",
-                role = constants.USER_ROLE,
-                opts = { auto_submit = false },
-                content = [[
-                You will receive a feature story describing desired functionality.
-                Step 1: analyze the story and write comprehensive tests in the target language or framework.
-                Output only the tests initially.
-                ]]
-              },
+        prompt_library = {
+          ["Feature-to-Code Workflow"] = {
+            strategy = "workflow",
+            description = "Read feature spec, generate tests & code, ensure tests pass",
+            opts = {
+              index = 1,     -- defines its position in palette
+              is_default = false,
+              short_name = "ftc",
+              is_slash_command = true,
+              auto_submit = true,
             },
-            -- Step 2: Generate implementation & run tests
-            {
+            prompts = {
+              -- Step 1: Read spec & generate tests
               {
-                name = "Implement & Test",
-                role = constants.USER_ROLE,
-                opts = { auto_submit = false },
-                content = [[
-                Now implement the code to satisfy the tests.
-                Use the @{insert_edit_into_file} tool to write the code, and then run the tests using @{cmd_runner}.
-                Include both tool calls in your response.
-                ]]
+                {
+                  name = "Generate Tests",
+                  role = constants.USER_ROLE,
+                  opts = { auto_submit = false },
+                  content = [[
+                  You will receive a feature story describing desired functionality.
+                  Step 1: analyze the story and write comprehensive tests in the target language or framework.
+                  Output only the tests initially.
+                  ]]
+                },
               },
-            },
-            -- Step 3: Iterate on failures until tests pass
-            {
+              -- Step 2: Generate implementation & run tests
               {
-                name = "Fix Failures",
-                role = constants.USER_ROLE,
-                opts = { auto_submit = true },
-                condition = function()
-                  return _G.codecompanion_current_tool == "cmd_runner"
-                end,
-                repeat_until = function(chat)
-                  return chat.tools.flags.testing == true
-                end,
-                content = "The tests failed. Please update the implementation to fix the failures and re-run the tests."
+                {
+                  name = "Implement & Test",
+                  role = constants.USER_ROLE,
+                  opts = { auto_submit = false },
+                  content = [[
+                  Now implement the code to satisfy the tests.
+                  Use the @{insert_edit_into_file} tool to write the code, and then run the tests using @{cmd_runner}.
+                  Include both tool calls in your response.
+                  ]]
+                },
+              },
+              -- Step 3: Iterate on failures until tests pass
+              {
+                {
+                  name = "Fix Failures",
+                  role = constants.USER_ROLE,
+                  opts = { auto_submit = true },
+                  condition = function()
+                    return _G.codecompanion_current_tool == "cmd_runner"
+                  end,
+                  repeat_until = function(chat)
+                    return chat.tools.flags.testing == true
+                  end,
+                  content = "The tests failed. Please update the implementation to fix the failures and re-run the tests."
+                },
               },
             },
           },
         },
-
         extensions = {
           mcphub = {
             callback = 'mcphub.extensions.codecompanion',
