@@ -26,7 +26,6 @@ return {
               is_default = false,
               short_name = "ftc",
               is_slash_command = true,
-              auto_submit = true,
             },
             prompts = {
               -- Step 1: Read spec & generate tests
