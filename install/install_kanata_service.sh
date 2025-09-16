@@ -10,11 +10,12 @@ SOURCE_PATH="install/kanata.service"
 if [ -e "$SERVICE_PATH" ]; then
     sudo rm "$SERVICE_PATH"
 fi
-# Create symbolic link to the service file
-sudo ln -s "$(realpath "$SOURCE_PATH")" "$SERVICE_PATH"
+sudo cp "$SOURCE_PATH" "$SERVICE_PATH"
 
+# Reload systemd so it picks up the new unit
 sudo systemctl daemon-reload
-sudo systemctl enable kanata.service
-sudo systemctl start kanata.service
+
+# Enable to start on boot + start immediately
+sudo systemctl enable --now kanata.service
 
 echo "Kanata service installed, enabled, and started."
