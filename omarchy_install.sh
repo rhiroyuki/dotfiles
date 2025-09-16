@@ -30,7 +30,7 @@ main() {
 
   install_config "kanata.kbd"
 
-  echo "Make sure zsh, tmux, kanata are installed and set as default shell"
+  echo "Make sure zsh, tmux, kanata are installed and zsh is set as default shell"
   echo "Finished installation"
 }
 
