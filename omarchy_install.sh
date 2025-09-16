@@ -15,14 +15,6 @@ set_hypr_kb_variant_intl() {
   fi
 }
 
-# append_ctrl_as_esc_to_kb_options() {
-#   local input_conf="$HOME/.config/hypr/input.conf"
-#   if [ -f "$input_conf" ]; then
-#     grep -q 'ctrl:esc' "$input_conf" || \
-#       sed -i '/^  kb_options =/ s/$/,ctrl:esc/' "$input_conf"
-#   fi
-# }
-
 main() {
   install_config "nvim"
   ln_file_to_home_directory "tmux.conf"
@@ -35,9 +27,10 @@ main() {
 
   # Set Hyprland keyboard variant and options
   set_hypr_kb_variant_intl
-  # append_ctrl_as_esc_to_kb_options
 
-  echo "Make sure zsh and tmux are installed and set as default shell"
+  install_config "kanata.kbd"
+
+  echo "Make sure zsh, tmux, kanata are installed and set as default shell"
   echo "Finished installation"
 }
 

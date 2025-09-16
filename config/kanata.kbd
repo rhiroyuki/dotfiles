@@ -1,0 +1,15 @@
+(defcfg
+  process-unmapped-keys no
+)
+
+(defsrc
+  esc
+  lctrl
+  rctrl
+)
+
+(deflayer base
+  esc
+  (tap-hold 200 200 esc lctrl) ;; left Ctrl: tap=Esc, hold=Ctrl
+  (tap-hold 200 200 esc rctrl) ;; right Ctrl: tap=Esc, hold=Ctrl
+)
