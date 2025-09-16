@@ -32,7 +32,7 @@ install_config() {
     mkdir -p "$target_full_path"
     touch "$target_full_path"/.dotfile
 
-    ln -s "${source_full_path}"/* "${qtarget_full_path}/"
+    ln -s "${source_full_path}"/* "${target_full_path}/"
   elif [ -f "$source_full_path" ]; then
     # Source is a file
     if [ -L "$target_full_path" ]; then

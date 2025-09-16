@@ -1,0 +1,10 @@
+[Unit]
+Description=Kanata Service
+
+[Service]
+ExecStartPre=/usr/bin/modprobe uinput
+ExecStart=/usr/bin/kanata -c /home/ricardo/.config/kanata.kbd
+Restart=no
+
+[Install]
+WantedBy=default.target

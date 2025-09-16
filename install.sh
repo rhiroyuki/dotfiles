@@ -2,7 +2,7 @@
 
 set -eu pipefail
 
-source "./install/helper.sh"
+source ./install/helper.sh
 
 install_dotfiles () {
   dotfiles=( asdfrc default-gems gemrc tmux.conf aliases gitignore solargraph.yml reek.yml gitattributes wezterm.lua XCompose )
@@ -44,6 +44,9 @@ main () {
   install_dunst_conf
 
   add_source_to_zshrc
+
+  install_config "kanata.kbd"
+  source ./install/install_kanata_service.sh
 
   echo "Finished installation"
 }

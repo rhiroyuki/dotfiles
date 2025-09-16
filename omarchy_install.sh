@@ -4,7 +4,7 @@
 
 set -eu pipefail
 
-source "./install/helper.sh"
+source ./install/helper.sh
 
 set_hypr_kb_variant_intl() {
   local input_conf="$HOME/.config/hypr/input.conf"
@@ -29,6 +29,7 @@ main() {
   set_hypr_kb_variant_intl
 
   install_config "kanata.kbd"
+  source ./install/install_kanata_service.sh
 
   echo "Make sure zsh, tmux, kanata are installed and zsh is set as default shell"
   echo "Finished installation"
