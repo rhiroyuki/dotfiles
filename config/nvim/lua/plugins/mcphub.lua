@@ -5,6 +5,9 @@ return {
       'nvim-lua/plenary.nvim',
     },
     build = 'bundled_build.lua',
+    lazy = true,
+    module = 'mcphub',
+    cmd = "MCPHub",
     config = function()
       require('mcphub').setup({
         use_bundled_binary = true,
