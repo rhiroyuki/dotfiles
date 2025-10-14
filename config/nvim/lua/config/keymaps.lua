@@ -19,6 +19,13 @@ map("n", "gri", vim.lsp.buf.implementation,              { desc = "Go to impleme
 map("n", "gO", vim.lsp.buf.document_symbol,              { desc = "Document symbols" })
 map("n", "<C-S>", vim.lsp.buf.signature_help,            { desc = "Signature help" })
 
+-- Moving through splits
+-- Terminal mode
+map("t", "<C-h>", "<C-\\><C-N><C-w>h",               { desc = "Go to left split"    } )
+map("t", "<C-j>", "<C-\\><C-N><C-w>j",               { desc = "Go to below split"   } )
+map("t", "<C-k>", "<C-\\><C-N><C-w>k",               { desc = "Go to above split"   } )
+map("t", "<C-l>", "<C-\\><C-N><C-w>l",               { desc = "Go to right split"   } )
+
 -- Tab Shortcuts
 map("n", "tf", ":tabfirst<CR>",                          { desc = "Go to first tab"    } )
 map("n", "tn", ":tabnext<CR>",                           { desc = "Go to next tab"     } )
@@ -32,7 +39,11 @@ map("n", "vv", "<C-w>v",                                 { desc = "Vertical spli
 map("n", "ss", "<C-w>s",                                 { desc = "Horizontal split" })
 map("n", "<leader>-", ":wincmd _<cr>:wincmd |<CR>",      { desc = "Maximize split" })
 map("n", "<leader>=", ":wincmd =<cr>",                   { desc = "Equalize splits" })
+-- map("t", "<leader>-", [[<C-\><C-n>:wincmd _<CR>:wincmd |<CR>a]], { desc = "Maximize split" })
+-- map("t", "<leader>=", [[<C-\><C-n>:wincmd =<CR>a]],              { desc = "Equalize splits" })
 map("n", "<leader><leader>", "<C-^>",                    { desc = "Switch to alternate file" })
+map("n", "vt", ":vsplit | terminal<CR>a",               { desc = "Vertical split terminal" })
+map("n", "st", ":split | terminal<CR>a",                { desc = "Horizontal split terminal" })
 
 -- Colorizer
 map("n", "<leader>ct", ":ColorizerToggle<CR>",           { desc = "Toggle Colorizer" })

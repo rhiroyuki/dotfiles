@@ -16,6 +16,18 @@ set_hypr_kb_variant_intl() {
 }
 
 main() {
+  # Remove unwanted applications (only those actually installed)
+  sudo pacman -Rns --noconfirm obsidian obs-studio kdenlive 1password-beta 1password-cli typora xournalpp || true
+
+  # Hyprland keybinds and unbinds
+  append_command_to_file "$HOME/.config/hypr/hyprland.conf" "bind = SUPER, h, movefocus, l"
+  append_command_to_file "$HOME/.config/hypr/hyprland.conf" "bind = SUPER, j, movefocus, d"
+  append_command_to_file "$HOME/.config/hypr/hyprland.conf" "bind = SUPER, k, movefocus, u"
+  append_command_to_file "$HOME/.config/hypr/hyprland.conf" "bind = SUPER, l, movefocus, r"
+  append_command_to_file "$HOME/.config/hypr/hyprland.conf" "unbind = SUPER, K"
+  append_command_to_file "$HOME/.config/hypr/hyprland.conf" "bindd = SUPER SHIFT, K, Show key bindings, exec, omarchy-menu-keybindings"
+  append_command_to_file "$HOME/.config/hypr/hyprland.conf" "unbind = SUPER, J"
+
   install_config "nvim"
   ln_file_to_home_directory "tmux.conf"
   ln_file_to_home_directory "aliases"
