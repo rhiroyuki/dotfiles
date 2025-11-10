@@ -35,3 +35,5 @@ palette = 16=#f5a97f
 palette = 17=#f4dbd6
 
 window-decoration = none
+
+confirm-close-surface=false

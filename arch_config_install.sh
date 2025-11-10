@@ -17,6 +17,8 @@ set_hypr_kb_variant_intl() {
 
 main() {
   install_config "nvim"
+  install_config "mango"
+  install_config "rofi"
   ln_file_to_home_directory "tmux.conf"
   ln_file_to_home_directory "aliases"
 
@@ -28,10 +30,9 @@ main() {
   # Set Hyprland keyboard variant and options
   set_hypr_kb_variant_intl
 
-  install_config "kanata.kbd"
-  source ./install/install_kanata_service.sh
+  source ./install/install_keyd_service.sh
 
-  echo "Make sure zsh, tmux, kanata are installed and zsh is set as default shell"
+  echo "Make sure zsh, tmux, keyd are installed and zsh is set as default shell"
   echo "Finished installation"
 }
 

@@ -45,8 +45,7 @@ main () {
 
   add_source_to_zshrc
 
-  install_config "kanata.kbd"
-  source ./install/install_kanata_service.sh
+  source ./install/install_keyd_service.sh
 
   echo "Finished installation"
 }
