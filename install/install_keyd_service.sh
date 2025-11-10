@@ -1,10 +1,10 @@
 #! /usr/bin/env bash
 
-# creates a systemd service and timer to run kanata at startup
-# filepath: install/install-kanata-service.sh
+# creates a systemd service and timer to run keyd at startup
+# filepath: install/install_keyd_service.sh
 
-SERVICE_PATH="/etc/systemd/system/kanata.service"
-SOURCE_PATH="install/kanata.service"
+SERVICE_PATH="/etc/keyd/default.conf"
+SOURCE_PATH="install/keyd_default_conf"
 
 # Remove existing file or symlink if present
 if [ -e "$SERVICE_PATH" ]; then
@@ -16,6 +16,6 @@ sudo cp "$SOURCE_PATH" "$SERVICE_PATH"
 sudo systemctl daemon-reload
 
 # Enable to start on boot + start immediately
-sudo systemctl enable --now kanata.service
+sudo systemctl enable --now keyd
 
-echo "Kanata service installed, enabled, and started."
+echo "Keyd service installed, enabled, and started."

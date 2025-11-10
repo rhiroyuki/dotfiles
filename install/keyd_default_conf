@@ -1,0 +1,6 @@
+[ids]
+*
+
+[main]
+# Make Ctrl behave as Esc when tapped, and as Ctrl when held
+leftcontrol = overload(control, esc)

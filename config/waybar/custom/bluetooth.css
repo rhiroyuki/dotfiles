@@ -1,0 +1,13 @@
+/* --- Bluetooth module styling --- */
+#custom-bluetooth {
+    font-size: 14px;
+    padding: 0 6px;
+}
+
+#custom-bluetooth.active {
+    color: @grn; /* green (spring green) */
+}
+
+#custom-bluetooth.inactive {
+    color: @brnblk; /* gray */
+}

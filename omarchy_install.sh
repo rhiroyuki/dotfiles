@@ -28,10 +28,9 @@ main() {
   # Set Hyprland keyboard variant and options
   set_hypr_kb_variant_intl
 
-  install_config "kanata.kbd"
-  source ./install/install_kanata_service.sh
+  source ./install/install_keyd_service.sh.sh
 
-  echo "Make sure zsh, tmux, kanata are installed and zsh is set as default shell"
+  echo "Make sure zsh, tmux, keyd are installed and zsh is set as default shell"
   echo "Finished installation"
 }
 
