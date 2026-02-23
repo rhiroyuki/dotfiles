@@ -32,6 +32,8 @@ map("n", "vv", "<C-w>v",                                 { desc = "Vertical spli
 map("n", "ss", "<C-w>s",                                 { desc = "Horizontal split" })
 map("n", "<leader>-", ":wincmd _<cr>:wincmd |<CR>",      { desc = "Maximize split" })
 map("n", "<leader>=", ":wincmd =<cr>",                   { desc = "Equalize splits" })
+map("t", "<F11>-", [[<C-\><C-n>:wincmd _<CR>:wincmd |<CR>a]], { desc = "Maximize split" })
+map("t", "<F11>=", [[<C-\><C-n>:wincmd =<CR>a]],              { desc = "Equalize splits" })
 map("n", "<leader><leader>", "<C-^>",                    { desc = "Switch to alternate file" })
 
 -- Colorizer
