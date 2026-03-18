@@ -5,7 +5,6 @@ stty -ixon
 
 export EDITOR=nvim
 export XMODIFIERS=@im=fcitx
-export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 
 setopt COMBINING_CHARS # combine zero-length punctuation characters (accents) with the base character

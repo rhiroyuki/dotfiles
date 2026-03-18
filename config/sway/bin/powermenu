@@ -1,0 +1,12 @@
+#!/bin/sh
+
+chosen=$(printf "🔒 Lock\n💤 Suspend\n🔄 Reboot\n⏻ Shutdown\n🚪 Log Out" | rofi -p "Session:" -dmenu -i)
+
+case "$chosen" in
+  "🔒 Lock")      swaylock -f -c 000000 ;;
+  "💤 Suspend")   swaylock -f -c 000000 & systemctl suspend ;;
+  "🔄 Reboot")    systemctl reboot ;;
+  "⏻ Shutdown")  systemctl poweroff ;;
+  "🚪 Log Out")   swaymsg exit ;;
+  *) exit 1 ;;
+esac

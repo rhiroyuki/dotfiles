@@ -11,8 +11,9 @@ sudo pacman -S --noconfirm \
                ripgrep \
                wlsunset \
                fzf \
-               flameshot \
+               grim \
                blueman \
+               dunst \
                firefox \
                wtype \
                ghostty \
@@ -26,6 +27,7 @@ sudo pacman -S --noconfirm \
                ttf-liberation ttf-dejavu ttf-roboto \
                ttf-jetbrains-mono ttf-fira-code \
                ttf-hack adobe-source-code-pro-fonts \
+               otf-font-awesome ttf-arimo-nerd noto-fonts \
                wl-clipboard \
                wayland \
                wayland-protocols \
@@ -42,7 +44,14 @@ sudo pacman -S --noconfirm \
                keyd \
                libxcb \
                rofi \
-               cliphist
+               cliphist \
+               swappy \
+               waybar \
+               brightnessctl \
+               sway \
+               networkmanager \
+               network-manager-applet \
+               libayatana-appindicator
 
 git clone https://aur.archlinux.org/yay.git
 cd yay
@@ -51,7 +60,6 @@ makepkg -si
 sudo fc-cache -fv
 
 yay -S --noconfirm --needed \
-  mangowc-git \
   handy-bin \
   rofi-emoji-git
 

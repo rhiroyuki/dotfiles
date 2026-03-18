@@ -1,0 +1,310 @@
+# Display configuration
+# Prefer the monitor-advertised mode on startup. Forcing a modeset here
+# can leave the first NVIDIA + wlroots render stuck until a VT switch.
+output * mode 2560x1440@120Hz
+
+set $rosewater #F4DBD6
+set $flamingo  #F0C6C6
+set $pink      #F5BDE6
+set $mauve     #C6A0F6
+set $red       #ED8796
+set $maroon    #EE99A0
+set $peach     #F5A97F
+set $green     #A6DA95
+set $teal      #8BD5CA
+set $sky       #91D7E3
+set $sapphire  #7DC4E4
+set $blue      #8AADF4
+set $lavender  #B7BDF8
+set $text      #CAD3F5
+set $subtext1  #B8C0E0
+set $subtext0  #A5ADCB
+set $overlay2  #939AB7
+set $overlay1  #8087A2
+set $overlay0  #6E738D
+set $surface2  #5B6078
+set $surface1  #494D64
+set $surface0  #363A4F
+set $base      #24273A
+set $mantle    #1E2030
+set $crust     #181926
+
+# Import Wayland session variables into the user systemd and D-Bus
+# environments so portal and user services start with the right display.
+exec systemctl --user set-environment XDG_CURRENT_DESKTOP=sway
+exec systemctl --user import-environment DISPLAY SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec hash dbus-update-activation-environment 2>/dev/null && \
+    dbus-update-activation-environment --systemd DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway WAYLAND_DISPLAY
+
+client.focused           $lavender $base $text  $rosewater $mauve
+client.focused_inactive  $overlay0 $base $text  $rosewater $overlay0
+client.unfocused         $overlay0 $base $text  $rosewater $overlay0
+client.urgent            $peach    $base $peach $overlay0  $peach
+client.placeholder       $overlay0 $base $text  $overlay0  $overlay0
+client.background        $base
+
+# Mod1 is Alt
+# Mod4 is Super/Windows key
+set $mod Mod1
+set $mod2 Mod4
+
+font pango:monospace 8
+
+# Hide title bar and set border
+default_border pixel 1
+default_floating_border pixel 0
+gaps inner 10
+gaps outer 0
+smart_gaps off
+smart_borders on
+
+# Input configuration
+input * {
+    xkb_layout "us"
+    xkb_variant "intl"
+    xkb_options "ctrl:nocaps"
+    repeat_delay 300
+    repeat_rate 30
+}
+
+input type:touchpad {
+    tap enabled
+    natural_scroll disabled
+    dwt enabled
+}
+
+# Wallpaper
+output * bg ~/dotfiles/wallpapers/cloudy.png fill
+
+# Autostart
+# exec dex --autostart --environment sway
+exec swayidle -w \
+    timeout 300 'swaylock -f -c 000000' \
+    timeout 1200 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    before-sleep 'swaylock -f -c 000000'
+
+exec sleep 2 && nm-applet --indicator
+exec sleep 2 && blueman-applet
+exec wlsunset -T 5700 -t 4500 -g 0.8
+exec sleep 3 && fcitx5 -d
+exec wl-paste --type text --watch cliphist store
+exec wl-paste --type image --watch cliphist store
+exec dunst
+
+# Speech-to-text (handy)
+bindsym $mod2+t exec bash -c 'handy --toggle-transcription; f=/tmp/handy_state; if [ -f "$f" ]; then rm "$f"; notify-send -t 1500 "Handy" "OFF"; else touch "$f"; notify-send -t 1500 "Handy" "ON"; fi'
+
+# Lock
+bindsym $mod2+l exec swaylock -f -c 000000
+
+# Volume up
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +10% && notify-send -t 1500 "Volume" "$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+(?=%)' | head -1)%"
+# Volume down
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -10% && notify-send -t 1500 "Volume" "$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+(?=%)' | head -1)%"
+# Toggle mute
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-send -t 1500 "Volume" "$(pactl get-sink-mute @DEFAULT_SINK@ | grep -q yes && echo Muted || echo Unmuted)"
+# Toggle mic mute
+bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle && notify-send -t 1500 "Mic" "$(pactl get-source-mute @DEFAULT_SOURCE@ | grep -q yes && echo Muted || echo Unmuted)"
+
+# Brightness up
+bindsym XF86MonBrightnessUp exec brightnessctl set +10% && notify-send -t 1500 "Brightness" "$(( $(brightnessctl get) * 100 / $(brightnessctl max) ))%"
+# Brightness down
+bindsym XF86MonBrightnessDown exec brightnessctl set 10%- && notify-send -t 1500 "Brightness" "$(( $(brightnessctl get) * 100 / $(brightnessctl max) ))%"
+
+# Play/pause media
+bindsym XF86AudioPlay exec playerctl play-pause && notify-send -t 1500 "Media" "$(playerctl status): $(playerctl metadata title)"
+# Pause media
+bindsym XF86AudioPause exec playerctl pause && notify-send -t 1500 "Media" "Paused: $(playerctl metadata title)"
+# Next track
+bindsym XF86AudioNext exec playerctl next && notify-send -t 1500 "Media" "Next: $(playerctl metadata title)"
+# Previous track
+bindsym XF86AudioPrev exec playerctl previous && notify-send -t 1500 "Media" "Previous: $(playerctl metadata title)"
+
+# Use Mouse+$mod to drag floating windows
+floating_modifier $mod normal
+
+# Start a terminal
+bindsym $mod+control+t exec ghostty
+
+# File explorer
+bindsym $mod2+e exec nemo
+
+# Screenshot (region to clipboard)
+bindsym $mod2+Print exec sh -c 'grim -g "$(slurp)" - | swappy -f -'
+
+# Kill focused window
+bindsym $mod+Shift+q kill
+
+# Launcher
+bindsym $mod+Return exec "$HOME/.config/sway/bin/launcher"
+# Emoji
+bindsym $mod+e exec rofi -show emoji
+# Powermenu (shutdown, suspend, reboot, shutdown, log out)
+bindsym $mod2+p exec "$HOME/.config/sway/bin/powermenu"
+
+# Clipboard history
+bindsym $mod+control+f exec cliphist list | rofi -dmenu -p "Clipboard" | cliphist decode | wl-copy
+# Show keybindings
+bindsym $mod+Shift+slash exec "$HOME/.config/sway/bin/keybindings"
+
+# Focus left
+bindsym $mod+h focus left
+# Focus down
+bindsym $mod+j focus down
+# Focus up
+bindsym $mod+k focus up
+# Focus right
+bindsym $mod+l focus right
+
+# Focus left
+bindsym $mod+Left focus left
+# Focus down
+bindsym $mod+Down focus down
+# Focus up
+bindsym $mod+Up focus up
+# Focus right
+bindsym $mod+Right focus right
+
+# Move window left
+bindsym $mod+Shift+h move left
+# Move window down
+bindsym $mod+Shift+j move down
+# Move window up
+bindsym $mod+Shift+k move up
+# Move window right
+bindsym $mod+Shift+l move right
+
+# Move window left
+bindsym $mod+Shift+Left move left
+# Move window down
+bindsym $mod+Shift+Down move down
+# Move window up
+bindsym $mod+Shift+Up move up
+# Move window right
+bindsym $mod+Shift+Right move right
+
+# Split in horizontal orientation
+bindsym $mod2+h split h
+
+# Split in vertical orientation
+bindsym $mod2+v split v
+
+# Enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# Layout: stacking
+bindsym $mod+s layout stacking
+# Layout: tabbed
+bindsym $mod+w layout tabbed
+# Layout: toggle split
+bindsym $mod+t layout toggle split
+
+# Toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# Change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# Focus the parent container
+bindsym $mod+a focus parent
+
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# Switch to workspace 1
+bindsym $mod+1 workspace number $ws1
+# Switch to workspace 2
+bindsym $mod+2 workspace number $ws2
+# Switch to workspace 3
+bindsym $mod+3 workspace number $ws3
+# Switch to workspace 4
+bindsym $mod+4 workspace number $ws4
+# Switch to workspace 5
+bindsym $mod+5 workspace number $ws5
+# Switch to workspace 6
+bindsym $mod+6 workspace number $ws6
+# Switch to workspace 7
+bindsym $mod+7 workspace number $ws7
+# Switch to workspace 8
+bindsym $mod+8 workspace number $ws8
+# Switch to workspace 9
+bindsym $mod+9 workspace number $ws9
+# Switch to workspace 10
+bindsym $mod+0 workspace number $ws10
+
+# Move container to workspace 1
+bindsym $mod+Shift+1 move container to workspace number $ws1
+# Move container to workspace 2
+bindsym $mod+Shift+2 move container to workspace number $ws2
+# Move container to workspace 3
+bindsym $mod+Shift+3 move container to workspace number $ws3
+# Move container to workspace 4
+bindsym $mod+Shift+4 move container to workspace number $ws4
+# Move container to workspace 5
+bindsym $mod+Shift+5 move container to workspace number $ws5
+# Move container to workspace 6
+bindsym $mod+Shift+6 move container to workspace number $ws6
+# Move container to workspace 7
+bindsym $mod+Shift+7 move container to workspace number $ws7
+# Move container to workspace 8
+bindsym $mod+Shift+8 move container to workspace number $ws8
+# Move container to workspace 9
+bindsym $mod+Shift+9 move container to workspace number $ws9
+# Move container to workspace 10
+bindsym $mod+Shift+0 move container to workspace number $ws10
+
+# Previous workspace
+bindsym $mod+Shift+Tab workspace prev
+# Next workspace
+bindsym $mod+Tab workspace next
+
+# Reload the configuration file
+bindsym $mod+Shift+c exec swaymsg reload && notify-send "Sway" "Config reloaded"
+# Exit sway
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+# Resize window
+mode "resize" {
+  # Shrink width
+  bindsym h resize shrink width 10 px or 10 ppt
+  # Grow height
+  bindsym j resize grow height 10 px or 10 ppt
+  # Shrink height
+  bindsym k resize shrink height 10 px or 10 ppt
+  # Grow width
+  bindsym l resize grow width 10 px or 10 ppt
+
+  # Shrink width
+  bindsym Left resize shrink width 10 px or 10 ppt
+  # Grow height
+  bindsym Down resize grow height 10 px or 10 ppt
+  # Shrink height
+  bindsym Up resize shrink height 10 px or 10 ppt
+  # Grow width
+  bindsym Right resize grow width 10 px or 10 ppt
+
+  # Exit resize mode
+  bindsym Return mode "default"
+  # Exit resize mode
+  bindsym Escape mode "default"
+  # Exit resize mode
+  bindsym $mod+r mode "default"
+}
+
+# Enter resize mode
+bindsym $mod+r mode "resize"
+
+# Float rules
+for_window [app_id="blueman-manager"] floating enable
+for_window [app_id="yad" title="yad-calendar"] floating enable
+
+exec_always $HOME/.config/sway/bin/launch_waybar

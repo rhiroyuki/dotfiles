@@ -1,0 +1,8 @@
+#! /usr/bin/env bash
+# vim: set ft=sh:
+
+if command -v rofi >/dev/null 2>&1; then
+  rofi -show "${1:-drun}"
+else
+  dmenu_run -i -p "Run: "
+fi

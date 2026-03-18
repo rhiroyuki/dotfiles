@@ -2,7 +2,11 @@
 
 CONFIG_FILES="$HOME/.config/waybar/config.jsonc $HOME/.config/waybar/style.css"
 
+killall waybar
 trap "killall waybar" EXIT
+
+until swaymsg -t get_outputs 2>/dev/null | grep -q '"active": true'; do sleep 0.1; done
+sleep 0.5
 
 while true; do
   waybar --log-level error &

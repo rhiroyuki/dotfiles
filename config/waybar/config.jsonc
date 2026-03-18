@@ -1,10 +1,8 @@
 {
   "modules-left": [
-    "ext/workspaces",
+    "sway/workspaces",
     "custom/sep",
-    "dwl/window#layout",
-    "custom/sep",
-    "dwl/window#title"
+    "sway/window"
   ],
   "modules-right": [
     "custom/sep",
@@ -50,6 +48,8 @@
     "tooltip": true
   },
   "network": {
+    "interval": 5,
+    "interface": "wlan0",
     "format": "{ifname}",
     "format-wifi": " ",
     "format-ethernet": "{ipaddr}/{cidr} 󰊗",
@@ -103,20 +103,17 @@
     "format-time": "{H}:{M}",
     "format-icons": ["", "", "", "", ""]
   },
-  "ext/workspaces": {
+  "sway/workspaces": {
     "format": "{icon}",
-    "ignore-hidden": false,
     "on-click": "activate",
-    "sort-by-id": true
+    "sort-by-number": true
   },
-  "dwl/tags": {
-    "num-tags": 9
-  },
-  "dwl/window#layout": {
-    "format": "[{layout}]"
-  },
-  "dwl/window#title": {
+  "sway/window": {
     "format": "{title}"
+  },
+  "tray": {
+    "icon-size": 20,
+    "spacing": 8
   },
   "custom/sep": {
     "format": "|",

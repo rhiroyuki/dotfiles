@@ -14,8 +14,7 @@ install_dotfiles () {
 }
 
 install_dunst_conf () {
-  mkdir -p "$HOME/.config/dunst"
-  wget "https://raw.githubusercontent.com/catppuccin/dunst/b0b838d38f134136322ad3df2b6dc57c4ca118cf/src/macchiato.conf" -O ~/.config/dunst/dunstrc
+  install_config "dunst"
 }
 
 add_source_to_zshrc() {

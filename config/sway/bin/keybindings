@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# vim: set ft=sh:
+# Display all sway keybindings in rofi
+
+CONFIG="$HOME/.config/sway/config"
+
+awk '
+  /^mode "([^"]+)"/ {
+    match($0, /^mode "([^"]+)"/, m)
+    current_mode = m[1]
+    next
+  }
+
+  /^\}/ { current_mode = "" }
+
+  /bindsym/ {
+    line = $0
+    sub(/^[[:space:]]*bindsym[[:space:]]+/, "", line)
+
+    # Extract the key (first token)
+    key = line
+    sub(/[[:space:]].*/, "", key)
+
+    # Replace $mod and $mod2
+    gsub(/\$mod2/, "Super", key)
+    gsub(/\$mod/, "Alt", key)
+
+    # Extract action (everything after the key)
+    action = line
+    sub(/^[^[:space:]]+[[:space:]]+/, "", action)
+
+    # Use preceding comment as description if available
+    desc = (prev_comment != "") ? prev_comment : action
+    gsub(/^exec /, "", desc)
+    gsub(/^"/, "", desc)
+    gsub(/"$/, "", desc)
+
+    # Truncate long descriptions
+    if (length(desc) > 60) desc = substr(desc, 1, 57) "..."
+
+    prefix = (current_mode != "") ? "[" current_mode "] " : ""
+    printf "%-30s  %s%s\n", key, prefix, desc
+    prev_comment = ""
+    next
+  }
+
+  /^[[:space:]]*#/ {
+    line = $0
+    sub(/^[[:space:]]*# ?/, "", line)
+    prev_comment = line
+    next
+  }
+
+  { prev_comment = "" }
+' "$CONFIG" | sort | rofi -dmenu -i -p "Keybindings" -no-custom
