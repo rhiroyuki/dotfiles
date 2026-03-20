@@ -1,6 +1,6 @@
 #! /bin/sh
 
-sudo pacman -S --noconfirm --needed base-devel git wget
+sudo pacman -S --noconfirm --needed base-devel git wget jq
 sudo pacman -S --noconfirm \
             --needed \
                man \
@@ -51,7 +51,13 @@ sudo pacman -S --noconfirm \
                sway \
                networkmanager \
                network-manager-applet \
-               libayatana-appindicator
+               libayatana-appindicator \
+               foot \
+               nemo \
+               pavucontrol \
+               playerctl \
+               bluetui \
+               impala
 
 git clone https://aur.archlinux.org/yay.git
 cd yay

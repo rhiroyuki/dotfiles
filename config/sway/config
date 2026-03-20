@@ -1,7 +1,6 @@
 # Display configuration
-# Prefer the monitor-advertised mode on startup. Forcing a modeset here
-# can leave the first NVIDIA + wlroots render stuck until a VT switch.
-output * mode 2560x1440@120Hz
+# Automatically select the highest refresh rate for each output's resolution
+exec_always $HOME/.config/sway/bin/set_max_refresh
 
 set $rosewater #F4DBD6
 set $flamingo  #F0C6C6
@@ -74,7 +73,7 @@ input type:touchpad {
 }
 
 # Wallpaper
-output * bg ~/dotfiles/wallpapers/cloudy.png fill
+output * bg $HOME/dotfiles/wallpapers/cloudy.png fill
 
 # Autostart
 # exec dex --autostart --environment sway

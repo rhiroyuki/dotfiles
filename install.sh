@@ -5,7 +5,7 @@ set -eu pipefail
 source ./install/helper.sh
 
 install_dotfiles () {
-  dotfiles=( asdfrc default-gems gemrc tmux.conf aliases gitignore solargraph.yml reek.yml gitattributes wezterm.lua XCompose )
+  dotfiles=( default-gems tmux.conf aliases gitignore gitattributes XCompose Xmodmap )
 
   for dotfile in "${dotfiles[@]}";
   do

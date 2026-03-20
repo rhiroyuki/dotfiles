@@ -86,13 +86,10 @@ configuration {
   kb-remove-char-back: "BackSpace,Shift+BackSpace";
   kb-remove-to-eol: "";
   kb-remove-to-sol: "Control+u";
-  kb-accept-entry: "Control+j,Control+m,Return,KP_Enter";
   kb-accept-custom: "Control+Return";
   kb-accept-custom-alt: "Control+Shift+Return";
   kb-accept-alt: "Shift+Return";
   kb-delete-entry: "Shift+Delete";
-  kb-mode-next: "Shift+Right,Control+Tab";
-  kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab";
   kb-mode-complete: "Shift+l";
   kb-row-left: "Control+Page_Up";
   kb-row-right: "Control+Page_Down";
@@ -143,6 +140,7 @@ configuration {
   kb-accept-entry:                "Control+m,Return,KP_Enter";
   kb-mode-next: "Shift+Right,Control+Tab,Control+l";
   kb-mode-previous: "Shift+Left,Control+Shift+Tab,Control+h";
+
   timeout {
       action: "kb-cancel";
       delay:  0;
@@ -154,7 +152,7 @@ configuration {
   modi: "run,drun,window";
   icon-theme: "Oranchelo";
   show-icons: true;
-  terminal: "wezterm";
+  terminal: "ghostty";
   drun-display-format: "{icon} {name}";
   location: 0;
   disable-history: false;

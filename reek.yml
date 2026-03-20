@@ -1,5 +1,0 @@
----
-detectors:
-  IrresponsibleModule:
-    enabled: false
-    exclude: []
