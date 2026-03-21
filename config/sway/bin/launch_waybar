@@ -6,6 +6,7 @@ killall waybar
 trap "killall waybar" EXIT
 
 until swaymsg -t get_outputs 2>/dev/null | grep -q '"active": true'; do sleep 0.1; done
+while pgrep -f apply_display_modes > /dev/null 2>&1; do sleep 0.1; done
 sleep 0.5
 
 while true; do

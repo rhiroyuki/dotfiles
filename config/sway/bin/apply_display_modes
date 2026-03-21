@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# For each output, apply a saved mode if one exists, otherwise leave sway's default.
+
+SAVE_FILE="$HOME/.config/sway/display_modes.saved"
+
+swaymsg -t get_outputs --raw | jq -r '.[] | select(.active) | .name' | while read -r output; do
+    saved_mode=$(grep "^output $output " "$SAVE_FILE" 2>/dev/null | awk '{print $3}')
+    if [[ -n "$saved_mode" ]]; then
+        swaymsg output "$output" mode "$saved_mode"
+    fi
+done

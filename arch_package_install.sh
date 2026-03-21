@@ -19,7 +19,6 @@ sudo pacman -S --noconfirm \
                ghostty \
                slurp \
                swaybg \
-               swaylock \
                swayidle \
                fcitx5 fcitx5-gtk fcitx5-configtool \
                noto-fonts noto-fonts-cjk \
@@ -67,5 +66,6 @@ sudo fc-cache -fv
 
 yay -S --noconfirm --needed \
   handy-bin \
-  rofi-emoji-git
+  rofi-emoji-git \
+  swaylock-effects
 

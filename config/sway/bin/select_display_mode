@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Interactive display mode selector for sway.
+# For each active output, presents available modes via rofi, applies the
+# selected mode temporarily, waits for confirmation (15s timeout), and
+# persists the choice to ~/.config/sway/display_modes.saved.
+# Adjust CONFIRM_TIMEOUT below to change the revert countdown duration.
+
+CONFIRM_TIMEOUT=15  # seconds to wait for confirmation before reverting
+
+SAVE_FILE="$HOME/.config/sway/display_modes.saved"
+
+mapfile -t outputs < <(swaymsg -t get_outputs --raw | jq -r '.[] | select(.active) | .name')
+
+if [[ ${#outputs[@]} -eq 0 ]]; then
+    notify-send "Display Mode" "No active outputs found"
+    exit 1
+fi
+
+for output in "${outputs[@]}"; do
+    # Get current mode for revert
+    current_mode=$(swaymsg -t get_outputs --raw | jq -r \
+        --arg name "$output" \
+        '.[] | select(.name == $name) | "\(.current_mode.width)x\(.current_mode.height)@\(.current_mode.refresh / 1000 | floor)Hz"')
+
+    # Build sorted deduplicated list of available modes
+    # Sort: highest resolution (width*height) first, then highest refresh first
+    mapfile -t modes < <(swaymsg -t get_outputs --raw | jq -r \
+        --arg name "$output" \
+        '.[] | select(.name == $name) | .modes[] |
+        "\(.width * .height) \(.refresh) \(.width)x\(.height)@\(.refresh / 1000 | floor)Hz"' \
+        | sort -k1,1rn -k2,2rn | awk '{print $3}' | uniq)
+
+    if [[ ${#modes[@]} -eq 0 ]]; then
+        continue
+    fi
+
+    # Present mode list via rofi (20 visible lines)
+    chosen=$(printf '%s\n' "${modes[@]}" | rofi -dmenu -p "$output mode" -format s -lines 20)
+
+    if [[ -z "$chosen" ]]; then
+        continue
+    fi
+
+    # Apply selected mode immediately
+    swaymsg output "$output" mode "$chosen"
+
+    # Show confirmation prompt with 10s countdown in a notification
+    (
+        notif_id=$(notify-send --print-id -t 1100 "Display Mode" "Reverts in ${CONFIRM_TIMEOUT}s")
+        for i in $(seq $(( CONFIRM_TIMEOUT - 1 )) -1 0); do
+            sleep 1
+            notify-send --replace-id="$notif_id" -t 1100 "Display Mode" "Reverts in ${i}s"
+        done
+    ) &
+    COUNTDOWN_PID=$!
+
+    rofi -dmenu -p "Keep $chosen on $output?" \
+        -mesg "Enter to keep, Esc or wait ${CONFIRM_TIMEOUT}s to revert" \
+        <<< $'y\nn' &
+    ROFI_PID=$!
+    ( sleep "$CONFIRM_TIMEOUT" && kill "$ROFI_PID" 2>/dev/null ) &
+    TIMER_PID=$!
+    wait "$ROFI_PID"
+    ROFI_EXIT=$?
+    kill "$TIMER_PID" 2>/dev/null
+    kill "$COUNTDOWN_PID" 2>/dev/null
+    wait "$TIMER_PID" 2>/dev/null
+    wait "$COUNTDOWN_PID" 2>/dev/null
+
+    if [[ $ROFI_EXIT -eq 0 ]]; then
+        # User confirmed — persist the choice
+        tmpfile=$(mktemp)
+        grep -v "^output $output " "$SAVE_FILE" > "$tmpfile" 2>/dev/null
+        echo "output $output $chosen" >> "$tmpfile"
+        mv "$tmpfile" "$SAVE_FILE"
+    else
+        # Cancelled or timed out — revert
+        swaymsg output "$output" mode "$current_mode"
+    fi
+done
+
+notify-send "Display Mode" "Done configuring outputs"

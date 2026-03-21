@@ -1,5 +1,8 @@
 # vim: filetype=zsh
 
+# Disables bell
+unsetopt beep
+
 # Disable terminal freeze <C s>
 stty -ixon
 

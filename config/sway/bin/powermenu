@@ -1,10 +1,9 @@
 #!/bin/sh
 
-chosen=$(printf "🔒 Lock\n💤 Suspend\n🔄 Reboot\n⏻ Shutdown\n🚪 Log Out" | rofi -p "Session:" -dmenu -i)
+chosen=$(printf "🔒 Lock\n🔄 Reboot\n⏻ Shutdown\n🚪 Log Out" | rofi -p "Session:" -dmenu -i)
 
 case "$chosen" in
-  "🔒 Lock")      swaylock -f -c 000000 ;;
-  "💤 Suspend")   swaylock -f -c 000000 & systemctl suspend ;;
+  "🔒 Lock")      swaylock -f --image $HOME/dotfiles/wallpapers/cloudy.png --effect-blur 7x5 ;;
   "🔄 Reboot")    systemctl reboot ;;
   "⏻ Shutdown")  systemctl poweroff ;;
   "🚪 Log Out")   swaymsg exit ;;

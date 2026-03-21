@@ -37,3 +37,4 @@ palette = 17=#f4dbd6
 window-decoration = none
 
 confirm-close-surface=false
+bell-features = ""

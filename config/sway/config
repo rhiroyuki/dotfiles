@@ -1,6 +1,6 @@
 # Display configuration
-# Automatically select the highest refresh rate for each output's resolution
-exec_always $HOME/.config/sway/bin/set_max_refresh
+# Apply saved display modes for each active output
+exec_always $HOME/.config/sway/bin/apply_display_modes
 
 set $rosewater #F4DBD6
 set $flamingo  #F0C6C6
@@ -78,10 +78,9 @@ output * bg $HOME/dotfiles/wallpapers/cloudy.png fill
 # Autostart
 # exec dex --autostart --environment sway
 exec swayidle -w \
-    timeout 300 'swaylock -f -c 000000' \
+    timeout 300 'swaylock -f --image $HOME/dotfiles/wallpapers/cloudy.png --effect-blur 7x5' \
     timeout 1200 'swaymsg "output * dpms off"' \
-    resume 'swaymsg "output * dpms on"' \
-    before-sleep 'swaylock -f -c 000000'
+    resume 'swaymsg "output * dpms on"'
 
 exec sleep 2 && nm-applet --indicator
 exec sleep 2 && blueman-applet
@@ -95,7 +94,7 @@ exec dunst
 bindsym $mod2+t exec bash -c 'handy --toggle-transcription; f=/tmp/handy_state; if [ -f "$f" ]; then rm "$f"; notify-send -t 1500 "Handy" "OFF"; else touch "$f"; notify-send -t 1500 "Handy" "ON"; fi'
 
 # Lock
-bindsym $mod2+l exec swaylock -f -c 000000
+bindsym $mod2+l exec swaylock -f --image $HOME/dotfiles/wallpapers/cloudy.png --effect-blur 7x5
 
 # Volume up
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +10% && notify-send -t 1500 "Volume" "$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+(?=%)' | head -1)%"
@@ -141,6 +140,8 @@ bindsym $mod+Return exec "$HOME/.config/sway/bin/launcher"
 bindsym $mod+e exec rofi -show emoji
 # Powermenu (shutdown, suspend, reboot, shutdown, log out)
 bindsym $mod2+p exec "$HOME/.config/sway/bin/powermenu"
+# Display mode selector
+bindsym $mod2+d exec "$HOME/dotfiles/config/sway/bin/select_display_mode"
 
 # Clipboard history
 bindsym $mod+control+f exec cliphist list | rofi -dmenu -p "Clipboard" | cliphist decode | wl-copy
