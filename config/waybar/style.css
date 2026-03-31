@@ -53,8 +53,9 @@ button:hover {
 #clock,
 #custom-sep,
 #battery,
-#cpu,
-#memory,
+#custom-cpu,
+#custom-gpu,
+#custom-mem,
 #disk,
 #tray {
     padding: 0 8px;
@@ -77,24 +78,34 @@ button:hover {
     color: @ylw;
 }
 
-#memory {
+#custom-mem {
     color: @mag;
 }
 
-#cpu {
+#custom-cpu {
     color: @grn;
 }
 
-#network.disconnected {
-    background-color: @red;
+tooltip {
+    background-color: @bg;
+    border: 1px solid @brblk;
+}
+
+tooltip label {
+    color: @fg;
+}
+
+#custom-gpu {
+    color: @red;
+}
+
+#custom-net {
+    color: @cyn;
+    padding: 0 8px;
 }
 
 #network.wifi {
     color: @grn;
-}
-
-#network.disconnected {
-    color: @brblk;
 }
 
 #tray {

@@ -30,8 +30,8 @@ set $crust     #181926
 
 # Import Wayland session variables into the user systemd and D-Bus
 # environments so portal and user services start with the right display.
-exec systemctl --user set-environment XDG_CURRENT_DESKTOP=sway
-exec systemctl --user import-environment DISPLAY SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec systemctl --user set-environment XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland
+exec systemctl --user import-environment DISPLAY SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
 exec hash dbus-update-activation-environment 2>/dev/null && \
     dbus-update-activation-environment --systemd DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway WAYLAND_DISPLAY
 

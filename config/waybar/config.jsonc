@@ -6,15 +6,19 @@
   ],
   "modules-right": [
     "custom/sep",
-    "cpu",
+    "custom/gpu",
     "custom/sep",
-    "memory",
+    "custom/cpu",
+    "custom/sep",
+    "custom/mem",
     "custom/sep",
     "disk",
     "custom/sep",
     "tray",
     "custom/sep",
     "pulseaudio",
+    "custom/sep",
+    "custom/net",
     "custom/sep",
     "network",
     "custom/sep",
@@ -26,12 +30,24 @@
   "clock": {
     "format-alt": "{:%Y-%m-%d}"
   },
-  "cpu": {
-   "format": "CPU: {usage}%",
+  "custom/gpu": {
+    "exec": "~/.config/waybar/custom/gpu.sh",
+    "interval": 3,
+    "format": "{}"
+  },
+  "custom/cpu": {
+    "exec": "~/.config/waybar/custom/cpu.sh",
+    "return-type": "json",
+    "interval": 2,
+    "format": "{}",
     "tooltip": false
   },
-  "memory": {
-    "format": "Mem: {used}GiB"
+  "custom/mem": {
+    "exec": "~/.config/waybar/custom/mem.sh",
+    "return-type": "json",
+    "interval": 5,
+    "format": "{}",
+    "tooltip": false
   },
   "disk": {
     "interval": 60,
@@ -47,13 +63,20 @@
     "interval": 30,
     "tooltip": true
   },
+  "custom/net": {
+    "exec": "~/.config/waybar/custom/net.sh",
+    "return-type": "json",
+    "interval": 2,
+    "format": "{}",
+    "tooltip": false
+  },
   "network": {
     "interval": 5,
     "interface": "wlan0",
     "format": "{ifname}",
     "format-wifi": " ",
     "format-ethernet": "{ipaddr}/{cidr} 󰊗",
-    "format-disconnected": "Disconnected", //An empty format will hide the module.
+    "format-disconnected": "",
     "tooltip-format": "{ifname} via {gwaddr} 󰊗",
     "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
     "tooltip-format-ethernet": "{ifname} ",
