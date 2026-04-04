@@ -9,6 +9,7 @@ sudo pacman -S --noconfirm \
                zsh \
                inotify-tools \
                ripgrep \
+               fd \
                wlsunset \
                fzf \
                grim \

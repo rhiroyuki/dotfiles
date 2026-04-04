@@ -42,20 +42,6 @@ set.shiftwidth = 2
 
 vim.cmd('filetype plugin indent on')
 
--- Speed up loading ruby files
--- /usr/share/nvim/runtime/ftplugin/ruby.vim and runtime/autoload/provider/ruby.vim
-vim.g.ruby_host_prog = os.getenv("HOME") .. "/.asdf/shims/neovim-ruby-host"
-vim.g.ruby_path = {}
-
-local group = vim.api.nvim_create_augroup("DisableRubyFiletypePlugin", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "ruby",
-  group = group,
-  callback = function()
-    vim.cmd('filetype plugin off')
-  end
-})
-
 -- Display tabs and trailing spaces visually
 set.list = true
 set.listchars:append({
@@ -117,6 +103,12 @@ set.smartcase = true
 set.inccommand = 'split'
 
 vim.g.mapleader = ' '
+
+-- == Disable providers (no plugins require them) ==
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_node_provider    = 0
+vim.g.loaded_perl_provider    = 0
+vim.g.loaded_ruby_provider    = 0
 
 -- == Disable some built-in plugins to speed up startup ==
 vim.g.loaded_gzip              = 1

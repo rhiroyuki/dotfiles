@@ -11,5 +11,16 @@ return {
   { "tpope/vim-repeat",                          event = "VeryLazy" },
   { "tpope/vim-surround",                        event = "VeryLazy" },
   { "windwp/nvim-autopairs",                     event = "InsertEnter", opts = {} },
-  { "MeanderingProgrammer/render-markdown.nvim", lazy = true, ft = { "markdown", "codecompanion" }, opts = {} }
+  { "MeanderingProgrammer/render-markdown.nvim", lazy = true, ft = { "markdown", "codecompanion" }, opts = {} },
+  { "nvim-tree/nvim-web-devicons",               lazy = true },
+  {
+    "ricardow/nvim-agent-link",
+    dir = "~/Homespace/nvim-agent-link", -- Absolute or relative path to the plugin
+    config = function()
+      require("agent-link").setup({
+        auto_open_plan = true,
+        terminal_detect_strategy = "auto",
+      })
+    end,
+  }
 }
