@@ -29,14 +29,16 @@ window#waybar {
     background: transparent;
     border-bottom: 3px solid @bg;
 }
-#workspaces button.active {
+#workspaces button.active,
+#workspaces button.focused {
     color: @cyn;
     border-bottom: 3px solid @mag;
 }
 #workspaces button.hidden {
     color: @white;
 }
-#workspaces button.hidden.active {
+#workspaces button.hidden.active,
+#workspaces button.hidden.focused {
     color: @cyn;
     border-bottom: 3px solid @mag;
 }
@@ -56,7 +58,7 @@ button:hover {
 #custom-cpu,
 #custom-gpu,
 #custom-mem,
-#disk,
+#custom-disk,
 #tray {
     padding: 0 8px;
     color: @white;
@@ -74,7 +76,7 @@ button:hover {
     color: @blu;
 }
 
-#disk {
+#custom-disk {
     color: @ylw;
 }
 

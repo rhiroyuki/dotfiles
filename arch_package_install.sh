@@ -19,7 +19,8 @@ sudo pacman -S --noconfirm \
                wtype \
                ghostty \
                slurp \
-               swaybg \
+               hyprpaper \
+               swaylock \
                swayidle \
                fcitx5 fcitx5-gtk fcitx5-configtool \
                noto-fonts noto-fonts-cjk \
@@ -46,9 +47,14 @@ sudo pacman -S --noconfirm \
                rofi \
                cliphist \
                swappy \
-               waybar \
                brightnessctl \
                sway \
+               uwsm \
+               hyprland \
+               hyprlock \
+               hypridle \
+               xdg-desktop-portal-hyprland \
+               xdg-desktop-portal-gtk \
                networkmanager \
                network-manager-applet \
                libayatana-appindicator \
@@ -59,14 +65,20 @@ sudo pacman -S --noconfirm \
                bluetui \
                impala
 
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
+if ! command -v yay >/dev/null 2>&1; then
+  git clone https://aur.archlinux.org/yay.git
+  cd yay
+  makepkg -si
+  cd ..
+fi
 
 sudo fc-cache -fv
 
 yay -S --noconfirm --needed \
+  waybar-git \
   handy-bin \
   rofi-emoji-git \
-  swaylock-effects
+  hyprlauncher \
+  hyprpolkitagent \
+  ttf-ms-fonts
 

@@ -27,6 +27,17 @@ There are no tests, linters, or build steps for this repo.
 
 `zshrc_dotfile` is **not** symlinked — `install.sh` appends `source ~/dotfiles/zshrc_dotfile` to `~/.zshrc` instead.
 
+## Package and modification tracking
+
+Whenever a package installation or system modification is requested:
+
+- **Arch Linux packages** — add the package to the appropriate section in `arch_package_install.sh` (pacman) or `arch_config_install.sh` (AUR/config steps).
+- **New dotfile or config** — follow the conventions below and update the "Configured tools & their files" table.
+- **Install-time setup** (services, symlinks, one-time commands) — add a script under `install/` and wire it into `install.sh` or document it in this file so the setup is reproducible.
+- **If a change cannot be scripted** (e.g. manual GUI step, hardware-specific tweak) — document it explicitly in this file under the relevant tool section.
+
+The goal is that a fresh install from this repo reproduces the full environment without any undocumented manual steps.
+
 ## Key conventions
 
 ### Adding a new dotfile
@@ -59,6 +70,7 @@ Existing files/dirs are renamed with a Unix-timestamp suffix (`_backup_123456789
 | asdf | `asdfrc` |
 | keyd | `install/keyd_default_conf`, `install/install_keyd_service.sh` |
 | fcitx5 | `install/setup_fcitx5_intl.sh` |
+| fontconfig | `config/fontconfig/fonts.conf` |
 
 ## Zsh
 

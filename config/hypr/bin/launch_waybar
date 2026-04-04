@@ -1,0 +1,15 @@
+#!/bin/bash
+
+CONFIG_FILES="$HOME/.config/waybar/config.jsonc $HOME/.config/waybar/style.css"
+
+killall waybar
+trap "killall waybar" EXIT
+
+until hyprctl monitors 2>/dev/null | grep -q "Monitor"; do sleep 0.1; done
+sleep 0.5
+
+while true; do
+  waybar --log-level error &
+  inotifywait -e create,modify $CONFIG_FILES
+  killall waybar
+done

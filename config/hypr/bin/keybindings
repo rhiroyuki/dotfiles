@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# vim: set ft=sh:
+# Display all hyprland keybindings in rofi
+
+CONFIG="$HOME/.config/hypr/hyprland.conf"
+
+awk '
+  /^submap = / {
+    if ($3 == "reset") {
+      current_submap = ""
+    } else {
+      current_submap = $3
+    }
+    next
+  }
+
+  /^bind[elm]? = / {
+    line = $0
+    sub(/^bind[elm]? = /, "", line)
+
+    # Split by comma: mods, key, dispatcher, params
+    n = split(line, parts, /[[:space:]]*,[[:space:]]*/)
+    mods = parts[1]
+    key  = parts[2]
+    disp = parts[3]
+    rest = parts[4]
+
+    # Build key combo display
+    combo = (mods != "") ? mods "+" key : key
+    gsub(/[[:space:]]/, "", combo)
+
+    # Use preceding comment as description
+    desc = (prev_comment != "") ? prev_comment : disp (rest != "" ? " " rest : "")
+    if (length(desc) > 60) desc = substr(desc, 1, 57) "..."
+
+    prefix = (current_submap != "") ? "[" current_submap "] " : ""
+    printf "%-35s  %s%s\n", combo, prefix, desc
+    prev_comment = ""
+    next
+  }
+
+  /^[[:space:]]*#/ {
+    line = $0
+    sub(/^[[:space:]]*# ?/, "", line)
+    prev_comment = line
+    next
+  }
+
+  { prev_comment = "" }
+' "$CONFIG" | sort | rofi -dmenu -i -p "Keybindings" -no-custom

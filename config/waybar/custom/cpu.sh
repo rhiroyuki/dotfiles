@@ -45,4 +45,8 @@ while read -r line; do
     fi
 done <<< "$stats1"
 
-jq -cn --arg text "CPU: ${overall}% ${sparkline}" '{"text": $text}'
+top_procs=$(ps -eo pcpu,pid,comm --sort=-pcpu | awk 'NR>=2 && NR<=4 {cpu=$1; pid=$2; $1=""; $2=""; sub(/^[[:space:]]+/, ""); printf "%s (PID %s): %s%%\n", $0, pid, cpu}')
+
+jq -cn --arg text "CPU: ${overall}% ${sparkline}" \
+       --arg tooltip "$top_procs" \
+       '{"text": $text, "tooltip": $tooltip}'
