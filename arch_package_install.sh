@@ -10,7 +10,7 @@ sudo pacman -S --noconfirm \
                inotify-tools \
                ripgrep \
                fd \
-               wlsunset \
+               hyprsunset \
                fzf \
                grim \
                blueman \

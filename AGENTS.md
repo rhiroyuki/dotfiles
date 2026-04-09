@@ -62,6 +62,7 @@ Existing files/dirs are renamed with a Unix-timestamp suffix (`_backup_123456789
 | Alacritty | `alacritty.toml` (in repo but not in the install symlink list) |
 | WezTerm | `wezterm.lua` |
 | Ghostty | `config/ghostty/config` |
+| hyprsunset | `config/hypr/hyprsunset.conf` |
 | Sway (Wayland WM) | `config/sway/` |
 | i3 (X11 WM) | `config/i3/` |
 | Waybar | `config/waybar/` |

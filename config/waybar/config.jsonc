@@ -16,6 +16,8 @@
     "custom/sep",
     "tray",
     "custom/sep",
+    "custom/brightness",
+    "custom/sep",
     "pulseaudio",
     "custom/sep",
     "custom/net",
@@ -28,7 +30,26 @@
   ],
 
   "clock": {
-    "format-alt": "{:%Y-%m-%d}"
+    "format": "{:%H:%M}",
+    "format-alt": "{:%Y-%m-%d}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "year",
+      "mode-mon-col": 3,
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "on-click-right": "mode",
+      "format": {
+        "months": "<span color='#ffead3'><b>{}</b></span>",
+        "days": "<span color='#ecc6d9'><b>{}</b></span>",
+        "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
+        "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+        "today": "<span color='#f38ba8'><b><u>{}</u></b></span>"
+      }
+    },
+    "actions": {
+      "on-click-right": "mode"
+    }
   },
   "custom/gpu": {
     "exec": "~/.config/waybar/custom/gpu.sh",
@@ -87,6 +108,12 @@
     "tooltip-format-disconnected": "Disconnected",
     "on-click": "foot impala",
     "max-length": 50
+  },
+  "custom/brightness": {
+    "exec": "~/.config/waybar/custom/brightness.sh",
+    "interval": 2,
+    "on-scroll-up": "~/.config/waybar/custom/brightness.sh up",
+    "on-scroll-down": "~/.config/waybar/custom/brightness.sh down"
   },
   "pulseaudio": {
     "format": "{volume}% {icon}",
