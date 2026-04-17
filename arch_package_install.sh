@@ -63,7 +63,9 @@ sudo pacman -S --noconfirm \
                pavucontrol \
                playerctl \
                bluetui \
-               impala
+               impala \
+               python-pip \
+               python-pipx
 
 if ! command -v yay >/dev/null 2>&1; then
   git clone https://aur.archlinux.org/yay.git
