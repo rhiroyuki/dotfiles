@@ -65,7 +65,8 @@ sudo pacman -S --noconfirm \
                bluetui \
                impala \
                python-pip \
-               python-pipx
+               python-pipx \
+               tree-sitter-cli
 
 if ! command -v yay >/dev/null 2>&1; then
   git clone https://aur.archlinux.org/yay.git
