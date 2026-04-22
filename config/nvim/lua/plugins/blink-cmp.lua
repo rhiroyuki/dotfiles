@@ -38,7 +38,6 @@ return {
       completion = {
         menu = {
           draw = {
-            treesitter = { 'lsp' },
             columns = {
               {
                 'label',

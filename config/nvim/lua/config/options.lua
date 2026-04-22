@@ -25,8 +25,7 @@ set.laststatus = 3
 
 set.winbar='=%=%m %f'
 
--- Keep it off, let treesitter handle it
-vim.cmd("syntax off")
+vim.cmd("syntax on")
 
 set.swapfile = false
 set.backup = false
