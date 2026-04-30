@@ -14,6 +14,8 @@
     "custom/sep",
     "custom/disk",
     "custom/sep",
+    "custom/temp",
+    "custom/sep",
     "tray",
     "custom/sep",
     "custom/brightness",
@@ -78,6 +80,14 @@
     "interval": 30,
     "format": "{}",
     "tooltip": true
+  },
+  "custom/temp": {
+    "exec": "~/.config/waybar/custom/temp.sh",
+    "return-type": "json",
+    "interval": 2,
+    "format": "{}",
+    "tooltip": true,
+    "on-click": "foot watch -n 1 sensors"
   },
   "custom/bluetooth": {
     "format": "{}",

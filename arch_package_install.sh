@@ -66,7 +66,8 @@ sudo pacman -S --noconfirm \
                impala \
                python-pip \
                python-pipx \
-               tree-sitter-cli
+               tree-sitter-cli \
+               lm_sensors
 
 if ! command -v yay >/dev/null 2>&1; then
   git clone https://aur.archlinux.org/yay.git

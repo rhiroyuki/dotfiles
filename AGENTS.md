@@ -65,7 +65,7 @@ Existing files/dirs are renamed with a Unix-timestamp suffix (`_backup_123456789
 | hyprsunset | `config/hypr/hyprsunset.conf` |
 | Sway (Wayland WM) | `config/sway/` |
 | i3 (X11 WM) | `config/i3/` |
-| Waybar | `config/waybar/` |
+| Waybar | `config/waybar/` (custom modules: `cpu.sh`, `gpu.sh`, `mem.sh`, `disk.sh`, `temp.sh`, `net.sh`, `brightness.sh`, `bluetooth.sh`) |
 | Git | `gitignore`, `gitattributes` |
 | Ruby | `gemrc`, `default-gems`, `reek.yml`, `solargraph.yml` |
 | asdf | `asdfrc` |

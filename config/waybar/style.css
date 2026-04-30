@@ -101,6 +101,19 @@ tooltip label {
     color: @red;
 }
 
+#custom-temp {
+    color: @blu;
+    padding: 0 8px;
+}
+
+#custom-temp.warn {
+    color: @ylw;
+}
+
+#custom-temp.crit {
+    color: @red;
+}
+
 #custom-net {
     color: @cyn;
     padding: 0 8px;
