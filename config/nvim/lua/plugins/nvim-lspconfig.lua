@@ -57,9 +57,19 @@ return {
 
       require("mason").setup({ autostart = false })
       require("mason-lspconfig").setup({
-        ensure_installed = {},
+        ensure_installed = { "gopls" },
         handlers = {
           lsp_server_setup,
+          gopls = function()
+            lspconfig.gopls.setup(vim.tbl_deep_extend("force", default_opt, {
+              settings = {
+                gopls = {
+                  completeUnimported = true,
+                  usePlaceholders = true,
+                },
+              },
+            }))
+          end,
           standardrb = function() end,
           rubocop = function() end,
           ruby_lsp = function() end

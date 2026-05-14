@@ -65,18 +65,18 @@ map("n", "<leader>lu", "<cmd>:Lazy update<CR>",          { desc = "Lazy update" 
 
 -- Organize imports
 -- Temporary for go files, until I find a better solution
--- local organize_imports = function()
---   vim.lsp.buf.code_action(
---     {
---       filter = function(a)
---         return string.find(a.title, "Organize")
---       end,
---       apply = true
---     }
---   )
--- end
--- vim.api.nvim_create_user_command("OrganizeImport", organize_imports, {})
--- map("n", "<C-O>", ":OrganizeImport<CR>")
+local organize_imports = function()
+  vim.lsp.buf.code_action(
+    {
+      filter = function(a)
+        return string.find(a.title, "Organize")
+      end,
+      apply = true
+    }
+  )
+end
+vim.api.nvim_create_user_command("OrganizeImport", organize_imports, {})
+map("n", "<C-O>", ":OrganizeImport<CR>")
 
 --- Applies an LSP code action that matches the word "import" in its title.
 -- This function filters available code actions provided by the LSP client,

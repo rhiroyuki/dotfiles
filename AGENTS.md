@@ -64,8 +64,9 @@ Existing files/dirs are renamed with a Unix-timestamp suffix (`_backup_123456789
 | Ghostty | `config/ghostty/config` |
 | hyprsunset | `config/hypr/hyprsunset.conf` |
 | Sway (Wayland WM) | `config/sway/` |
-| i3 (X11 WM) | `config/i3/` |
+| i3 (X11 WM) | `config/i3/` (helpers: `bin/launcher`, `bin/powermenu`, `bin/keybindings`, `bin/polybar`) |
 | Waybar | `config/waybar/` (custom modules: `cpu.sh`, `gpu.sh`, `mem.sh`, `disk.sh`, `temp.sh`, `net.sh`, `brightness.sh`, `bluetooth.sh`) |
+| Polybar (X11 status bar) | `config/polybar/` (calendar popup script under `polybar-scripts/`) |
 | Git | `gitignore`, `gitattributes` |
 | Ruby | `gemrc`, `default-gems`, `reek.yml`, `solargraph.yml` |
 | asdf | `asdfrc` |
