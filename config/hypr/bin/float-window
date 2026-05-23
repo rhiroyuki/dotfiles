@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# vim: set ft=sh:
+# Toggle a persistent float window rule for the focused window's class.
+# No rule yet -> confirm and add one; rule exists -> confirm and remove it.
+# Reloads Hyprland and updates the current window immediately.
+# Bound in hyprland.conf: ALT SHIFT, F.
+
+config="$HOME/.config/hypr/hyprland.conf"
+
+# Grab class + address from the focused window in a single query, before the
+# yad dialog opens and steals focus (a later query would target yad itself).
+window=$(hyprctl activewindow -j)
+class=$(jq -r '.class // ""' <<<"$window")
+address=$(jq -r '.address // ""' <<<"$window")
+
+if [ -z "$class" ]; then
+  notify-send -t 2000 "Float window" "No focused window to float."
+  exit 1
+fi
+
+rule="windowrule = match:class $class, float on"
+
+# Fixed-string match: class names contain dots that would be regex wildcards.
+if grep -qF "$rule" "$config"; then
+  # Rule exists -> confirm removal and re-tile this class.
+  text=$(printf 'Stop floating windows of:\n\n<b>%s</b>' "$class")
+  yad --question --center --title="Float window" --text="$text" \
+      --button="Cancel:1" --button="Stop floating:0" || exit 0
+
+  # Rewrite through the symlink (cat >, not mv/sed -i) so the repo file
+  # stays linked. The guard avoids truncating the config if grep fails.
+  tmp=$(mktemp)
+  grep -vF "$rule" "$config" >"$tmp"
+  [ -s "$tmp" ] && cat "$tmp" >"$config"
+  rm -f "$tmp"
+
+  hyprctl reload >/dev/null
+  hyprctl dispatch settiled "address:$address" >/dev/null
+  notify-send -t 2000 "Float window" "\"$class\" will no longer float."
+  exit 0
+fi
+
+# No rule yet -> confirm and add one.
+text=$(printf 'Always float windows of:\n\n<b>%s</b>' "$class")
+yad --question --center --title="Float window" --text="$text" \
+    --button="Cancel:1" --button="Float:0" || exit 0
+
+printf '%s\n' "$rule" >>"$config"
+hyprctl reload >/dev/null
+hyprctl dispatch setfloating "address:$address" >/dev/null
+notify-send -t 2000 "Float window" "\"$class\" will now float."
