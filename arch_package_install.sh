@@ -67,7 +67,8 @@ sudo pacman -S --noconfirm \
                python-pip \
                python-pipx \
                tree-sitter-cli \
-               lm_sensors
+               lm_sensors \
+               waybar
 
 if ! command -v yay >/dev/null 2>&1; then
   git clone https://aur.archlinux.org/yay.git
@@ -79,7 +80,6 @@ fi
 sudo fc-cache -fv
 
 yay -S --noconfirm --needed \
-  waybar-git \
   handy-bin \
   rofi-emoji-git \
   hyprlauncher \
