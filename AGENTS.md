@@ -65,13 +65,14 @@ Existing files/dirs are renamed with a Unix-timestamp suffix (`_backup_123456789
 | hyprsunset | `config/hypr/hyprsunset.conf` |
 | Sway (Wayland WM) | `config/sway/` |
 | i3 (X11 WM) | `config/i3/` (helpers: `bin/launcher`, `bin/powermenu`, `bin/keybindings`, `bin/polybar`) |
-| Waybar | `config/waybar/` (custom modules: `cpu.sh`, `gpu.sh`, `mem.sh`, `disk.sh`, `temp.sh`, `net.sh`, `brightness.sh`, `bluetooth.sh`) |
+| Waybar | `config/waybar/` (custom modules: `cpu.sh`, `gpu.sh`, `mem.sh`, `disk.sh`, `temp.sh`, `net.sh`, `brightness.sh`, `bluetooth.sh`; `startup-gate.sh` blanks JSON modules for the first 15s of a session so heavy scripts don't stall the bar). Launched by `config/hypr/bin/launch_waybar`, which supervises the bar (reload on config change, relaunch on crash with capped backoff) |
 | Polybar (X11 status bar) | `config/polybar/` (calendar popup script under `polybar-scripts/`) |
 | Git | `gitignore`, `gitattributes` |
 | Ruby | `gemrc`, `default-gems`, `reek.yml`, `solargraph.yml` |
 | asdf | `asdfrc` |
 | keyd | `install/keyd_default_conf`, `install/install_keyd_service.sh` |
 | fcitx5 | `install/setup_fcitx5_intl.sh` |
+| NVIDIA (Wayland) | `install/nvidia_modeset.conf`, `install/install_nvidia_modeset.sh` (pins `nvidia_drm.modeset=1`) |
 | fontconfig | `config/fontconfig/fonts.conf` |
 
 ## Zsh
@@ -102,6 +103,14 @@ config/nvim/
 Notable plugins: GitHub Copilot, CodeCompanion, Telescope, nvim-lspconfig, blink-cmp, LuaSnip, nvim-treesitter, nvim-tmux-navigator.
 
 The Copilot plugin uses dynamic Node.js path detection to work with asdf-managed Node versions (see `config/nvim/lua/plugins/`).
+
+## NVIDIA (Wayland)
+
+On the NVIDIA-driven Wayland box, `install/install_nvidia_modeset.sh` drops
+`install/nvidia_modeset.conf` to `/etc/modprobe.d/nvidia-modeset.conf` to pin
+`nvidia_drm.modeset=1`. It is **run manually** (`sudo bash install/install_nvidia_modeset.sh`),
+not wired into `install.sh`, because it is hardware-specific and needs root.
+Takes effect on the next boot.
 
 ## Theme
 

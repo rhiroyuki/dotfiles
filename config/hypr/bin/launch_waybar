@@ -8,8 +8,42 @@ trap "killall waybar" EXIT
 until hyprctl monitors 2>/dev/null | grep -q "Monitor"; do sleep 0.1; done
 sleep 0.5
 
+# Record session start so custom modules can gate themselves (startup-gate.sh).
+# Written once per session, before the loop, so reloads and crash-restarts pass
+# through the gate immediately rather than re-blanking the bar for another 15s.
+date +%s > /tmp/waybar_start_ts
+
+# Supervise waybar: reload it on config changes AND relaunch it when it dies. The
+# old loop only woke on config changes via inotifywait, so a waybar that crashed
+# at startup (e.g. a transient output/IPC hiccup at login) was never restarted -
+# the bar just stayed absent. Restart-on-death uses a capped backoff so a waybar
+# that fails hard cannot spin.
+backoff=1
 while true; do
+  started=$(date +%s)
   waybar --log-level error &
-  inotifywait -e create,modify $CONFIG_FILES
-  killall waybar
+  wb=$!
+
+  inotifywait -qq -e create,modify $CONFIG_FILES &
+  iw=$!
+
+  # Wake on whichever happens first: waybar exits, or a config file changes.
+  wait -n
+
+  if kill -0 "$wb" 2>/dev/null; then
+    # waybar still alive => a config file changed => intentional reload
+    kill "$iw" 2>/dev/null; wait "$iw" 2>/dev/null
+    killall waybar; wait "$wb" 2>/dev/null
+    backoff=1
+  else
+    # waybar exited on its own => crash/transient failure => restart with backoff
+    kill "$iw" 2>/dev/null; wait "$iw" 2>/dev/null
+    uptime=$(( $(date +%s) - started ))
+    sleep "$backoff"
+    if (( uptime < 5 )); then
+      backoff=$(( backoff * 2 > 16 ? 16 : backoff * 2 ))
+    else
+      backoff=1
+    fi
+  fi
 done

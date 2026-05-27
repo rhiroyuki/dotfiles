@@ -54,35 +54,35 @@
     }
   },
   "custom/gpu": {
-    "exec": "~/.config/waybar/custom/gpu.sh",
+    "exec": "~/.config/waybar/custom/startup-gate.sh gpu.sh",
     "return-type": "json",
     "interval": 3,
     "format": "{}",
     "tooltip": true
   },
   "custom/cpu": {
-    "exec": "~/.config/waybar/custom/cpu.sh",
+    "exec": "~/.config/waybar/custom/startup-gate.sh cpu.sh",
     "return-type": "json",
     "interval": 2,
     "format": "{}",
     "tooltip": true
   },
   "custom/mem": {
-    "exec": "~/.config/waybar/custom/mem.sh",
+    "exec": "~/.config/waybar/custom/startup-gate.sh mem.sh",
     "return-type": "json",
     "interval": 5,
     "format": "{}",
     "tooltip": true
   },
   "custom/disk": {
-    "exec": "~/.config/waybar/custom/disk.sh",
+    "exec": "~/.config/waybar/custom/startup-gate.sh disk.sh",
     "return-type": "json",
     "interval": 30,
     "format": "{}",
     "tooltip": true
   },
   "custom/temp": {
-    "exec": "~/.config/waybar/custom/temp.sh",
+    "exec": "~/.config/waybar/custom/startup-gate.sh temp.sh",
     "return-type": "json",
     "interval": 2,
     "format": "{}",
@@ -92,14 +92,14 @@
   "custom/bluetooth": {
     "format": "{}",
     "return-type": "json",
-    "exec": "~/.config/waybar/custom/bluetooth.sh",
+    "exec": "~/.config/waybar/custom/startup-gate.sh bluetooth.sh",
     "on-click": "foot bluetui",
     "on-click-right": "blueman-manager",
     "interval": 30,
     "tooltip": true
   },
   "custom/net": {
-    "exec": "~/.config/waybar/custom/net.sh",
+    "exec": "~/.config/waybar/custom/startup-gate.sh net.sh",
     "return-type": "json",
     "interval": 2,
     "format": "{}",
