@@ -59,7 +59,7 @@ sudo pacman -S --noconfirm \
                network-manager-applet \
                libayatana-appindicator \
                foot \
-               nemo \
+               nemo nemo-fileroller file-roller \
                pavucontrol \
                playerctl \
                bluetui \
