@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 
+noop() { printf '%s\n' '{"text": "", "tooltip": ""}'; exit 0; }
+
+command -v nvidia-smi >/dev/null 2>&1 || noop
+command -v jq         >/dev/null 2>&1 || noop
+
 read -r usage mem_used mem_total < <(
     nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total \
-        --format=csv,noheader,nounits | awk -F', ' '{print $1, $2, $3}'
+        --format=csv,noheader,nounits 2>/dev/null | awk -F', ' '{print $1, $2, $3}'
 )
+[[ -z "$usage" ]] && noop
 
 # pmon -s m: gpu pid type fb(MB) ccpm command
 top_vram=$(nvidia-smi pmon -c 1 -s m 2>/dev/null \
