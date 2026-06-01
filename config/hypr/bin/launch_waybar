@@ -24,6 +24,24 @@ while true; do
   waybar --log-level error &
   wb=$!
 
+  # Render health check: waybar can stay alive yet never draw its bar (transient
+  # output/IPC race at login). The crash-restart path below only wakes on process
+  # exit, so a hung-but-alive bar would never recover. Poll the compositor for
+  # waybar's layer surface; if it never appears, kill the process so the restart
+  # path with backoff picks it up.
+  healthy=0
+  for _ in $(seq 1 50); do
+    kill -0 "$wb" 2>/dev/null || break
+    if hyprctl layers 2>/dev/null | grep -q "namespace: waybar"; then healthy=1; break; fi
+    sleep 0.1
+  done
+  if (( healthy == 0 )) && kill -0 "$wb" 2>/dev/null; then
+    killall waybar; wait "$wb" 2>/dev/null
+    sleep "$backoff"
+    backoff=$(( backoff * 2 > 16 ? 16 : backoff * 2 ))
+    continue
+  fi
+
   inotifywait -qq -e create,modify $CONFIG_FILES &
   iw=$!
 
