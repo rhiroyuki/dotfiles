@@ -35,6 +35,7 @@ Whenever a package installation or system modification is requested:
 - **New dotfile or config** — follow the conventions below and update the "Configured tools & their files" table.
 - **Install-time setup** (services, symlinks, one-time commands) — add a script under `install/` and wire it into `install.sh` or document it in this file so the setup is reproducible.
 - **If a change cannot be scripted** (e.g. manual GUI step, hardware-specific tweak) — document it explicitly in this file under the relevant tool section.
+- **Behaviour change to an existing script or config** — whenever you add, change, or remove behaviour (not just files), update the relevant tool section and "Configured tools & their files" row so this doc always reflects current behaviour.
 
 The goal is that a fresh install from this repo reproduces the full environment without any undocumented manual steps.
 
@@ -65,7 +66,7 @@ Existing files/dirs are renamed with a Unix-timestamp suffix (`_backup_123456789
 | hyprsunset | `config/hypr/hyprsunset.conf` |
 | Sway (Wayland WM) | `config/sway/` |
 | i3 (X11 WM) | `config/i3/` (helpers: `bin/launcher`, `bin/powermenu`, `bin/keybindings`, `bin/polybar`) |
-| Waybar | `config/waybar/` (custom modules: `cpu.sh`, `gpu.sh`, `mem.sh`, `disk.sh`, `temp.sh`, `net.sh`, `brightness.sh`, `bluetooth.sh`; `startup-gate.sh` blanks JSON modules for the first 15s of a session so heavy scripts don't stall the bar). Launched by `config/hypr/bin/launch_waybar`, which supervises the bar (reload on config change, relaunch on crash with capped backoff) |
+| Waybar | `config/waybar/` (custom modules: `cpu.sh`, `gpu.sh`, `mem.sh`, `disk.sh`, `temp.sh`, `net.sh`, `brightness.sh`, `bluetooth.sh`; `startup-gate.sh` blanks JSON modules for the first 15s of a session so heavy scripts don't stall the bar). Launched by `config/hypr/bin/launch_waybar`, which supervises the bar (reload on config change, relaunch on crash with capped backoff, and a render health check that polls `hyprctl layers` for waybar's layer surface to restart a hung-but-alive bar that never drew at first load) |
 | Polybar (X11 status bar) | `config/polybar/` (calendar popup script under `polybar-scripts/`) |
 | Git | `gitignore`, `gitattributes` |
 | Ruby | `gemrc`, `default-gems`, `reek.yml`, `solargraph.yml` |
