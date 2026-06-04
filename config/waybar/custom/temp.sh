@@ -10,11 +10,11 @@ noop() { printf '%s\n' '{"text": "", "tooltip": ""}'; exit 0; }
 command -v sensors >/dev/null 2>&1 || noop
 command -v jq      >/dev/null 2>&1 || noop
 
-raw=$(sensors -j 2>/dev/null) || noop
+raw=$(timeout -k 1 2 sensors -j 2>/dev/null) || noop
 [[ -z "$raw" ]] && noop
 
 if command -v nvidia-smi >/dev/null 2>&1; then
-    nv=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null \
+    nv=$(timeout -k 1 2 nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null \
          | head -1 | tr -dc '0-9')
     if [[ -n "$nv" ]]; then
         raw=$(jq --argjson t "$nv" \
