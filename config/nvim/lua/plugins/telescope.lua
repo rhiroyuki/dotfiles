@@ -15,6 +15,18 @@ return {
     config = function()
       local telescope = require("telescope")
       local actions = require("telescope.actions")
+      local action_state = require("telescope.actions.state")
+
+      -- Reopen find_files with extra opts, carrying over the current prompt.
+      local function find_files_with(opts)
+        return function(prompt_bufnr)
+          local prompt = action_state.get_current_picker(prompt_bufnr):_get_prompt()
+          actions.close(prompt_bufnr)
+          require("telescope.builtin").find_files(
+            vim.tbl_extend("force", { default_text = prompt }, opts)
+          )
+        end
+      end
 
       telescope.setup({
         defaults = {
@@ -22,6 +34,18 @@ return {
             i = {
               ["<C-j>"] = actions.move_selection_next,
               ["<C-k>"] = actions.move_selection_previous,
+            }
+          }
+        },
+        pickers = {
+          find_files = {
+            mappings = {
+              i = {
+                -- toggle hidden (dotfiles)
+                ["<C-h>"] = find_files_with({ hidden = true }),
+                -- toggle gitignored + hidden files
+                ["<C-u>"] = find_files_with({ no_ignore = true, hidden = true }),
+              }
             }
           }
         },
