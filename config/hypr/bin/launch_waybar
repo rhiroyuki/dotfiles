@@ -8,6 +8,27 @@ trap "killall waybar" EXIT
 until hyprctl monitors 2>/dev/null | grep -q "Monitor"; do sleep 0.1; done
 sleep 0.5
 
+# Wait for the NVIDIA driver to be warm before the first launch. On this
+# multi-GPU Wayland box waybar renders via GTK+EGL; if the driver is still
+# cold-initialising at login the first GL buffer commit can stall, leaving a
+# mapped-but-unpainted surface (a ~24px bar that never grows to its real
+# height) which the presence health check below cannot tell from a good bar. A
+# cheap nvidia-smi probe blocks until the driver answers (capped ~10s) so the
+# first frame lands on a warm driver.
+if command -v nvidia-smi >/dev/null 2>&1; then
+  for _ in $(seq 1 50); do
+    timeout 2 nvidia-smi >/dev/null 2>&1 && break
+    sleep 0.2
+  done
+fi
+
+# Render watchdog tunables. GATE_DELAY mirrors startup-gate.sh's DELAY (the
+# window during which heavy modules render blank); MIN_HEIGHT is the populated
+# bar's surface height. After the gate lifts a healthy bar is MIN_HEIGHT tall;
+# a stuck mis-rendered surface stays short.
+GATE_DELAY=15
+MIN_HEIGHT=28
+
 # Record session start so custom modules can gate themselves (startup-gate.sh).
 # Written once per session, before the loop, so reloads and crash-restarts pass
 # through the gate immediately rather than re-blanking the bar for another 15s.
@@ -42,11 +63,29 @@ while true; do
     continue
   fi
 
+  # Render watchdog: the presence check above only proves a surface exists, not
+  # that it painted. A GTK/EGL race can map the bar at a degenerate height and
+  # leave it stuck there even after modules populate. Wait until the startup
+  # gate has lifted and the bar should be at full height, then check it; if the
+  # surface is still short, kill it so the crash-restart path below recovers it.
+  (
+    sleep $(( GATE_DELAY + 5 ))
+    kill -0 "$wb" 2>/dev/null || exit 0
+    h=$(hyprctl layers 2>/dev/null | grep "namespace: waybar" \
+          | grep -oP 'xywh: \d+ \d+ \d+ \K\d+' | head -1)
+    [[ -n "$h" ]] && (( h < MIN_HEIGHT )) && killall waybar
+  ) &
+  rw=$!
+
   inotifywait -qq -e create,modify $CONFIG_FILES &
   iw=$!
 
-  # Wake on whichever happens first: waybar exits, or a config file changes.
-  wait -n
+  # Wake on whichever happens first: waybar exits (crash, or watchdog killed a
+  # mis-rendered bar), or a config file changes. The watchdog is intentionally
+  # not waited on directly so its normal exit does not wake us.
+  wait -n "$wb" "$iw"
+
+  kill "$rw" 2>/dev/null; wait "$rw" 2>/dev/null
 
   if kill -0 "$wb" 2>/dev/null; then
     # waybar still alive => a config file changed => intentional reload
