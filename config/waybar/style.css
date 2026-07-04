@@ -101,6 +101,26 @@ tooltip label {
     color: @red;
 }
 
+#custom-power {
+    color: @red;
+    padding: 0 12px 0 4px;
+}
+
+#custom-power:hover {
+    color: @white;
+    background-color: @red;
+}
+
+#custom-keybindings {
+    color: @blu;
+    padding: 0 6px;
+}
+
+#custom-keybindings:hover {
+    color: @white;
+    background-color: @blu;
+}
+
 #custom-temp {
     color: @blu;
     padding: 0 8px;

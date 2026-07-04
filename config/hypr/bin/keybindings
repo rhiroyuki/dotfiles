@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # vim: set ft=sh:
-# Display all hyprland keybindings in rofi
+# Display all hyprland keybindings in rofi; selecting one activates it.
 
 CONFIG="$HOME/.config/hypr/hyprland.conf"
 
-awk '
+# Each entry is TAB-separated: <display>\t<dispatcher and args>
+# The display column is shown in rofi; the dispatch column drives hyprctl.
+entries="$(awk '
   /^submap = / {
     if ($3 == "reset") {
       current_submap = ""
@@ -18,23 +20,27 @@ awk '
     line = $0
     sub(/^bind[elm]? = /, "", line)
 
-    # Split by comma: mods, key, dispatcher, params
+    # Split by comma: mods, key, dispatcher, params...
     n = split(line, parts, /[[:space:]]*,[[:space:]]*/)
     mods = parts[1]
     key  = parts[2]
     disp = parts[3]
-    rest = parts[4]
+
+    # Reconstruct dispatcher arguments from any remaining params
+    args = ""
+    for (i = 4; i <= n; i++) args = args (i > 4 ? " " : "") parts[i]
+    dispatch = disp (args != "" ? " " args : "")
 
     # Build key combo display
     combo = (mods != "") ? mods "+" key : key
     gsub(/[[:space:]]/, "", combo)
 
     # Use preceding comment as description
-    desc = (prev_comment != "") ? prev_comment : disp (rest != "" ? " " rest : "")
+    desc = (prev_comment != "") ? prev_comment : dispatch
     if (length(desc) > 60) desc = substr(desc, 1, 57) "..."
 
     prefix = (current_submap != "") ? "[" current_submap "] " : ""
-    printf "%-35s  %s%s\n", combo, prefix, desc
+    printf "%-35s  %s%s\t%s\n", combo, prefix, desc, dispatch
     prev_comment = ""
     next
   }
@@ -47,4 +53,14 @@ awk '
   }
 
   { prev_comment = "" }
-' "$CONFIG" | sort | rofi -dmenu -i -p "Keybindings" -no-custom
+' "$CONFIG" | sort)"
+
+# Show only the display column; rofi returns the selected index.
+idx="$(cut -f1 <<< "$entries" | rofi -dmenu -i -p "Keybindings" -no-custom -format i)"
+[ -z "$idx" ] && exit 0
+
+# Look up the dispatch command for the chosen index and activate it.
+dispatch="$(sed -n "$((idx + 1))p" <<< "$entries" | cut -f2)"
+[ -z "$dispatch" ] && exit 0
+
+hyprctl dispatch $dispatch

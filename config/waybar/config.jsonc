@@ -28,7 +28,11 @@
     "custom/sep",
     "custom/bluetooth",
     "custom/sep",
-    "clock"
+    "clock",
+    "custom/sep",
+    "custom/keybindings",
+    "custom/sep",
+    "custom/power"
   ],
 
   "clock": {
@@ -179,6 +183,16 @@
   "custom/sep": {
     "format": "|",
     "interval": 0
+  },
+  "custom/power": {
+    "format": "⏻",
+    "tooltip": false,
+    "on-click": "~/.config/hypr/bin/powermenu"
+  },
+  "custom/keybindings": {
+    "format": "?",
+    "tooltip-format": "Show Hyprland keybindings (ALT+SHIFT+/)",
+    "on-click": "~/.config/hypr/bin/keybindings"
   },
   "sway/language": {
     "format": "{}",
