@@ -64,9 +64,9 @@ Existing files/dirs are renamed with a Unix-timestamp suffix (`_backup_123456789
 | WezTerm | `wezterm.lua` |
 | Ghostty | `config/ghostty/config` |
 | hyprsunset | `config/hypr/hyprsunset.conf` |
-| Sway (Wayland WM) | `config/sway/` |
+| Sway (Wayland WM) | `config/sway/` (helpers under `bin/`: `launcher`, `powermenu`, `keybindings`, `launch_waybar`, `select_display_mode`/`apply_display_modes`; `brightness` + `temperature-schedule` drive software gamma — see "Brightness on Sway" below) |
 | i3 (X11 WM) | `config/i3/` (helpers: `bin/launcher`, `bin/powermenu`, `bin/keybindings`, `bin/polybar`) |
-| Waybar | `config/waybar/` (custom modules: `cpu.sh`, `gpu.sh`, `mem.sh`, `disk.sh`, `temp.sh`, `net.sh`, `brightness.sh`, `bluetooth.sh`; `startup-gate.sh` blanks JSON modules for the first 15s of a session so heavy scripts don't stall the bar). Launched by `config/hypr/bin/launch_waybar`, which supervises the bar (reload on config change, relaunch on crash with capped backoff, and a render health check that polls `hyprctl layers` for waybar's layer surface to restart a hung-but-alive bar that never drew at first load) |
+| Waybar | `config/waybar/` (custom modules: `cpu.sh`, `gpu.sh`, `mem.sh`, `disk.sh`, `temp.sh`, `net.sh`, `brightness.sh`, `bluetooth.sh`; `custom/power` opens the session menu via `config/hypr/bin/powermenu` (lock/suspend/reboot/shutdown/log out); `custom/keybindings` opens the Hyprland keybindings cheatsheet via `config/hypr/bin/keybindings` (also bound to `ALT SHIFT, slash`); `startup-gate.sh` blanks JSON modules for the first 15s of a session so heavy scripts don't stall the bar). Launched by `config/hypr/bin/launch_waybar`, which supervises the bar (reload on config change, relaunch on crash with capped backoff, and a render health check that polls `hyprctl layers` for waybar's layer surface to restart a hung-but-alive bar that never drew at first load) |
 | Polybar (X11 status bar) | `config/polybar/` (calendar popup script under `polybar-scripts/`) |
 | Git | `gitignore`, `gitattributes` |
 | Ruby | `gemrc`, `default-gems`, `reek.yml`, `solargraph.yml` |
@@ -128,6 +128,30 @@ GPU warm (that's the persistence daemon above). Optional.
 
 All three are **run manually** (`sudo bash install/<script>.sh`), not wired into
 `install.sh`, because they are hardware-specific and need root.
+
+## Brightness on Sway
+
+This box drives an external monitor and has **no `/sys/class/backlight` device**,
+so `brightnessctl` cannot change brightness. Sway therefore dims in software via
+**`wl-gammarelay-rs`** (AUR, in the `yay` block of `arch_package_install.sh`),
+which holds the `wlr-gamma-control` and exposes `Brightness`/`Temperature` over
+D-Bus (`busctl`).
+
+- `config/sway/bin/brightness {up,down}` nudges the `Brightness` property and
+  echoes the new percent (used by the `XF86MonBrightness*` keybindings). It also
+  writes the percent to `/tmp/hyprsunset_gamma` so Waybar's `custom/brightness.sh`
+  display module stays correct.
+- `config/sway/bin/temperature-schedule --daemon` is launched from the Sway
+  config and applies a day/night color temperature by the hour, mirroring the
+  profiles in `config/hypr/hyprsunset.conf` (wl-gammarelay-rs holds a fixed
+  temperature and does not transition on its own; this replaces the old
+  `wlsunset` scheduling).
+
+Only one `wlr-gamma-control` client may run at a time, so `wl-gammarelay-rs`
+**replaces** `wlsunset`. On Hyprland the equivalent job is done by `hyprsunset`
+(`config/waybar/custom/brightness.sh` → `hyprctl hyprsunset gamma`); hyprsunset
+uses Hyprland's `hyprland-ctm-control-v1` protocol and does **not** work under
+Sway, which is why Sway needs its own tool.
 
 ## Theme
 

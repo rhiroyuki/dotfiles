@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Software brightness for Sway.
+#
+# This box drives an external monitor and has no /sys/class/backlight device,
+# so brightnessctl cannot change brightness. We dim via wl-gammarelay-rs, which
+# holds the wlr-gamma-control and exposes a Brightness property over D-Bus.
+# (Hyprland uses hyprsunset for the same job; hyprsunset is Hyprland-only.)
+
+STEP=0.05
+MIN=0.10
+MAX=1.00
+# Shared with Waybar's custom/brightness.sh display module (percent integer).
+STATE_FILE="/tmp/hyprsunset_gamma"
+
+get() {
+    busctl --user get-property rs.wl-gammarelay / rs.wl.gammarelay Brightness \
+        | awk '{print $2}'
+}
+
+set_brightness() {
+    busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Brightness d "$1"
+}
+
+cur=$(get)
+[[ -z "$cur" ]] && cur=1.0
+
+case "$1" in
+    up)
+        new=$(awk -v c="$cur" -v s="$STEP" -v m="$MAX" \
+            'BEGIN{n=c+s; if(n>m)n=m; printf "%.2f", n}')
+        set_brightness "$new"
+        ;;
+    down)
+        new=$(awk -v c="$cur" -v s="$STEP" -v m="$MIN" \
+            'BEGIN{n=c-s; if(n<m)n=m; printf "%.2f", n}')
+        set_brightness "$new"
+        ;;
+    *)
+        new=$cur
+        ;;
+esac
+
+pct=$(awk -v n="$new" 'BEGIN{printf "%d", n*100}')
+echo "$pct" > "$STATE_FILE"
+echo "$pct"

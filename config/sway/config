@@ -84,7 +84,8 @@ exec swayidle -w \
 
 exec sleep 2 && nm-applet --indicator
 exec sleep 2 && blueman-applet
-exec wlsunset -T 5700 -t 4500 -g 0.8
+exec wl-gammarelay-rs
+exec "$HOME/.config/sway/bin/temperature-schedule" --daemon
 exec sleep 3 && fcitx5 -d
 exec wl-paste --type text --watch cliphist store
 exec wl-paste --type image --watch cliphist store
@@ -105,10 +106,10 @@ bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-s
 # Toggle mic mute
 bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle && notify-send -t 1500 "Mic" "$(pactl get-source-mute @DEFAULT_SOURCE@ | grep -q yes && echo Muted || echo Unmuted)"
 
-# Brightness up
-bindsym XF86MonBrightnessUp exec brightnessctl set +10% && notify-send -t 1500 "Brightness" "$(( $(brightnessctl get) * 100 / $(brightnessctl max) ))%"
+# Brightness up (software dimming via wl-gammarelay-rs; no backlight on this box)
+bindsym XF86MonBrightnessUp exec notify-send -t 1500 "Brightness" "$("$HOME/.config/sway/bin/brightness" up)%"
 # Brightness down
-bindsym XF86MonBrightnessDown exec brightnessctl set 10%- && notify-send -t 1500 "Brightness" "$(( $(brightnessctl get) * 100 / $(brightnessctl max) ))%"
+bindsym XF86MonBrightnessDown exec notify-send -t 1500 "Brightness" "$("$HOME/.config/sway/bin/brightness" down)%"
 
 # Play/pause media
 bindsym XF86AudioPlay exec playerctl play-pause && notify-send -t 1500 "Media" "$(playerctl status): $(playerctl metadata title)"

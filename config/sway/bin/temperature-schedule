@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Day/night color-temperature schedule for Sway.
+#
+# wl-gammarelay-rs only holds a fixed temperature; it does not transition on a
+# schedule the way wlsunset (or Hyprland's hyprsunset profiles) does. This
+# script applies the temperature for the current hour, mirroring the profiles
+# in config/hypr/hyprsunset.conf. Run with --daemon from the Sway config to keep
+# it updated; run with no args to apply once.
+
+set_temp() {
+    busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay \
+        Temperature q "$1" 2>/dev/null
+}
+
+# Mirrors config/hypr/hyprsunset.conf:
+#   06:00 6500K · 09:00 5100K · 17:00 4200K · 20:00 3300K
+current_temp() {
+    local h
+    h=$(date +%-H)
+    if   (( h >= 20 || h < 6 )); then echo 3300
+    elif (( h >= 17 ));          then echo 4200
+    elif (( h >= 9 ));           then echo 5100
+    else                              echo 6500
+    fi
+}
+
+case "$1" in
+    --daemon)
+        while true; do
+            set_temp "$(current_temp)"
+            sleep 900
+        done
+        ;;
+    *)
+        set_temp "$(current_temp)"
+        ;;
+esac
