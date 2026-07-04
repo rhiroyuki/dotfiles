@@ -5,6 +5,7 @@ sudo pacman -S --noconfirm \
             --needed \
                man \
                less \
+               curl \
                tmux \
                zsh \
                inotify-tools \
@@ -81,8 +82,8 @@ sudo fc-cache -fv
 
 yay -S --noconfirm --needed \
   handy-bin \
+  wl-gammarelay-rs \
   rofi-emoji-git \
   hyprlauncher \
   hyprpolkitagent \
   ttf-ms-fonts
-
