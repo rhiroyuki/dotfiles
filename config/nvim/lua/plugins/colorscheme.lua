@@ -9,6 +9,7 @@ return {
         integrations = {
           cmp = true,
           nvimtree = true,
+          treesitter = true,
           telescope = {
             enabled = true
           },

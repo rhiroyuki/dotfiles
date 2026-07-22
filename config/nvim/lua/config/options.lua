@@ -25,7 +25,8 @@ set.laststatus = 3
 
 set.winbar='=%=%m %f'
 
-vim.cmd("syntax on")
+-- Keep it off, let treesitter handle it
+vim.cmd("syntax off")
 
 set.swapfile = false
 set.backup = false
@@ -126,4 +127,3 @@ vim.g.loaded_netrw             = 1
 vim.g.loaded_netrwPlugin       = 1
 vim.g.loaded_netrwSettings     = 1
 vim.g.loaded_netrwFileHandlers = 1
-

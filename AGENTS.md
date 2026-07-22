@@ -105,6 +105,11 @@ Notable plugins: GitHub Copilot, CodeCompanion, Telescope, nvim-lspconfig, blink
 
 The Copilot plugin uses dynamic Node.js path detection to work with asdf-managed Node versions (see `config/nvim/lua/plugins/`).
 
+Treesitter uses the plugins' `main` branches, installs the Ruby parser, enables
+highlighting for available parsers, and provides text-object selection and
+navigation keymaps from `config/nvim/lua/plugins/nvim-treesitter.lua`. Vim's
+legacy syntax highlighting is disabled so Treesitter owns highlighting.
+
 ## NVIDIA (Wayland)
 
 On the NVIDIA-driven Wayland box, `install/install_nvidia_modeset.sh` drops
