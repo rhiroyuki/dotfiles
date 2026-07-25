@@ -84,7 +84,7 @@ Existing files/dirs are renamed with a Unix-timestamp suffix (`_backup_123456789
 | WezTerm | `wezterm.lua` |
 | Ghostty | `config/ghostty/config` |
 | hyprsunset | `config/hypr/hyprsunset.conf` |
-| Sway (Wayland WM) | `config/sway/` (helpers under `bin/`: `launch_waybar`, `select_display_mode`/`apply_display_modes`; `brightness` + `temperature-schedule` drive software gamma — see "Brightness on Sway" below; app launcher, power menu and keybindings cheatsheet are the shared `bin/session-launcher`, `bin/session-powermenu` and `bin/session-keybindings`, see "WM adapter registry" below) |
+| Sway (Wayland WM) | `config/sway/` (helpers under `bin/`: `launch_waybar`, `select_display_mode`/`apply_display_modes`; `temperature-schedule` drives the day/night colour schedule — see "Brightness on Sway" below for how brightness itself is owned by `bin/gamma`; app launcher, power menu and keybindings cheatsheet are the shared `bin/session-launcher`, `bin/session-powermenu` and `bin/session-keybindings`, see "WM adapter registry" below) |
 | i3 (X11 WM) | `config/i3/` (helpers: `bin/polybar`; app launcher, power menu and keybindings cheatsheet are the shared `bin/session-launcher`, `bin/session-powermenu` and `bin/session-keybindings`, see "WM adapter registry" below) |
 | Waybar | `config/waybar/` (custom modules: `lib.sh` (shared `sparkline`/`emit`/`noop`/`state_file` primitives), `cpu.sh`, `gpu.sh`, `mem.sh`, `disk.sh`, `temp.sh`, `net.sh`, `brightness.sh`, `bluetooth.sh`; `custom/power` opens the session menu via the shared `bin/session-powermenu` (lock/suspend/reboot/shutdown/log out); `custom/keybindings` opens the keybindings cheatsheet via the shared `bin/session-keybindings` (also bound to `ALT SHIFT, slash`); `startup-gate.sh` blanks JSON modules for the first 15s of a session so heavy scripts don't stall the bar). Launched by `config/hypr/bin/launch_waybar`, which supervises the bar (reload on config change, relaunch on crash with capped backoff, and a render health check that polls `hyprctl layers` for waybar's layer surface to restart a hung-but-alive bar that never drew at first load) |
 | Polybar (X11 status bar) | `config/polybar/` (calendar popup script under `polybar-scripts/`) |
@@ -169,23 +169,30 @@ which holds the `wlr-gamma-control` and exposes `Brightness`/`Temperature` over
 D-Bus (`busctl`).
 
 - `bin/gamma` (`get`/`set <percent>`/`nudge <up|down>`/`temp <kelvin>`) is the
-  single owner of brightness and colour temperature, per the contract in
-  `docs/adr/0002-gamma-contract.md`. It probes for a backend directly —
-  `busctl`/`wl-gammarelay-rs` under Sway, `hyprctl hyprsunset` under Hyprland
-  — rather than going through `bin/lib/wm.sh`, since "which WM" and "which
-  gamma backend" are independent facts. Unit is integer percent 0-100, step
-  5, min 10, max 100; state stays at `/tmp/hyprsunset_gamma` as an integer
-  percent so Waybar's `custom/brightness.sh` display module can keep polling
-  it cheaply; `gamma get` re-probes the live backend rather than trusting
-  that file. When no backend probes successfully, all verbs degrade to
-  behaving as if brightness were pinned at 100 and still exit 0. Pure logic
+  **single owner** of brightness and colour temperature, per the contract in
+  `docs/adr/0002-gamma-contract.md`, and the only file that reads or writes
+  `/tmp/hyprsunset_gamma`. It probes for a backend directly — `busctl`/
+  `wl-gammarelay-rs` under Sway, `hyprctl hyprsunset` under Hyprland — rather
+  than going through `bin/lib/wm.sh`, since "which WM" and "which gamma
+  backend" are independent facts. Unit is integer percent 0-100, step 5, min
+  10, max 100; state stays at `/tmp/hyprsunset_gamma` as an integer percent
+  so Waybar's `custom/brightness.sh` display module can keep polling it
+  cheaply; `gamma get` re-probes the live backend rather than trusting that
+  file. When no backend probes successfully, all verbs degrade to behaving
+  as if brightness were pinned at 100 and still exit 0. Pure logic
   (clamping, argument parsing, degraded-mode decisions) is checked without a
   real backend by `bin/lib/fixtures/check-gamma-logic.sh`.
-- The Sway `XF86MonBrightness*` keybindings call `bin/gamma nudge up/down`
-  (issue 0011, landed as the tracer caller). `config/sway/bin/brightness` and
-  `config/waybar/custom/brightness.sh` are still the two original
-  implementations for now — issue 0012 rewires the remaining callers onto
-  `bin/gamma` and deletes `config/sway/bin/brightness`.
+- Every caller now goes through `bin/gamma` — the Sway and Hyprland
+  `XF86MonBrightness*` keybindings call `bin/gamma nudge up/down` directly,
+  and Waybar's scroll actions (`config/waybar/config.jsonc`) call
+  `bin/gamma nudge up/down` instead of a bar script. `config/sway/bin/brightness`
+  (the old Sway-only implementation) is deleted.
+- `config/waybar/custom/brightness.sh` is display-only: it calls
+  `bin/gamma get` and renders the icon/percent text; it never writes state.
+- `config/sway/bin/temperature-schedule` still owns applying the day/night
+  colour-temperature schedule directly against `wl-gammarelay-rs` — it does
+  not touch `/tmp/hyprsunset_gamma` and is out of scope here. Unifying its
+  PROFILE table with `config/hypr/hyprsunset.conf`'s is issue 0013's job.
 - `config/sway/bin/temperature-schedule --daemon` is launched from the Sway
   config and applies a day/night color temperature by the hour, mirroring the
   profiles in `config/hypr/hyprsunset.conf` (wl-gammarelay-rs holds a fixed

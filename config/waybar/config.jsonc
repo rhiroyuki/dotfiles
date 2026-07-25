@@ -126,8 +126,8 @@
   "custom/brightness": {
     "exec": "~/.config/waybar/custom/brightness.sh",
     "interval": 2,
-    "on-scroll-up": "~/.config/waybar/custom/brightness.sh up",
-    "on-scroll-down": "~/.config/waybar/custom/brightness.sh down"
+    "on-scroll-up": "~/dotfiles/bin/gamma nudge up",
+    "on-scroll-down": "~/dotfiles/bin/gamma nudge down"
   },
   "pulseaudio": {
     "format": "{volume}% {icon}",
