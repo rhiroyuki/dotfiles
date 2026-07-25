@@ -140,7 +140,7 @@ bindsym $mod+Return exec "$HOME/dotfiles/bin/session-launcher"
 # Emoji
 bindsym $mod+e exec rofi -show emoji
 # Powermenu (shutdown, suspend, reboot, shutdown, log out)
-bindsym $mod2+p exec "$HOME/.config/sway/bin/powermenu"
+bindsym $mod2+p exec "$HOME/dotfiles/bin/session-powermenu"
 # Display mode selector
 bindsym $mod2+d exec "$HOME/dotfiles/config/sway/bin/select_display_mode"
 

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# vim: set ft=sh:
+#
+# Unified session power menu for hyprland/sway/i3 (issue 0008). The menu is
+# defined once here; only lock/exit commands are WM-specific, and those come
+# from the adapter table (ADR 0001, bin/lib/wm.sh) instead of being
+# hardcoded per copy. Replaces the three per-WM config/{hypr,sway,i3}/bin/powermenu
+# scripts, which had diverged (Sway's copy silently dropped Suspend).
+# Referenced directly at $HOME/dotfiles/bin/session-powermenu from each WM
+# config, mirroring bin/session-launcher (issue 0007).
+
+source "$HOME/dotfiles/bin/lib/wm.sh"
+wm_detect
+lock_cmd="$(wm_get lock_cmd)"
+exit_cmd="$(wm_get exit_cmd)"
+
+chosen=$(printf "🔒 Lock\n💤 Suspend\n🔄 Reboot\n⏻ Shutdown\n🚪 Log Out" | rofi -p "Session:" -dmenu -i)
+
+case "$chosen" in
+  "🔒 Lock")      $lock_cmd ;;
+  "💤 Suspend")   $lock_cmd & systemctl suspend ;;
+  "🔄 Reboot")    systemctl reboot ;;
+  "⏻ Shutdown")  systemctl poweroff ;;
+  "🚪 Log Out")   $exit_cmd ;;
+  *) exit 1 ;;
+esac
