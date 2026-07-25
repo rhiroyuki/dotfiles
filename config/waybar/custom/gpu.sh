@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-noop() { printf '%s\n' '{"text": "", "tooltip": ""}'; exit 0; }
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
 command -v nvidia-smi >/dev/null 2>&1 || noop
-command -v jq         >/dev/null 2>&1 || noop
 
 read -r usage mem_used mem_total < <(
     timeout -k 1 2 nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total \
@@ -27,6 +26,4 @@ top_gpu=$(timeout -k 1 2 nvidia-smi pmon -c 1 -s u 2>/dev/null \
 
 tooltip="$(printf "Top VRAM:\n%s\n\nTop GPU:\n%s" "$top_vram" "$top_gpu")"
 
-jq -cn --arg text "GPU: ${usage}% | VRAM: ${mem_used}/${mem_total}MiB" \
-       --arg tooltip "$tooltip" \
-       '{"text": $text, "tooltip": $tooltip}'
+emit "GPU: ${usage}% | VRAM: ${mem_used}/${mem_total}MiB" "$tooltip"

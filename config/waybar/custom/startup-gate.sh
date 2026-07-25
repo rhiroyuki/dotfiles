@@ -14,10 +14,12 @@
 # Only route return-type:json modules through this; plain-text modules would
 # render the literal '{"text": ""}' placeholder.
 
-DELAY=15
-MARKER=/tmp/waybar_start_ts
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
-start=$(cat "$MARKER" 2>/dev/null || echo 0)
+DELAY=15
+
+start=$(state_file_read start_ts)
+[[ "$start" =~ ^[0-9]+$ ]] || start=0
 now=$(date +%s)
 
 if (( now - start < DELAY )); then

@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
+
+# Shared with config/sway/bin/brightness; issue 0012 owns unifying this path,
+# so it deliberately stays outside lib.sh's state_file prefix.
 STATE_FILE="/tmp/hyprsunset_gamma"
 STEP=5
 MIN=10
 MAX=100
 
-[[ ! -f "$STATE_FILE" ]] && echo "100" > "$STATE_FILE"
-current=$(cat "$STATE_FILE")
+current=$(cat "$STATE_FILE" 2>/dev/null)
+[[ "$current" =~ ^[0-9]+$ ]] || current=100
 
 case "$1" in
     up)

@@ -5,7 +5,7 @@
 
 set -e
 
-noop() { printf '%s\n' '{"text": "", "tooltip": ""}'; exit 0; }
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
 command -v sensors >/dev/null 2>&1 || noop
 command -v jq      >/dev/null 2>&1 || noop

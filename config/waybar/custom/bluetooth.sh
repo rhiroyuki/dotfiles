@@ -1,11 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Bluetooth status indicator for Waybar with color states
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
+
 if ls /sys/class/bluetooth/hci* &>/dev/null 2>&1; then
     # Active (green)
-    echo '{"text":"󰂯","tooltip":"Bluetooth is active","class":"active"}'
+    emit "󰂯" "Bluetooth is active" "active"
 else
     # Inactive (gray)
-    echo '{"text":"󰂲","tooltip":"Bluetooth is inactive","class":"inactive"}'
+    emit "󰂲" "Bluetooth is inactive" "inactive"
 fi

@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-blocks=("▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
-read -r total used avail _ <<< "$(df -BG / | awk 'NR==2 {gsub(/G/,"",$2); gsub(/G/,"",$3); gsub(/G/,"",$4); print $2, $3, $4}')"
+command -v df >/dev/null 2>&1 || noop
+
+read -r total used avail _ <<< "$(df -BG / 2>/dev/null | awk 'NR==2 {gsub(/G/,"",$2); gsub(/G/,"",$3); gsub(/G/,"",$4); print $2, $3, $4}')"
+[[ "$total" =~ ^[0-9]+$ && "$total" -gt 0 && "$used" =~ ^[0-9]+$ ]] || noop
 
 usage=$(( used * 100 / total ))
-idx=$(( usage * 7 / 100 ))
-(( idx > 7 )) && idx=7
-block="${blocks[$idx]}"
+block="$(sparkline "$usage")"
 
-jq -cn --arg text "Disk: ${usage}% ${block}" \
-       --arg tooltip "Used: ${used}G / ${total}G (${avail}G free)" \
-       '{"text": $text, "tooltip": $tooltip}'
+emit "Disk: ${usage}% ${block}" "Used: ${used}G / ${total}G (${avail}G free)"
