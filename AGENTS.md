@@ -84,9 +84,9 @@ Existing files/dirs are renamed with a Unix-timestamp suffix (`_backup_123456789
 | WezTerm | `wezterm.lua` |
 | Ghostty | `config/ghostty/config` |
 | hyprsunset | `config/hypr/hyprsunset.conf` |
-| Sway (Wayland WM) | `config/sway/` (helpers under `bin/`: `keybindings`, `launch_waybar`, `select_display_mode`/`apply_display_modes`; `brightness` + `temperature-schedule` drive software gamma — see "Brightness on Sway" below; app launcher and power menu are the shared `bin/session-launcher` and `bin/session-powermenu`, see "WM adapter registry" below) |
-| i3 (X11 WM) | `config/i3/` (helpers: `bin/keybindings`, `bin/polybar`; app launcher and power menu are the shared `bin/session-launcher` and `bin/session-powermenu`, see "WM adapter registry" below) |
-| Waybar | `config/waybar/` (custom modules: `lib.sh` (shared `sparkline`/`emit`/`noop`/`state_file` primitives), `cpu.sh`, `gpu.sh`, `mem.sh`, `disk.sh`, `temp.sh`, `net.sh`, `brightness.sh`, `bluetooth.sh`; `custom/power` opens the session menu via the shared `bin/session-powermenu` (lock/suspend/reboot/shutdown/log out); `custom/keybindings` opens the Hyprland keybindings cheatsheet via `config/hypr/bin/keybindings` (also bound to `ALT SHIFT, slash`); `startup-gate.sh` blanks JSON modules for the first 15s of a session so heavy scripts don't stall the bar). Launched by `config/hypr/bin/launch_waybar`, which supervises the bar (reload on config change, relaunch on crash with capped backoff, and a render health check that polls `hyprctl layers` for waybar's layer surface to restart a hung-but-alive bar that never drew at first load) |
+| Sway (Wayland WM) | `config/sway/` (helpers under `bin/`: `launch_waybar`, `select_display_mode`/`apply_display_modes`; `brightness` + `temperature-schedule` drive software gamma — see "Brightness on Sway" below; app launcher, power menu and keybindings cheatsheet are the shared `bin/session-launcher`, `bin/session-powermenu` and `bin/session-keybindings`, see "WM adapter registry" below) |
+| i3 (X11 WM) | `config/i3/` (helpers: `bin/polybar`; app launcher, power menu and keybindings cheatsheet are the shared `bin/session-launcher`, `bin/session-powermenu` and `bin/session-keybindings`, see "WM adapter registry" below) |
+| Waybar | `config/waybar/` (custom modules: `lib.sh` (shared `sparkline`/`emit`/`noop`/`state_file` primitives), `cpu.sh`, `gpu.sh`, `mem.sh`, `disk.sh`, `temp.sh`, `net.sh`, `brightness.sh`, `bluetooth.sh`; `custom/power` opens the session menu via the shared `bin/session-powermenu` (lock/suspend/reboot/shutdown/log out); `custom/keybindings` opens the keybindings cheatsheet via the shared `bin/session-keybindings` (also bound to `ALT SHIFT, slash`); `startup-gate.sh` blanks JSON modules for the first 15s of a session so heavy scripts don't stall the bar). Launched by `config/hypr/bin/launch_waybar`, which supervises the bar (reload on config change, relaunch on crash with capped backoff, and a render health check that polls `hyprctl layers` for waybar's layer surface to restart a hung-but-alive bar that never drew at first load) |
 | Polybar (X11 status bar) | `config/polybar/` (calendar popup script under `polybar-scripts/`) |
 | Git | `gitignore`, `gitattributes` |
 | Ruby | `gemrc`, `default-gems`, `reek.yml`, `solargraph.yml` |
@@ -226,10 +226,15 @@ rather than erroring out.
 works end-to-end); it read `lock_cmd`/`exit_cmd` from the table and used
 bash (`#!/usr/bin/env bash`), not `#!/bin/sh`, because `wm.sh` uses bash-only
 syntax. It has since been unified into `bin/session-powermenu` (issue 0008),
-alongside `bin/session-launcher` (issue 0007), which reads the same table.
-The remaining keybindings/launch_waybar duplicates across
-`config/{hypr,sway,i3}/` are intentionally not yet unified onto this
-table — that is future work (issues 0009, 0016).
+alongside `bin/session-launcher` (issue 0007) and `bin/session-keybindings`
+(issue 0009), which read the same table. `bin/session-keybindings` reads
+`config_file` and `dispatch_cmd`; its parsing (Hyprland's `bind[elm]? =
+MODS,KEY,DISPATCHER[,ARGS]`/`submap` grammar vs. Sway/i3's `bindsym KEY
+ACTION`/`mode` grammar) lives in a standalone `parse_keybindings` function,
+exercised without rofi by `bin/lib/fixtures/check-keybindings-parser.sh`.
+The remaining launch_waybar duplicate across `config/{hypr,sway}/` is
+intentionally not yet unified onto this table — that is future work
+(issue 0016).
 
 ## Architecture Decision Records
 

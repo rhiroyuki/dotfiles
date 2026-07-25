@@ -191,8 +191,8 @@
   },
   "custom/keybindings": {
     "format": "?",
-    "tooltip-format": "Show Hyprland keybindings (ALT+SHIFT+/)",
-    "on-click": "~/.config/hypr/bin/keybindings"
+    "tooltip-format": "Show keybindings (ALT+SHIFT+/)",
+    "on-click": "~/dotfiles/bin/session-keybindings"
   },
   "sway/language": {
     "format": "{}",

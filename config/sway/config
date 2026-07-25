@@ -147,7 +147,7 @@ bindsym $mod2+d exec "$HOME/dotfiles/config/sway/bin/select_display_mode"
 # Clipboard history
 bindsym $mod+control+f exec cliphist list | rofi -dmenu -p "Clipboard" | cliphist decode | wl-copy
 # Show keybindings
-bindsym $mod+Shift+slash exec "$HOME/.config/sway/bin/keybindings"
+bindsym $mod+Shift+slash exec "$HOME/dotfiles/bin/session-keybindings"
 
 # Focus left
 bindsym $mod+h focus left

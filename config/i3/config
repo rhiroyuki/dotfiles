@@ -130,7 +130,7 @@ bindsym $mod2+p exec --no-startup-id "$HOME/dotfiles/bin/session-powermenu"
 # Clipboard history
 bindsym $mod+control+f exec --no-startup-id rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
 # Show keybindings
-bindsym $mod+Shift+slash exec --no-startup-id "$HOME/.config/i3/bin/keybindings"
+bindsym $mod+Shift+slash exec --no-startup-id "$HOME/dotfiles/bin/session-keybindings"
 
 # Focus left
 bindsym $mod+h focus left
