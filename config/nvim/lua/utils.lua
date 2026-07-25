@@ -1,5 +1,10 @@
 local M = {}
 
+--- Registry of lhs keys already registered per mode, used to detect
+--- accidental duplicate bindings. Buffer-local mappings are excluded
+--- because the same lhs legitimately repeats across buffers.
+M._registered_keymaps = {}
+
 --- Maps a keybinding in Neovim.
 ---
 --- This function simplifies the process of setting key mappings by merging
@@ -10,7 +15,24 @@ local M = {}
 --- @param command string|function: The command or Lua function to execute when the key is pressed.
 --- @param opts table|nil: A table of options for the keymap (optional).
 M.map = function(mode, key, command, opts)
-  local merged_opts = vim.tbl_deep_extend("force", { noremap = true, silent = true }, opts or {desc = "Description not provided"})
+  local merged_opts = vim.tbl_deep_extend(
+    "force",
+    { noremap = true, silent = true, desc = "Description not provided" },
+    opts or {}
+  )
+
+  if not merged_opts.buffer then
+    local registry = M._registered_keymaps
+    registry[mode] = registry[mode] or {}
+    if registry[mode][key] then
+      vim.notify(
+        string.format("utils.map: duplicate keymap for %q in mode %q", key, mode),
+        vim.log.levels.WARN
+      )
+    end
+    registry[mode][key] = true
+  end
+
   vim.keymap.set(mode, key, command, merged_opts)
 end
 
