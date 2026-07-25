@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+# vim: set ft=sh:
+#
+# Unified keybindings cheatsheet for hyprland/sway/i3 (issue 0009). Config
+# path and bind grammar come from the WM adapter table (ADR 0001,
+# bin/lib/wm.sh); dispatching a selected bind uses dispatch_cmd from the
+# same table, so every WM gets Hyprland's "select to activate" behaviour,
+# not just Hyprland. Replaces config/{hypr,sway,i3}/bin/keybindings.
+#
+# Referenced directly at $HOME/dotfiles/bin/session-keybindings from each WM
+# config, mirroring bin/session-launcher (issue 0007) and
+# bin/session-powermenu (issue 0008).
+#
+# parse_keybindings is kept separate from the rofi/dispatch flow below so it
+# can be exercised against fixture configs without opening rofi; see
+# bin/lib/fixtures/check-keybindings-parser.sh.
+
+# parse_keybindings <config_path> <wm_id> - emit TAB-separated bind entries.
+#
+# Each line is <display>\t<dispatch>. <display> is what rofi shows; <dispatch>
+# is the raw dispatcher/action text to hand to the WM's dispatch_cmd if this
+# entry is selected. Hyprland's grammar is "bind[elm]? = MODS,KEY,DISPATCHER
+# [,ARGS]" with optional "submap = NAME" ... "submap = reset" blocks. Sway
+# and i3 share "bindsym KEY ACTION" with optional "mode \"NAME\" { ... }"
+# blocks; i3 additionally strips a leading "--no-startup-id" from the action
+# before display and before dispatch (i3-msg does not understand that flag).
+parse_keybindings() {
+  local config="$1" wm_id="$2"
+
+  case "$wm_id" in
+    hyprland)
+      awk '
+        /^submap = / {
+          current_submap = ($3 == "reset") ? "" : $3
+          next
+        }
+
+        /^bind[elm]? = / {
+          line = $0
+          sub(/^bind[elm]? = /, "", line)
+
+          n = split(line, parts, /[[:space:]]*,[[:space:]]*/)
+          mods = parts[1]
+          key  = parts[2]
+          disp = parts[3]
+
+          args = ""
+          for (i = 4; i <= n; i++) args = args (i > 4 ? " " : "") parts[i]
+          dispatch = disp (args != "" ? " " args : "")
+
+          combo = (mods != "") ? mods "+" key : key
+          gsub(/[[:space:]]/, "", combo)
+
+          desc = (prev_comment != "") ? prev_comment : dispatch
+          if (length(desc) > 60) desc = substr(desc, 1, 57) "..."
+
+          prefix = (current_submap != "") ? "[" current_submap "] " : ""
+          printf "%-35s  %s%s\t%s\n", combo, prefix, desc, dispatch
+          prev_comment = ""
+          next
+        }
+
+        /^[[:space:]]*#/ {
+          line = $0
+          sub(/^[[:space:]]*# ?/, "", line)
+          prev_comment = line
+          next
+        }
+
+        { prev_comment = "" }
+      ' "$config"
+      ;;
+
+    sway|i3)
+      local strip=0
+      [[ "$wm_id" == i3 ]] && strip=1
+
+      awk -v strip="$strip" '
+        /^[[:space:]]*mode "([^"]+)"/ {
+          match($0, /"([^"]+)"/)
+          current_mode = substr($0, RSTART + 1, RLENGTH - 2)
+          next
+        }
+
+        /^\}/ { current_mode = "" }
+
+        /bindsym/ {
+          line = $0
+          sub(/^[[:space:]]*bindsym[[:space:]]+/, "", line)
+
+          key = line
+          sub(/[[:space:]].*/, "", key)
+          gsub(/\$mod2/, "Super", key)
+          gsub(/\$mod/, "Alt", key)
+
+          action = line
+          sub(/^[^[:space:]]+[[:space:]]+/, "", action)
+
+          desc = (prev_comment != "") ? prev_comment : action
+          gsub(/^exec /, "", desc)
+          if (strip) gsub(/^--no-startup-id /, "", desc)
+          gsub(/^"/, "", desc)
+          gsub(/"$/, "", desc)
+          if (length(desc) > 60) desc = substr(desc, 1, 57) "..."
+
+          prefix = (current_mode != "") ? "[" current_mode "] " : ""
+          printf "%-30s  %s%s\t%s\n", key, prefix, desc, action
+          prev_comment = ""
+          next
+        }
+
+        /^[[:space:]]*#/ {
+          line = $0
+          sub(/^[[:space:]]*# ?/, "", line)
+          prev_comment = line
+          next
+        }
+
+        { prev_comment = "" }
+      ' "$config"
+      ;;
+  esac
+}
+
+# --- rofi + dispatch flow (skipped when sourced for parser tests) ---
+if [[ "${SESSION_KEYBINDINGS_SOURCE_ONLY:-}" == "1" ]]; then
+  return 0 2>/dev/null || exit 0
+fi
+
+source "$HOME/dotfiles/bin/lib/wm.sh"
+wm_detect
+
+config="$(wm_get config_file)" || exit 1
+dispatch_cmd="$(wm_get dispatch_cmd)" || exit 1
+
+entries="$(parse_keybindings "$config" "$WM_ID" | sort)"
+
+idx="$(cut -f1 <<< "$entries" | rofi -dmenu -i -p "Keybindings" -no-custom -format i)"
+[ -z "$idx" ] && exit 0
+
+dispatch="$(sed -n "$((idx + 1))p" <<< "$entries" | cut -f2)"
+[ -z "$dispatch" ] && exit 0
+
+$dispatch_cmd $dispatch
