@@ -106,10 +106,10 @@ bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-s
 # Toggle mic mute
 bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle && notify-send -t 1500 "Mic" "$(pactl get-source-mute @DEFAULT_SOURCE@ | grep -q yes && echo Muted || echo Unmuted)"
 
-# Brightness up (software dimming via wl-gammarelay-rs; no backlight on this box)
-bindsym XF86MonBrightnessUp exec notify-send -t 1500 "Brightness" "$("$HOME/.config/sway/bin/brightness" up)%"
+# Brightness up (software dimming; bin/gamma probes and owns the backend)
+bindsym XF86MonBrightnessUp exec notify-send -t 1500 "Brightness" "$("$HOME/dotfiles/bin/gamma" nudge up)%"
 # Brightness down
-bindsym XF86MonBrightnessDown exec notify-send -t 1500 "Brightness" "$("$HOME/.config/sway/bin/brightness" down)%"
+bindsym XF86MonBrightnessDown exec notify-send -t 1500 "Brightness" "$("$HOME/dotfiles/bin/gamma" nudge down)%"
 
 # Play/pause media
 bindsym XF86AudioPlay exec playerctl play-pause && notify-send -t 1500 "Media" "$(playerctl status): $(playerctl metadata title)"

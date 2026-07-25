@@ -168,10 +168,24 @@ so `brightnessctl` cannot change brightness. Sway therefore dims in software via
 which holds the `wlr-gamma-control` and exposes `Brightness`/`Temperature` over
 D-Bus (`busctl`).
 
-- `config/sway/bin/brightness {up,down}` nudges the `Brightness` property and
-  echoes the new percent (used by the `XF86MonBrightness*` keybindings). It also
-  writes the percent to `/tmp/hyprsunset_gamma` so Waybar's `custom/brightness.sh`
-  display module stays correct.
+- `bin/gamma` (`get`/`set <percent>`/`nudge <up|down>`/`temp <kelvin>`) is the
+  single owner of brightness and colour temperature, per the contract in
+  `docs/adr/0002-gamma-contract.md`. It probes for a backend directly —
+  `busctl`/`wl-gammarelay-rs` under Sway, `hyprctl hyprsunset` under Hyprland
+  — rather than going through `bin/lib/wm.sh`, since "which WM" and "which
+  gamma backend" are independent facts. Unit is integer percent 0-100, step
+  5, min 10, max 100; state stays at `/tmp/hyprsunset_gamma` as an integer
+  percent so Waybar's `custom/brightness.sh` display module can keep polling
+  it cheaply; `gamma get` re-probes the live backend rather than trusting
+  that file. When no backend probes successfully, all verbs degrade to
+  behaving as if brightness were pinned at 100 and still exit 0. Pure logic
+  (clamping, argument parsing, degraded-mode decisions) is checked without a
+  real backend by `bin/lib/fixtures/check-gamma-logic.sh`.
+- The Sway `XF86MonBrightness*` keybindings call `bin/gamma nudge up/down`
+  (issue 0011, landed as the tracer caller). `config/sway/bin/brightness` and
+  `config/waybar/custom/brightness.sh` are still the two original
+  implementations for now — issue 0012 rewires the remaining callers onto
+  `bin/gamma` and deletes `config/sway/bin/brightness`.
 - `config/sway/bin/temperature-schedule --daemon` is launched from the Sway
   config and applies a day/night color temperature by the hour, mirroring the
   profiles in `config/hypr/hyprsunset.conf` (wl-gammarelay-rs holds a fixed
@@ -183,17 +197,6 @@ Only one `wlr-gamma-control` client may run at a time, so `wl-gammarelay-rs`
 (`config/waybar/custom/brightness.sh` → `hyprctl hyprsunset gamma`); hyprsunset
 uses Hyprland's `hyprland-ctm-control-v1` protocol and does **not** work under
 Sway, which is why Sway needs its own tool.
-
-**Pending unification:** `config/sway/bin/brightness` and
-`config/waybar/custom/brightness.sh` are two independent implementations with
-different units (0-1 float vs percent) and step sizes (`0.05`/`0.10` vs
-`5`/`10`) that happen to share `/tmp/hyprsunset_gamma` as state. The contract
-for a single `bin/gamma` module that owns both (percent 0-100, step 5, min
-10, state file unchanged, verbs `get`/`set`/`nudge`/`temp`, degraded mode
-falls back to 100%, backend selected by direct probe rather than through
-`bin/lib/wm.sh`) is decided in `docs/adr/0002-gamma-contract.md`. The module
-itself and the caller rewiring described above are not yet built — see
-issues 0011 and 0012.
 
 ## Hyprland input.conf (Omarchy-owned)
 

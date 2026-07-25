@@ -1,0 +1,212 @@
+#!/usr/bin/env bash
+# vim: set ft=sh:
+#
+# Single owner of brightness + colour temperature (ADR 0002,
+# docs/adr/0002-gamma-contract.md). Unit is integer percent 0-100; STEP=5,
+# MIN=10, MAX=100 are defined once, here. State stays at STATE_FILE as an
+# integer percent, written on every set/nudge so Waybar's display module can
+# poll it cheaply -- but `get` never trusts that file, it re-probes the live
+# backend (or falls back to DEFAULT in degraded mode) every time it's called.
+#
+# Backend is selected by probing directly -- busctl for wl-gammarelay-rs
+# (Sway), hyprctl hyprsunset (Hyprland) -- not through bin/lib/wm.sh
+# (ADR 0001). "Which WM is running" and "which gamma backend is present" are
+# independent facts (ADR 0002 decision 6), so this module owns its own
+# two-entry backend table instead of adding a field to the WM adapter.
+#
+# Degraded mode (no backend probes successfully): get/set/nudge/temp all
+# exit 0 and behave as if brightness were always at DEFAULT=MAX -- a session
+# with no working gamma control is "always full brightness", not "broken"
+# (ADR 0002 decision 5). Only malformed arguments produce a non-zero exit.
+#
+# Issue 0011 lands this module and switches one caller (Sway's
+# XF86MonBrightness* keys) over as a tracer; issue 0012 rewires the rest
+# (config/waybar/custom/brightness.sh, hyprland.conf's brightness binds) and
+# deletes config/sway/bin/brightness.
+#
+# Pure logic (clamping, integer parsing) is exercised without a real backend
+# by bin/lib/fixtures/check-gamma-logic.sh. STATE_FILE is overridable via
+# GAMMA_STATE_FILE so that check can run without touching the real
+# /tmp/hyprsunset_gamma or a live session.
+
+set -u
+
+STEP=5
+MIN=10
+MAX=100
+DEFAULT=$MAX
+STATE_FILE="${GAMMA_STATE_FILE:-/tmp/hyprsunset_gamma}"
+
+# is_int <value> - true if <value> is a (possibly negative) bare integer.
+is_int() {
+  [[ "$1" =~ ^-?[0-9]+$ ]]
+}
+
+# clamp <value> - clamp an integer to [MIN, MAX].
+clamp() {
+  local v="$1"
+  (( v < MIN )) && v=$MIN
+  (( v > MAX )) && v=$MAX
+  echo "$v"
+}
+
+# --- backend table (ADR 0002 decision 6): probed directly, two entries ---
+
+backend_gammarelay_probe() {
+  busctl --user get-property rs.wl-gammarelay / rs.wl.gammarelay Brightness &>/dev/null
+}
+
+backend_gammarelay_get() {
+  busctl --user get-property rs.wl-gammarelay / rs.wl.gammarelay Brightness 2>/dev/null \
+    | awk '{printf "%d", $2 * 100}'
+}
+
+backend_gammarelay_set() {
+  local pct="$1" frac
+  frac=$(awk -v p="$pct" 'BEGIN{printf "%.2f", p / 100}')
+  busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Brightness d "$frac" &>/dev/null
+}
+
+backend_gammarelay_temp() {
+  busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q "$1" &>/dev/null
+}
+
+# hyprsunset has no query request (only temperature/identity/gamma setters),
+# so its "live" value is the state file this module itself maintains -- it
+# is the sole writer, so the file is as authoritative as the backend gets.
+backend_hyprsunset_probe() {
+  hyprctl hyprsunset gamma &>/dev/null
+}
+
+backend_hyprsunset_get() {
+  local v
+  v=$(cat "$STATE_FILE" 2>/dev/null)
+  is_int "$v" || v=$DEFAULT
+  echo "$v"
+}
+
+backend_hyprsunset_set() {
+  hyprctl hyprsunset gamma "$1" &>/dev/null
+}
+
+backend_hyprsunset_temp() {
+  hyprctl hyprsunset temperature "$1" &>/dev/null
+}
+
+# detect_backend - set BACKEND to "gammarelay", "hyprsunset", or "" (none
+# probes successfully -- degraded mode).
+detect_backend() {
+  if backend_gammarelay_probe; then
+    BACKEND=gammarelay
+  elif backend_hyprsunset_probe; then
+    BACKEND=hyprsunset
+  else
+    BACKEND=""
+  fi
+}
+
+# backend_get / backend_set / backend_temp - dispatch to the detected
+# backend's functions. No-ops (besides printing) when BACKEND is empty.
+backend_get() {
+  case "$BACKEND" in
+    gammarelay) backend_gammarelay_get ;;
+    hyprsunset) backend_hyprsunset_get ;;
+  esac
+}
+
+backend_set() {
+  case "$BACKEND" in
+    gammarelay) backend_gammarelay_set "$1" ;;
+    hyprsunset) backend_hyprsunset_set "$1" ;;
+  esac
+}
+
+backend_temp() {
+  case "$BACKEND" in
+    gammarelay) backend_gammarelay_temp "$1" ;;
+    hyprsunset) backend_hyprsunset_temp "$1" ;;
+  esac
+}
+
+# --- verbs ---
+
+cmd_get() {
+  detect_backend
+  if [[ -z "$BACKEND" ]]; then
+    echo "$DEFAULT"
+    return 0
+  fi
+  echo "$(backend_get)"
+}
+
+cmd_set() {
+  local requested="${1:-}"
+  if ! is_int "$requested"; then
+    echo "usage: gamma set <percent (integer)>" >&2
+    return 1
+  fi
+
+  local pct
+  pct=$(clamp "$requested")
+  detect_backend
+  [[ -n "$BACKEND" ]] && backend_set "$pct"
+  echo "$pct" > "$STATE_FILE"
+  echo "$pct"
+}
+
+cmd_nudge() {
+  local dir="${1:-}"
+  if [[ "$dir" != up && "$dir" != down ]]; then
+    echo "usage: gamma nudge <up|down>" >&2
+    return 1
+  fi
+
+  detect_backend
+  local current=$DEFAULT
+  if [[ -n "$BACKEND" ]]; then
+    current=$(backend_get)
+    is_int "$current" || current=$DEFAULT
+  fi
+
+  local target
+  if [[ "$dir" == up ]]; then
+    target=$(( current + STEP ))
+  else
+    target=$(( current - STEP ))
+  fi
+
+  local pct
+  pct=$(clamp "$target")
+  [[ -n "$BACKEND" ]] && backend_set "$pct"
+  echo "$pct" > "$STATE_FILE"
+  echo "$pct"
+}
+
+cmd_temp() {
+  local kelvin="${1:-}"
+  if ! is_int "$kelvin"; then
+    echo "usage: gamma temp <kelvin (integer)>" >&2
+    return 1
+  fi
+
+  detect_backend
+  [[ -n "$BACKEND" ]] && backend_temp "$kelvin"
+  echo "$kelvin"
+}
+
+# --- entry point (skipped when sourced for the fixture check) ---
+if [[ "${GAMMA_SOURCE_ONLY:-}" == "1" ]]; then
+  return 0 2>/dev/null || exit 0
+fi
+
+case "${1:-}" in
+  get)   cmd_get ;;
+  set)   cmd_set "${2:-}" ;;
+  nudge) cmd_nudge "${2:-}" ;;
+  temp)  cmd_temp "${2:-}" ;;
+  *)
+    echo "usage: gamma <get|set PERCENT|nudge up|down|temp KELVIN>" >&2
+    exit 2
+    ;;
+esac
+exit $?
