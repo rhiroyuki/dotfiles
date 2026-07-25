@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# vim: set ft=sh:
+#
+# Unified app launcher for hyprland/sway/i3 (issue 0007). Nothing here is
+# WM-specific; the three per-WM copies this replaced were byte-identical.
+# Referenced directly at $HOME/dotfiles/bin/session-launcher from each WM
+# config, mirroring how bin/lib/wm.sh is sourced (ADR 0001) - no install
+# step symlinks top-level bin/ anywhere, so WM configs call the canonical
+# repo path directly.
+
+if command -v rofi >/dev/null 2>&1; then
+  rofi -show "${1:-drun}"
+else
+  dmenu_run -i -p "Run: "
+fi

@@ -84,8 +84,8 @@ Existing files/dirs are renamed with a Unix-timestamp suffix (`_backup_123456789
 | WezTerm | `wezterm.lua` |
 | Ghostty | `config/ghostty/config` |
 | hyprsunset | `config/hypr/hyprsunset.conf` |
-| Sway (Wayland WM) | `config/sway/` (helpers under `bin/`: `launcher`, `powermenu`, `keybindings`, `launch_waybar`, `select_display_mode`/`apply_display_modes`; `brightness` + `temperature-schedule` drive software gamma — see "Brightness on Sway" below) |
-| i3 (X11 WM) | `config/i3/` (helpers: `bin/launcher`, `bin/powermenu`, `bin/keybindings`, `bin/polybar`) |
+| Sway (Wayland WM) | `config/sway/` (helpers under `bin/`: `powermenu`, `keybindings`, `launch_waybar`, `select_display_mode`/`apply_display_modes`; `brightness` + `temperature-schedule` drive software gamma — see "Brightness on Sway" below; app launcher is the shared `bin/session-launcher`, see "WM adapter registry" below) |
+| i3 (X11 WM) | `config/i3/` (helpers: `bin/powermenu`, `bin/keybindings`, `bin/polybar`; app launcher is the shared `bin/session-launcher`, see "WM adapter registry" below) |
 | Waybar | `config/waybar/` (custom modules: `lib.sh` (shared `sparkline`/`emit`/`noop`/`state_file` primitives), `cpu.sh`, `gpu.sh`, `mem.sh`, `disk.sh`, `temp.sh`, `net.sh`, `brightness.sh`, `bluetooth.sh`; `custom/power` opens the session menu via `config/hypr/bin/powermenu` (lock/suspend/reboot/shutdown/log out); `custom/keybindings` opens the Hyprland keybindings cheatsheet via `config/hypr/bin/keybindings` (also bound to `ALT SHIFT, slash`); `startup-gate.sh` blanks JSON modules for the first 15s of a session so heavy scripts don't stall the bar). Launched by `config/hypr/bin/launch_waybar`, which supervises the bar (reload on config change, relaunch on crash with capped backoff, and a render health check that polls `hyprctl layers` for waybar's layer surface to restart a hung-but-alive bar that never drew at first load) |
 | Polybar (X11 status bar) | `config/polybar/` (calendar popup script under `polybar-scripts/`) |
 | Git | `gitignore`, `gitattributes` |
@@ -96,6 +96,7 @@ Existing files/dirs are renamed with a Unix-timestamp suffix (`_backup_123456789
 | NVIDIA (Wayland) | `install/nvidia_modeset.conf`, `install/install_nvidia_modeset.sh` (pins `nvidia_drm.modeset=1`); `install/install_nvidia_persistenced.sh` (keeps driver warm from boot — fixes slow first GPU launch); `install/install_nvidia_early_modules.sh`, `install/nvidia_mkinitcpio.hook` (load modules in initramfs) |
 | fontconfig | `config/fontconfig/fonts.conf` |
 | WM adapter registry | `bin/lib/wm.sh` (`wm_detect`/`wm_get`; see "WM adapter registry" below); decision recorded in `docs/adr/0001-wm-adapter-registry.md` |
+| App launcher | `bin/session-launcher` (rofi with dmenu fallback; unifies the formerly byte-identical `config/{hypr,sway,i3}/bin/launcher`). Each WM config invokes it via `$HOME/dotfiles/bin/session-launcher` directly — top-level `bin/` is not symlinked anywhere by `install.sh`, so callers reference the canonical repo path, same as `bin/lib/wm.sh` |
 
 ## Zsh
 

@@ -121,7 +121,7 @@ bindsym $mod2+Print exec --no-startup-id flameshot gui
 bindsym $mod+Shift+q kill
 
 # Launcher
-bindsym $mod+Return exec --no-startup-id "$HOME/.config/i3/bin/launcher"
+bindsym $mod+Return exec --no-startup-id "$HOME/dotfiles/bin/session-launcher"
 # Emoji
 bindsym $mod+e exec --no-startup-id rofi -show emoji
 # Powermenu (lock, suspend, reboot, shutdown, log out)

@@ -136,7 +136,7 @@ bindsym $mod2+Print exec sh -c 'grim -g "$(slurp)" - | swappy -f -'
 bindsym $mod+Shift+q kill
 
 # Launcher
-bindsym $mod+Return exec "$HOME/.config/sway/bin/launcher"
+bindsym $mod+Return exec "$HOME/dotfiles/bin/session-launcher"
 # Emoji
 bindsym $mod+e exec rofi -show emoji
 # Powermenu (shutdown, suspend, reboot, shutdown, log out)
