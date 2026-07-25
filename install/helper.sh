@@ -1,5 +1,8 @@
 : "${DOTFILES_DIR:="$HOME/dotfiles"}"
 
+# Canonical zshrc source line, used identically by every installer.
+ZSHRC_SOURCE_LINE="source ~/dotfiles/zshrc_dotfile"
+
 ln_file_to_home_directory () {
   source_full_path="$DOTFILES_DIR/$1"
   target_full_path=${2:-"$HOME/.$1"}
@@ -55,6 +58,8 @@ install_config() {
 append_command_to_file() {
   local input=$2
   local destiny=$1
+
+  [ -e "$destiny" ] || touch "$destiny"
 
   if ! grep -Fxq "$input" "$destiny"; then
     echo "Adding to ${destiny}"

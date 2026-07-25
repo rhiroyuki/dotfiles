@@ -36,18 +36,6 @@ install_dotfiles () {
   done
 }
 
-add_source_to_zshrc() {
-  local zshrc_file="$HOME/.zshrc"
-  local source_line="source ~/dotfiles/zshrc_dotfile"
-
-  if ! grep -Fxq "$source_line" "$zshrc_file"; then
-    echo "Adding source line to .zshrc"
-    echo "$source_line" >> "$zshrc_file"
-  else
-    echo "Source line already present in .zshrc"
-  fi
-}
-
 main () {
   install_dotfiles
 
@@ -56,7 +44,7 @@ main () {
     install_config "$(basename "$dir")"
   done
 
-  add_source_to_zshrc
+  append_command_to_file "$HOME/.zshrc" "$ZSHRC_SOURCE_LINE"
 
   source "$DOTFILES_DIR/install/install_keyd_service.sh"
 

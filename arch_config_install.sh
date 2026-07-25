@@ -28,7 +28,7 @@ main() {
   # fix cedilla for hyprland
   append_command_to_file "$HOME/.XCompose" "include \"%H/dotfiles/XCompose\""
 
-  append_command_to_file "$HOME/.zshrc" "source $HOME/dotfiles/zshrc_dotfile"
+  append_command_to_file "$HOME/.zshrc" "$ZSHRC_SOURCE_LINE"
 
   # Auto-start sway on TTY1 login
   append_command_to_file "$HOME/.zprofile" "if [ -z \"\$DISPLAY\" ] && [ \"\$(tty)\" = \"/dev/tty1\" ]; then exec sway --unsupported-gpu; fi"
@@ -36,7 +36,6 @@ main() {
   # Set Hyprland keyboard variant and options
   set_hypr_kb_variant_intl
 
-  source "$DOTFILES_DIR/install/install_keyd_service.sh"
   source "$DOTFILES_DIR/install/setup_fcitx5_intl.sh"
 
   # Configure NetworkManager to use iwd as wifi backend and enable it

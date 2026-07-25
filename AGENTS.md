@@ -33,7 +33,9 @@ file to resolve from, so it clones the repo to `~/dotfiles` and re-execs itself
 from the clone. `$DOTFILES_DIR` is exported for the sourced `install/*` scripts;
 `install/helper.sh` defaults it to `~/dotfiles` when sourced standalone.
 
-`zshrc_dotfile` is **not** symlinked — `install.sh` appends `source ~/dotfiles/zshrc_dotfile` to `~/.zshrc` instead.
+`zshrc_dotfile` is **not** symlinked — every installer appends the canonical
+`source ~/dotfiles/zshrc_dotfile` line (`$ZSHRC_SOURCE_LINE` in `install/helper.sh`)
+to `~/.zshrc` via `append_command_to_file`, instead.
 
 ## Package and modification tracking
 
