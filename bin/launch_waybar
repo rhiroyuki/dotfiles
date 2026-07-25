@@ -1,0 +1,162 @@
+#!/usr/bin/env bash
+# vim: set ft=sh:
+#
+# Unified waybar launcher/supervisor for Hyprland and Sway (issue 0016,
+# ADR 0001). Replaces config/{hypr,sway}/bin/launch_waybar, which had
+# diverged: every reliability fix (crash-restart backoff, render health
+# check, height watchdog, NVIDIA warm-up, session-start marker) had only
+# ever been added to the Hyprland copy, leaving Sway with no crash
+# recovery and startup-gate.sh permanently open (it reads a marker only
+# Hyprland wrote).
+#
+# WM-specific knowledge (compositor-ready wait, startup marker path) comes
+# from bin/lib/wm.sh's adapter table. i3 has no launch_waybar entry point
+# at all - it uses Polybar, not Waybar (see wm.sh's i3:workspace_module).
+
+source "$HOME/dotfiles/bin/lib/wm.sh"
+wm_detect
+
+CONFIG_FILES="$HOME/.config/waybar/config.jsonc $HOME/.config/waybar/style.css"
+
+# MARKER is injectable (WAYBAR_START_MARKER) so tests never touch the real
+# /tmp/waybar_start_ts that startup-gate.sh reads for the live session.
+MARKER="${WAYBAR_START_MARKER:-$(wm_get startup_marker 2>/dev/null)}"
+[[ -z "$MARKER" ]] && MARKER="/tmp/waybar_start_ts"
+
+killall waybar
+trap "killall waybar" EXIT
+
+# Wait for the compositor to be ready before the first launch. The wait
+# condition is WM-specific (Hyprland vs Sway report readiness differently);
+# unrecognised WM_ID falls through with no wait rather than hanging forever.
+case "$WM_ID" in
+  hyprland)
+    until hyprctl monitors 2>/dev/null | grep -q "Monitor"; do sleep 0.1; done
+    ;;
+  sway)
+    until swaymsg -t get_outputs 2>/dev/null | grep -q '"active": true'; do sleep 0.1; done
+    while pgrep -f apply_display_modes >/dev/null 2>&1; do sleep 0.1; done
+    ;;
+esac
+sleep 0.5
+
+# Wait for the NVIDIA driver to be warm before the first launch. On a
+# multi-GPU Wayland box waybar renders via GTK+EGL; if the driver is still
+# cold-initialising at login the first GL buffer commit can stall, leaving
+# a mapped-but-unpainted surface (a bar that never grows to its real
+# height) which the presence health check below cannot tell from a good
+# bar. A cheap nvidia-smi probe blocks until the driver answers (capped
+# ~10s) so the first frame lands on a warm driver. Skipped entirely (no
+# stall) on machines with no NVIDIA driver - `command -v` fails fast there.
+if command -v nvidia-smi >/dev/null 2>&1; then
+  for _ in $(seq 1 50); do
+    timeout 2 nvidia-smi >/dev/null 2>&1 && break
+    sleep 0.2
+  done
+fi
+
+# Render watchdog tunables. GATE_DELAY mirrors startup-gate.sh's DELAY (the
+# window during which heavy modules render blank); MIN_HEIGHT is the
+# populated bar's surface height. After the gate lifts a healthy bar is
+# MIN_HEIGHT tall; a stuck mis-rendered surface stays short.
+GATE_DELAY=15
+MIN_HEIGHT=28
+
+# Record session start so custom modules can gate themselves
+# (startup-gate.sh, via state_file_read "start_ts" -> the same path as
+# MARKER). Written once per session, before the loop, so reloads and
+# crash-restarts pass through the gate immediately rather than
+# re-blanking the bar for another GATE_DELAY seconds. Written in every
+# session (both WMs), not just Hyprland, so the gate actually gates
+# under Sway too.
+date +%s >"$MARKER"
+
+# health_check_supported - only Hyprland exposes layer-surface
+# introspection (`hyprctl layers`) that distinguishes a hung-but-alive bar
+# (process running, no painted surface) from a healthy one, and reports
+# surface height for the watchdog below. Sway has no equivalent IPC query:
+# `swaymsg -t get_tree` covers windows/workspaces, not layer-shell clients
+# like waybar, and `get_bar_config` only describes swaybar's own built-in
+# bar, not external layer-shell clients. Rather than fabricate a check that
+# can't actually detect a hung surface, this is a logged no-op under Sway -
+# Sway still gets crash-restart-on-exit (below), just not the "alive but
+# never painted" detection.
+health_check_supported=0
+if [[ "$WM_ID" == "hyprland" ]]; then
+  health_check_supported=1
+elif [[ "$WM_ID" == "sway" ]]; then
+  echo "launch_waybar: render health check / height watchdog skipped under Sway - no IPC equivalent to 'hyprctl layers' for layer-shell surface geometry" >&2
+fi
+
+# Supervise waybar: reload it on config changes AND relaunch it when it
+# dies. Restart-on-death uses a capped backoff so a waybar that fails hard
+# cannot spin.
+backoff=1
+while true; do
+  started=$(date +%s)
+  waybar --log-level error &
+  wb=$!
+
+  rw=""
+  if (( health_check_supported )); then
+    # Render health check: waybar can stay alive yet never draw its bar
+    # (transient output/IPC race at login). The crash-restart path below
+    # only wakes on process exit, so a hung-but-alive bar would never
+    # recover. Poll the compositor for waybar's layer surface; if it never
+    # appears, kill the process so the restart path with backoff picks it up.
+    healthy=0
+    for _ in $(seq 1 50); do
+      kill -0 "$wb" 2>/dev/null || break
+      if hyprctl layers 2>/dev/null | grep -q "namespace: waybar"; then healthy=1; break; fi
+      sleep 0.1
+    done
+    if (( healthy == 0 )) && kill -0 "$wb" 2>/dev/null; then
+      killall waybar; wait "$wb" 2>/dev/null
+      sleep "$backoff"
+      backoff=$(( backoff * 2 > 16 ? 16 : backoff * 2 ))
+      continue
+    fi
+
+    # Render watchdog: the presence check above only proves a surface
+    # exists, not that it painted. A GTK/EGL race can map the bar at a
+    # degenerate height and leave it stuck there even after modules
+    # populate. Wait until the startup gate has lifted and the bar should
+    # be at full height, then check it; if the surface is still short,
+    # kill it so the crash-restart path below recovers it.
+    (
+      sleep $(( GATE_DELAY + 5 ))
+      kill -0 "$wb" 2>/dev/null || exit 0
+      h=$(hyprctl layers 2>/dev/null | grep "namespace: waybar" \
+            | grep -oP 'xywh: \d+ \d+ \d+ \K\d+' | head -1)
+      [[ -n "$h" ]] && (( h < MIN_HEIGHT )) && killall waybar
+    ) &
+    rw=$!
+  fi
+
+  inotifywait -qq -e create,modify $CONFIG_FILES &
+  iw=$!
+
+  # Wake on whichever happens first: waybar exits (crash, or watchdog
+  # killed a mis-rendered bar), or a config file changes. The watchdog is
+  # intentionally not waited on directly so its normal exit does not wake us.
+  wait -n "$wb" "$iw"
+
+  [[ -n "$rw" ]] && { kill "$rw" 2>/dev/null; wait "$rw" 2>/dev/null; }
+
+  if kill -0 "$wb" 2>/dev/null; then
+    # waybar still alive => a config file changed => intentional reload
+    kill "$iw" 2>/dev/null; wait "$iw" 2>/dev/null
+    killall waybar; wait "$wb" 2>/dev/null
+    backoff=1
+  else
+    # waybar exited on its own => crash/transient failure => restart with backoff
+    kill "$iw" 2>/dev/null; wait "$iw" 2>/dev/null
+    uptime=$(( $(date +%s) - started ))
+    sleep "$backoff"
+    if (( uptime < 5 )); then
+      backoff=$(( backoff * 2 > 16 ? 16 : backoff * 2 ))
+    else
+      backoff=1
+    fi
+  fi
+done

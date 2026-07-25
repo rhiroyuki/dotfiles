@@ -308,4 +308,4 @@ bindsym $mod+r mode "resize"
 for_window [app_id="blueman-manager"] floating enable
 for_window [app_id="yad" title="yad-calendar"] floating enable
 
-exec_always $HOME/.config/sway/bin/launch_waybar
+exec_always $HOME/dotfiles/bin/launch_waybar
