@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 
-blocks=("▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
 get_stats() {
-    grep "^cpu" /proc/stat
+    grep "^cpu" /proc/stat 2>/dev/null
 }
 
 stats1=$(get_stats)
+[[ -z "$stats1" ]] && noop
+
 sleep 1
 stats2=$(get_stats)
+[[ -z "$stats2" ]] && noop
 
 overall=""
-sparkline=""
+sparkline_out=""
 
 while read -r line; do
     name=$(awk '{print $1}' <<< "$line")
@@ -40,13 +43,10 @@ while read -r line; do
     if [[ "$name" == "cpu" ]]; then
         overall="$usage"
     else
-        idx=$((usage * 7 / 100))
-        sparkline+="${blocks[$idx]}"
+        sparkline_out+="$(sparkline "$usage")"
     fi
 done <<< "$stats1"
 
 top_procs=$(ps -eo pcpu,pid,comm --sort=-pcpu | awk 'NR>=2 && NR<=4 {cpu=$1; pid=$2; $1=""; $2=""; sub(/^[[:space:]]+/, ""); printf "%s (PID %s): %s%%\n", $0, pid, cpu}')
 
-jq -cn --arg text "CPU: ${overall}% ${sparkline}" \
-       --arg tooltip "$top_procs" \
-       '{"text": $text, "tooltip": $tooltip}'
+emit "CPU: ${overall}% ${sparkline_out}" "$top_procs"
