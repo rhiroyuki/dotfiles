@@ -25,6 +25,14 @@ There are no tests, linters, or build steps for this repo.
 - **`install_config <appname>`** — creates `~/.config/<appname>/`, drops a `.dotfile` marker there, then symlinks the contents of `config/<appname>/` into it. The `.dotfile` marker indicates the directory is managed by this repo (safe to replace on reinstall).
 - **`append_command_to_file`** — idempotent append; checks for exact line before adding.
 
+Both `install.sh` and `arch_config_install.sh` run under `set -euo pipefail` and
+resolve every repo-internal path from `$DOTFILES_DIR`, which is derived from the
+script's own location — so they can be run from any working directory. When
+`install.sh` is piped into bash (the `curl` bootstrap above) there is no script
+file to resolve from, so it clones the repo to `~/dotfiles` and re-execs itself
+from the clone. `$DOTFILES_DIR` is exported for the sourced `install/*` scripts;
+`install/helper.sh` defaults it to `~/dotfiles` when sourced standalone.
+
 `zshrc_dotfile` is **not** symlinked — `install.sh` appends `source ~/dotfiles/zshrc_dotfile` to `~/.zshrc` instead.
 
 ## Package and modification tracking

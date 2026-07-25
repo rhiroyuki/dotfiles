@@ -1,5 +1,7 @@
+: "${DOTFILES_DIR:="$HOME/dotfiles"}"
+
 ln_file_to_home_directory () {
-  source_full_path="$HOME/dotfiles/$1"
+  source_full_path="$DOTFILES_DIR/$1"
   target_full_path=${2:-"$HOME/.$1"}
 
   if [ -L "$target_full_path" ]; then
@@ -16,7 +18,7 @@ ln_file_to_home_directory () {
 }
 
 install_config() {
-  local source_full_path="$HOME/dotfiles/config/$1"
+  local source_full_path="$DOTFILES_DIR/config/$1"
   local target_full_path="$HOME/.config/$1"
 
   if [ -d "$source_full_path" ]; then

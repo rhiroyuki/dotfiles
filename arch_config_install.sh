@@ -2,9 +2,12 @@
 
 # Omarchy overwrite installation
 
-set -eu pipefail
+set -euo pipefail
 
-source ./install/helper.sh
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export DOTFILES_DIR
+
+source "$DOTFILES_DIR/install/helper.sh"
 
 set_hypr_kb_variant_intl() {
   local input_conf="$HOME/.config/hypr/input.conf"
@@ -33,8 +36,8 @@ main() {
   # Set Hyprland keyboard variant and options
   set_hypr_kb_variant_intl
 
-  source ./install/install_keyd_service.sh
-  source ./install/setup_fcitx5_intl.sh
+  source "$DOTFILES_DIR/install/install_keyd_service.sh"
+  source "$DOTFILES_DIR/install/setup_fcitx5_intl.sh"
 
   # Configure NetworkManager to use iwd as wifi backend and enable it
   sudo mkdir -p /etc/NetworkManager/conf.d

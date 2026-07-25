@@ -4,7 +4,9 @@
 # filepath: install/install_keyd_service.sh
 
 SERVICE_PATH="/etc/keyd/default.conf"
-SOURCE_PATH="install/keyd_default_conf"
+# Resolve from this script's own directory so it works regardless of cwd, both
+# when executed directly and when sourced by the installers.
+SOURCE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/keyd_default_conf"
 
 # Remove existing file or symlink if present
 if [ -e "$SERVICE_PATH" ]; then
