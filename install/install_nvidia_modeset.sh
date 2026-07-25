@@ -10,13 +10,13 @@
 set -euo pipefail
 
 TARGET="/etc/modprobe.d/nvidia-modeset.conf"
-SOURCE="install/nvidia_modeset.conf"
+# Resolve from this script's own directory so it works regardless of cwd, both
+# when executed directly and when sourced by install.sh.
+SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/nvidia_modeset.conf"
 
-if [ ! -f "$SOURCE" ]; then
-    echo "Run this from the dotfiles repo root ($SOURCE not found)." >&2
-    exit 1
+if [ -f "$TARGET" ] && cmp -s "$SOURCE" "$TARGET"; then
+  echo "$TARGET already matches; nothing to do."
+else
+  sudo install -Dm644 "$SOURCE" "$TARGET"
+  echo "Installed $TARGET. Reboot for nvidia_drm.modeset=1 to take effect."
 fi
-
-sudo install -Dm644 "$SOURCE" "$TARGET"
-
-echo "Installed $TARGET. Reboot for nvidia_drm.modeset=1 to take effect."

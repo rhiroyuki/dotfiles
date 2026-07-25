@@ -132,27 +132,31 @@ legacy syntax highlighting is disabled so Treesitter owns highlighting.
 
 ## NVIDIA (Wayland)
 
-On the NVIDIA-driven Wayland box, `install/install_nvidia_modeset.sh` drops
-`install/nvidia_modeset.conf` to `/etc/modprobe.d/nvidia-modeset.conf` to pin
-`nvidia_drm.modeset=1`. It is **run manually** (`sudo bash install/install_nvidia_modeset.sh`),
-not wired into `install.sh`, because it is hardware-specific and needs root.
-Takes effect on the next boot.
+On the NVIDIA-driven Wayland box, `install.sh --nvidia` runs the three
+NVIDIA-specific setup steps via `install/install_nvidia.sh`, in order. This is
+opt-in (not auto-detected) because it is hardware-specific and needs root; run
+it explicitly on machines with the NVIDIA proprietary driver
+(`bash install.sh --nvidia`, combinable with `--arch`). Each step is
+idempotent and detects when it has already been applied, so re-running
+`--nvidia` is always safe.
 
-`install/install_nvidia_persistenced.sh` enables `nvidia-persistenced.service`.
-Without persistence mode the driver de-initializes when the last GPU client
-exits, so the first client after boot (e.g. the first Firefox launch) pays a
-multi-second cold-init cost on Wayland. The daemon keeps the driver warm from
-systemd early boot. This is the fix for "first app to use the GPU is slow".
-
-`install/install_nvidia_early_modules.sh` adds the NVIDIA modules to
-`MODULES=(...)` in `/etc/mkinitcpio.conf`, installs a pacman hook
-(`install/nvidia_mkinitcpio.hook` → `/etc/pacman.d/hooks/`) that rebuilds the
-initramfs on driver/kernel updates, and runs `mkinitcpio -P`. This loads the
-modules in early boot for a cleaner KMS/Wayland start; it does **not** keep the
-GPU warm (that's the persistence daemon above). Optional.
-
-All three are **run manually** (`sudo bash install/<script>.sh`), not wired into
-`install.sh`, because they are hardware-specific and need root.
+1. `install/install_nvidia_modeset.sh` drops `install/nvidia_modeset.conf` to
+   `/etc/modprobe.d/nvidia-modeset.conf` to pin `nvidia_drm.modeset=1`. Takes
+   effect on the next boot.
+2. `install/install_nvidia_persistenced.sh` enables
+   `nvidia-persistenced.service`. Without persistence mode the driver
+   de-initializes when the last GPU client exits, so the first client after
+   boot (e.g. the first Firefox launch) pays a multi-second cold-init cost on
+   Wayland. The daemon keeps the driver warm from systemd early boot. This is
+   the fix for "first app to use the GPU is slow".
+3. `install/install_nvidia_early_modules.sh` adds the NVIDIA modules to
+   `MODULES=(...)` in `/etc/mkinitcpio.conf`, installs a pacman hook
+   (`install/nvidia_mkinitcpio.hook` → `/etc/pacman.d/hooks/`) that rebuilds
+   the initramfs on driver/kernel updates, and runs `mkinitcpio -P` (only when
+   something changed). This loads the modules in early boot for a cleaner
+   KMS/Wayland start; it does **not** keep the GPU warm (that's the
+   persistence daemon above). Runs last since it rebuilds the initramfs after
+   any other system changes above.
 
 ## Brightness on Sway
 

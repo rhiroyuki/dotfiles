@@ -13,15 +13,16 @@
 
 set -euo pipefail
 
+# Resolve from this script's own directory so it works regardless of cwd, both
+# when executed directly and when sourced by install.sh.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 CONF="/etc/mkinitcpio.conf"
-HOOK_SOURCE="install/nvidia_mkinitcpio.hook"
+HOOK_SOURCE="$SCRIPT_DIR/nvidia_mkinitcpio.hook"
 HOOK_TARGET="/etc/pacman.d/hooks/nvidia-mkinitcpio.hook"
 MODULES="nvidia nvidia_modeset nvidia_uvm nvidia_drm"
 
-if [ ! -f "$HOOK_SOURCE" ]; then
-    echo "Run this from the dotfiles repo root ($HOOK_SOURCE not found)." >&2
-    exit 1
-fi
+changed=false
 
 if grep -qE '^MODULES=.*nvidia' "$CONF"; then
     echo "MODULES already contains nvidia in $CONF; leaving it as is."
@@ -32,11 +33,20 @@ else
     # Collapse any double spaces left when the array was empty.
     sudo sed -i -E 's/  +/ /g; s/\( /(/; s/ \)/)/' "$CONF"
     echo "Added NVIDIA modules to MODULES in $CONF."
+    changed=true
 fi
 
-sudo install -Dm644 "$HOOK_SOURCE" "$HOOK_TARGET"
-echo "Installed pacman hook $HOOK_TARGET (rebuilds initramfs on driver/kernel updates)."
+if [ -f "$HOOK_TARGET" ] && cmp -s "$HOOK_SOURCE" "$HOOK_TARGET"; then
+    echo "$HOOK_TARGET already matches; nothing to do."
+else
+    sudo install -Dm644 "$HOOK_SOURCE" "$HOOK_TARGET"
+    echo "Installed pacman hook $HOOK_TARGET (rebuilds initramfs on driver/kernel updates)."
+    changed=true
+fi
 
-sudo mkinitcpio -P
-
-echo "Initramfs rebuilt. NVIDIA modules will load in early boot from next reboot."
+if [ "$changed" = true ]; then
+    sudo mkinitcpio -P
+    echo "Initramfs rebuilt. NVIDIA modules will load in early boot from next reboot."
+else
+    echo "NVIDIA early modules already configured; skipping initramfs rebuild."
+fi

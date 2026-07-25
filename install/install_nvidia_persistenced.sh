@@ -15,6 +15,10 @@
 
 set -euo pipefail
 
-sudo systemctl enable --now nvidia-persistenced.service
-
-echo "Enabled nvidia-persistenced.service. Persistence mode is now warm from boot."
+if systemctl is-enabled --quiet nvidia-persistenced.service 2>/dev/null && \
+   systemctl is-active --quiet nvidia-persistenced.service 2>/dev/null; then
+  echo "nvidia-persistenced.service already enabled and active; nothing to do."
+else
+  sudo systemctl enable --now nvidia-persistenced.service
+  echo "Enabled nvidia-persistenced.service. Persistence mode is now warm from boot."
+fi

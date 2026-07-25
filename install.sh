@@ -37,6 +37,15 @@ install_dotfiles () {
 }
 
 main () {
+  local arch_flag=false
+  local nvidia_flag=false
+  for arg in "$@"; do
+    case "$arg" in
+      --arch) arch_flag=true ;;
+      --nvidia) nvidia_flag=true ;;
+    esac
+  done
+
   install_dotfiles
 
   for dir in "$DOTFILES_DIR/config"/*; do
@@ -51,8 +60,15 @@ main () {
   # Run the remaining Arch-specific steps when on Arch, or when explicitly
   # asked. Everything else Arch used to hand-pick (nvim/sway/rofi configs,
   # tmux.conf, aliases, XCompose, zshrc) is already covered above.
-  if [ "${1:-}" = "--arch" ] || [ -f /etc/arch-release ]; then
+  if $arch_flag || [ -f /etc/arch-release ]; then
     source "$DOTFILES_DIR/arch_config_install.sh"
+  fi
+
+  # NVIDIA setup (modeset pin, persistence daemon, early-boot module
+  # loading) is hardware-specific and needs root, so it stays opt-in behind
+  # --nvidia rather than auto-detected.
+  if $nvidia_flag; then
+    source "$DOTFILES_DIR/install/install_nvidia.sh"
   fi
 
   echo "Finished installation"
