@@ -53,7 +53,7 @@ map("n", '<C-\\>', ":NvimTreeFindFileToggle<CR>",        { desc = "Toggle NvimTr
 -- Other.nvim Keymaps
 map("n", "<leader>ll", "<cmd>:Other<CR>",                { desc = "Other" })
 map("n", "<leader>ltn", "<cmd>:OtherTabNew<CR>",         { desc = "Other Tab New" })
-map("n", "<leader>lp", "<cmd>:OtherSplit<CR>",           { desc = "Other Split" })
+map("n", "<leader>lo", "<cmd>:OtherSplit<CR>",           { desc = "Other Split" })
 map("n", "<leader>lv", "<cmd>:OtherVSplit<CR>",          { desc = "Other VSplit" })
 map("n", "<leader>lc", "<cmd>:OtherClear<CR>",           { desc = "Other Clear" })
 map("n", "<leader>lt", "<cmd>:Other test<CR>",           { desc = "Other test" })

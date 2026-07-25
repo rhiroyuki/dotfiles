@@ -42,12 +42,6 @@ return {
 
         local merge_capabilities = vim.tbl_deep_extend("force", built_capabilities, opt or {})
 
-        if utils.module_exists("lsp" .. server) then
-          local lsp_capabilities = require("lsp." .. server)
-
-          merge_capabilities = vim.tbl_deep_extend("force", merge_capabilities, lsp_capabilities)
-        end
-
         lspconfig[server].setup(
           vim.tbl_deep_extend("force", default_opt, {
             capabilities = merge_capabilities,
