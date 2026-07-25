@@ -95,6 +95,7 @@ Existing files/dirs are renamed with a Unix-timestamp suffix (`_backup_123456789
 | fcitx5 | `install/setup_fcitx5_intl.sh` |
 | NVIDIA (Wayland) | `install/nvidia_modeset.conf`, `install/install_nvidia_modeset.sh` (pins `nvidia_drm.modeset=1`); `install/install_nvidia_persistenced.sh` (keeps driver warm from boot — fixes slow first GPU launch); `install/install_nvidia_early_modules.sh`, `install/nvidia_mkinitcpio.hook` (load modules in initramfs) |
 | fontconfig | `config/fontconfig/fonts.conf` |
+| WM adapter registry | `bin/lib/wm.sh` (`wm_detect`/`wm_get`; see "WM adapter registry" below); decision recorded in `docs/adr/0001-wm-adapter-registry.md` |
 
 ## Zsh
 
@@ -192,6 +193,33 @@ only if it already exists), matching a single `kb_variant =` line so Omarchy
 updates to the rest of the file are undisturbed. If Omarchy ever changes that
 line's format, this patch silently no-ops (guarded by the `[ -f "$input_conf" ]`
 check) rather than corrupting the file.
+
+## WM adapter registry
+
+`bin/lib/wm.sh` is the single source of truth for "which WM am I in, and
+what are its verbs?" — see `docs/adr/0001-wm-adapter-registry.md` for the
+full decision writeup. Callers `source` it, call `wm_detect` (resolves
+`$XDG_CURRENT_DESKTOP`, matched case-insensitively, into `WM_ID`), then read
+fields with `wm_get <field>` instead of hardcoding per-WM paths/commands.
+Covers hyprland, sway, and i3 with: `config_file`, `bind_grammar`,
+`dispatch_cmd`, `lock_cmd`, `exit_cmd`, `workspace_module`,
+`startup_marker`. An unset/unrecognised `XDG_CURRENT_DESKTOP` resolves to
+`WM_ID=unknown`, which is non-fatal — `wm_get` warns on stderr and returns 1
+rather than erroring out.
+
+`config/hypr/bin/powermenu` is the first caller (a tracer proving the seam
+works end-to-end); it reads `lock_cmd`/`exit_cmd` from the table. It is
+bash (`#!/usr/bin/env bash`), not `#!/bin/sh`, because `wm.sh` uses bash-only
+syntax. The other launcher/powermenu/keybindings/launch_waybar duplicates
+across `config/{hypr,sway,i3}/` are intentionally not yet unified onto this
+table — that is future work (issues 0007-0009, 0016).
+
+## Architecture Decision Records
+
+Decisions with lasting design consequences (detection mechanisms, seam
+placement, supported-target calls) are recorded under `docs/adr/` as
+numbered ADRs (`NNNN-title.md`). See `docs/adr/0001-wm-adapter-registry.md`
+for the format.
 
 ## Theme
 
