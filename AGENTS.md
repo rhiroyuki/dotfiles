@@ -10,10 +10,20 @@ Personal dotfiles for a Linux development environment. The canonical source of t
 # Any distro
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/rhiroyuki/dotfiles/master/install.sh)"
 
-# Arch Linux packages (run before install.sh)
+# Arch Linux packages (run before install.sh — installs pacman/yay packages,
+# not config)
 bash arch_package_install.sh
-bash arch_config_install.sh
 ```
+
+`install.sh` is the single entry point for configuration. On Arch (detected via
+`/etc/arch-release`) or when passed `--arch`, it also sources
+`arch_config_install.sh` for the handful of steps that are genuinely
+Arch-specific (fcitx5, NetworkManager/iwd, tty1 auto-sway, Hyprland keyboard
+variant) — everything else (nvim/sway/rofi configs, tmux.conf, aliases,
+XCompose, zshrc) is handled once by `install.sh`'s own `config/*` loop and
+`dotfiles` array, so both code paths install the same set of files.
+`arch_config_install.sh` can still be run standalone if only the Arch-specific
+steps are needed.
 
 There are no tests, linters, or build steps for this repo.
 
@@ -167,6 +177,17 @@ Only one `wlr-gamma-control` client may run at a time, so `wl-gammarelay-rs`
 (`config/waybar/custom/brightness.sh` → `hyprctl hyprsunset gamma`); hyprsunset
 uses Hyprland's `hyprland-ctm-control-v1` protocol and does **not** work under
 Sway, which is why Sway needs its own tool.
+
+## Hyprland input.conf (Omarchy-owned)
+
+`arch_config_install.sh`'s `set_hypr_kb_variant_intl` sed-patches
+`~/.config/hypr/input.conf` to set `kb_variant = intl`. This file is **not**
+owned by this repo — it's generated/managed by Omarchy, so it lives outside
+`config/hypr/` and is never symlinked. The script only edits it in place (and
+only if it already exists), matching a single `kb_variant =` line so Omarchy
+updates to the rest of the file are undisturbed. If Omarchy ever changes that
+line's format, this patch silently no-ops (guarded by the `[ -f "$input_conf" ]`
+check) rather than corrupting the file.
 
 ## Theme
 

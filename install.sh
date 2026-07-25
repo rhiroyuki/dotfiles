@@ -48,6 +48,13 @@ main () {
 
   source "$DOTFILES_DIR/install/install_keyd_service.sh"
 
+  # Run the remaining Arch-specific steps when on Arch, or when explicitly
+  # asked. Everything else Arch used to hand-pick (nvim/sway/rofi configs,
+  # tmux.conf, aliases, XCompose, zshrc) is already covered above.
+  if [ "${1:-}" = "--arch" ] || [ -f /etc/arch-release ]; then
+    source "$DOTFILES_DIR/arch_config_install.sh"
+  fi
+
   echo "Finished installation"
 }
 

@@ -1,14 +1,19 @@
 #! /usr/bin/env bash
 
-# Omarchy overwrite installation
+# Arch-specific configuration steps that go beyond the shared config/* loop
+# in install.sh. Invoked automatically by install.sh on Arch Linux (or via
+# --arch), and can still be run standalone.
 
 set -euo pipefail
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+script_source="${BASH_SOURCE[0]}"
+DOTFILES_DIR="$(cd "$(dirname "$script_source")" && pwd)"
 export DOTFILES_DIR
 
 source "$DOTFILES_DIR/install/helper.sh"
 
+# NOTE: ~/.config/hypr/input.conf is not owned by this repo — it belongs to
+# Omarchy. See AGENTS.md's "Hyprland input.conf (Omarchy-owned)" section.
 set_hypr_kb_variant_intl() {
   local input_conf="$HOME/.config/hypr/input.conf"
   if [ -f "$input_conf" ]; then
@@ -19,17 +24,6 @@ set_hypr_kb_variant_intl() {
 }
 
 main() {
-  install_config "nvim"
-  install_config "sway"
-  install_config "rofi"
-  ln_file_to_home_directory "tmux.conf"
-  ln_file_to_home_directory "aliases"
-
-  # fix cedilla for hyprland
-  append_command_to_file "$HOME/.XCompose" "include \"%H/dotfiles/XCompose\""
-
-  append_command_to_file "$HOME/.zshrc" "$ZSHRC_SOURCE_LINE"
-
   # Auto-start sway on TTY1 login
   append_command_to_file "$HOME/.zprofile" "if [ -z \"\$DISPLAY\" ] && [ \"\$(tty)\" = \"/dev/tty1\" ]; then exec sway --unsupported-gpu; fi"
 
@@ -43,8 +37,7 @@ main() {
   echo -e "[device]\nwifi.backend=iwd" | sudo tee /etc/NetworkManager/conf.d/iwd.conf > /dev/null
   sudo systemctl enable --now NetworkManager
 
-  echo "Make sure zsh, tmux, keyd are installed and zsh is set as default shell"
-  echo "Finished installation"
+  echo "Arch-specific configuration complete"
 }
 
 main
