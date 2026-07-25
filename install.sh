@@ -36,10 +36,6 @@ install_dotfiles () {
   done
 }
 
-install_dunst_conf () {
-  install_config "dunst"
-}
-
 add_source_to_zshrc() {
   local zshrc_file="$HOME/.zshrc"
   local source_line="source ~/dotfiles/zshrc_dotfile"
@@ -59,23 +55,6 @@ main () {
     echo "Installing $(basename "$dir")"
     install_config "$(basename "$dir")"
   done
-
-  # Install general-purpose scripts from bin/ onto ~/.local/bin (user PATH).
-  if [[ -d "$DOTFILES_DIR/bin" ]]; then
-    mkdir -p "$HOME/.local/bin"
-    for script in "$DOTFILES_DIR"/bin/*; do
-      [[ -f "$script" ]] || continue
-      name="$(basename "$script")"
-      target="$HOME/.local/bin/$name"
-      # Back up any pre-existing real file (not our symlink) before linking.
-      if [[ -e "$target" && ! -L "$target" ]]; then
-        mv "$target" "${target}_backup_$(date +%s)"
-      fi
-      ln -sf "$script" "$target"
-      echo "linked ~/.local/bin/${name} -> bin/${name}"
-    done
-  fi
-  install_dunst_conf
 
   add_source_to_zshrc
 
