@@ -183,6 +183,17 @@ Only one `wlr-gamma-control` client may run at a time, so `wl-gammarelay-rs`
 uses Hyprland's `hyprland-ctm-control-v1` protocol and does **not** work under
 Sway, which is why Sway needs its own tool.
 
+**Pending unification:** `config/sway/bin/brightness` and
+`config/waybar/custom/brightness.sh` are two independent implementations with
+different units (0-1 float vs percent) and step sizes (`0.05`/`0.10` vs
+`5`/`10`) that happen to share `/tmp/hyprsunset_gamma` as state. The contract
+for a single `bin/gamma` module that owns both (percent 0-100, step 5, min
+10, state file unchanged, verbs `get`/`set`/`nudge`/`temp`, degraded mode
+falls back to 100%, backend selected by direct probe rather than through
+`bin/lib/wm.sh`) is decided in `docs/adr/0002-gamma-contract.md`. The module
+itself and the caller rewiring described above are not yet built — see
+issues 0011 and 0012.
+
 ## Hyprland input.conf (Omarchy-owned)
 
 `arch_config_install.sh`'s `set_hypr_kb_variant_intl` sed-patches
