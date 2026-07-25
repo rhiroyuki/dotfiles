@@ -8,8 +8,10 @@ return {
     config = function()
       require('ufo').setup()
 
-      vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
-      vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+      local map = require("utils").map
+
+      map('n', 'zR', require('ufo').openAllFolds, { desc = "Open all folds" })
+      map('n', 'zM', require('ufo').closeAllFolds, { desc = "Close all folds" })
     end
   }
 }

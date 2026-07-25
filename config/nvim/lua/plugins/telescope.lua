@@ -62,10 +62,11 @@ return {
       telescope.load_extension("fzf")
 
       local builtin = require("telescope.builtin")
+      local map = require("utils").map
 
-      vim.keymap.set("n", "<C-p>", builtin.find_files, { noremap = true, desc = "Find files" })
-      vim.keymap.set("n", "<leader>fg", builtin.live_grep, { noremap = true, desc = "Live grep" })
-      vim.keymap.set("n", "<leader>h", builtin.oldfiles, { noremap = true, desc = "Recent files" })
+      map("n", "<C-p>", builtin.find_files, { desc = "Find files" })
+      map("n", "<leader>fg", builtin.live_grep, { desc = "Live grep" })
+      map("n", "<leader>h", builtin.oldfiles, { desc = "Recent files" })
     end
   }
 }

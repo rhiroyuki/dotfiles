@@ -12,7 +12,9 @@ return {
       },
     })
 
-    vim.keymap.set({ "n", "x" }, "gS", splitjoin.split, { desc = "Split arguments" })
-    vim.keymap.set({ "n", "x" }, "gJ", splitjoin.join, { desc = "Join arguments" })
+    local map = require("utils").map
+
+    map({ "n", "x" }, "gS", splitjoin.split, { desc = "Split arguments" })
+    map({ "n", "x" }, "gJ", splitjoin.join, { desc = "Join arguments" })
   end,
 }

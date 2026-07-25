@@ -1,12 +1,14 @@
 return {
   "janko-m/vim-test",
   config = function()
-    vim.keymap.set("n", "<leader>rs", ":TestFile<cr>")
-    vim.keymap.set("n", "<leader>rn", ":TestNearest<cr>")
-    vim.keymap.set("n", "<leader>rl", ":TestLast<cr>")
-    vim.keymap.set("n", "<leader>ra", ":TestSuite<cr>")
-    vim.keymap.set("n", "<leader>rj", ":TestVisit<cr>")
-    vim.keymap.set("n", "<leader>rof", ":TestSuite --only-failures<cr>")
+    local map = require("utils").map
+
+    map("n", "<leader>rs", ":TestFile<cr>", { desc = "Test file" })
+    map("n", "<leader>rn", ":TestNearest<cr>", { desc = "Test nearest" })
+    map("n", "<leader>rl", ":TestLast<cr>", { desc = "Test last" })
+    map("n", "<leader>ra", ":TestSuite<cr>", { desc = "Test suite" })
+    map("n", "<leader>rj", ":TestVisit<cr>", { desc = "Test visit" })
+    map("n", "<leader>rof", ":TestSuite --only-failures<cr>", { desc = "Test suite (only failures)" })
 
     vim.g["test#strategy"] = "vtr"
     vim.g["test#preserve_screen"] = 1
