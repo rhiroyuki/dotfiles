@@ -13,7 +13,7 @@
 #   lock_cmd="$(wm_get lock_cmd)"
 #
 # Fields (per WM): config_file, bind_grammar, dispatch_cmd, lock_cmd,
-# exit_cmd, workspace_module, startup_marker.
+# exit_cmd, workspace_module, startup_marker, waybar_config.
 
 # wm_detect - resolve the running WM from $XDG_CURRENT_DESKTOP into WM_ID.
 #
@@ -53,6 +53,7 @@ wm_get() {
     hyprland:exit_cmd)         echo "uwsm stop" ;;
     hyprland:workspace_module) echo "hyprland/workspaces" ;;
     hyprland:startup_marker)   echo "/tmp/waybar_start_ts" ;;
+    hyprland:waybar_config)    echo "$HOME/.config/waybar/hyprland.jsonc" ;;
 
     sway:config_file)      echo "$HOME/.config/sway/config" ;;
     sway:bind_grammar)     echo 'bindsym KEY ACTION... ($mod/$mod2 macro-expanded; optional "mode \"NAME\" { ... }" blocks scope a set of binds)' ;;
@@ -61,6 +62,7 @@ wm_get() {
     sway:exit_cmd)         echo "swaymsg exit" ;;
     sway:workspace_module) echo "sway/workspaces" ;;
     sway:startup_marker)   echo "/tmp/waybar_start_ts" ;;
+    sway:waybar_config)    echo "$HOME/.config/waybar/sway.jsonc" ;;
 
     i3:config_file)      echo "$HOME/.config/i3/config" ;;
     i3:bind_grammar)     echo 'bindsym KEY ACTION... (same grammar as sway; optional "mode \"NAME\" { ... }" blocks scope a set of binds)' ;;
@@ -69,6 +71,7 @@ wm_get() {
     i3:exit_cmd)         echo "i3-msg exit" ;;
     i3:workspace_module) echo "i3/workspaces (rendered via Polybar, not Waybar - i3 has no launch_waybar)" ;;
     i3:startup_marker)   echo "" ;;
+    i3:waybar_config)    echo "" ;;
 
     unknown:*)
       echo "wm_get: unrecognised WM (XDG_CURRENT_DESKTOP='${XDG_CURRENT_DESKTOP:-}') - no adapter entry" >&2

@@ -1,0 +1,19 @@
+{
+  // Sway-specific overlay on top of the shared config (issue 0017).
+  // waybar's "include" merges key-by-key; arrays like modules-left are
+  // replaced wholesale (not concatenated), so modules-left must be
+  // restated here in full even though only its module names differ from
+  // the Hyprland overlay.
+  "include": ["config.jsonc"],
+  "modules-left": [
+    "sway/workspaces",
+    "custom/sep",
+    "sway/window"
+  ],
+  "sway/workspaces": {
+    "format": "{name}"
+  },
+  "sway/window": {
+    "format": "{title}"
+  }
+}

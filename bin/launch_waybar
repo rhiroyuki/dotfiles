@@ -16,7 +16,14 @@
 source "$HOME/dotfiles/bin/lib/wm.sh"
 wm_detect
 
-CONFIG_FILES="$HOME/.config/waybar/config.jsonc $HOME/.config/waybar/style.css"
+# WAYBAR_CONFIG selects the per-WM overlay (issue 0017): config.jsonc holds
+# everything WM-agnostic, and hyprland.jsonc/sway.jsonc "include" it while
+# supplying the WM-specific workspace/window modules. Falls back to the
+# shared config.jsonc for an unrecognised WM_ID rather than failing to launch.
+WAYBAR_CONFIG="$(wm_get waybar_config 2>/dev/null)"
+[[ -z "$WAYBAR_CONFIG" ]] && WAYBAR_CONFIG="$HOME/.config/waybar/config.jsonc"
+
+CONFIG_FILES="$HOME/.config/waybar/*.jsonc $HOME/.config/waybar/style.css"
 
 # MARKER is injectable (WAYBAR_START_MARKER) so tests never touch the real
 # /tmp/waybar_start_ts that startup-gate.sh reads for the live session.
@@ -94,7 +101,7 @@ fi
 backoff=1
 while true; do
   started=$(date +%s)
-  waybar --log-level error &
+  waybar --log-level error -c "$WAYBAR_CONFIG" &
   wb=$!
 
   rw=""

@@ -1,9 +1,7 @@
 {
-  "modules-left": [
-    "hyprland/workspaces",
-    "custom/sep",
-    "hyprland/window"
-  ],
+  // modules-left is WM-specific (workspace/window modules differ between
+  // Hyprland and Sway) and is defined in the per-WM include that wraps
+  // this file - see hyprland.jsonc / sway.jsonc and bin/launch_waybar.
   "modules-right": [
     "custom/sep",
     "custom/gpu",
@@ -168,14 +166,6 @@
     "format-time": "{H}:{M}",
     "format-icons": ["", "", "", "", ""]
   },
-  "hyprland/workspaces": {
-    "format": "{name}",
-    "on-click": "activate",
-    "sort-by-number": true
-  },
-  "hyprland/window": {
-    "format": "{title}"
-  },
   "tray": {
     "icon-size": 20,
     "spacing": 8
@@ -193,9 +183,5 @@
     "format": "?",
     "tooltip-format": "Show keybindings (ALT+SHIFT+/)",
     "on-click": "~/dotfiles/bin/session-keybindings"
-  },
-  "sway/language": {
-    "format": "{}",
-    "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
   }
 }
