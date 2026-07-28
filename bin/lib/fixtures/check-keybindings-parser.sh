@@ -2,9 +2,10 @@
 # vim: set ft=sh:
 #
 # Fixture-based check for parse_keybindings() in bin/session-keybindings
-# (issue 0009). Exercises the Hyprland grammar (submaps) and the Sway/i3
-# grammar (modes, plus i3's --no-startup-id stripping) without invoking
-# rofi. Run directly; exits non-zero on any mismatch.
+# (issue 0009). Exercises the Hyprland `hyprctl binds -j` reader (modmask
+# decoding, submaps, display-only dispatch) and the Sway/i3 config grammar
+# (modes, plus i3's --no-startup-id stripping) without invoking rofi.
+# Run directly; exits non-zero on any mismatch.
 
 set -u
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -29,28 +30,54 @@ check() {
   fi
 }
 
-# --- Hyprland: plain binds + submap scoping ---
-hypr_out="$(parse_keybindings "$here/hyprland.conf" hyprland)"
+# --- Hyprland: hyprctl binds -j reader ---
+hypr_out="$(parse_keybindings "$here/hyprland-binds.json" hyprland)"
 
-check "hyprland: plain bind dispatches exec kitty" \
-  "$(grep -F 'SUPER+Return' <<< "$hypr_out" | cut -f2)" \
-  "exec kitty"
-
-check "hyprland: submap-scoped bind is labeled and dispatches with args" \
-  "$(grep -F 'right' <<< "$hypr_out" | cut -f2)" \
-  "resizeactive 10 0"
-
-check "hyprland: submap-scoped bind display carries [resize] prefix" \
-  "$(grep -F 'right' <<< "$hypr_out" | cut -f1 | grep -c '\[resize\]')" \
+check "hyprland: modmask 64 decodes to SUPER" \
+  "$(grep -F 'Launcher' <<< "$hypr_out" | cut -f1 | grep -cE '^SUPER \+ Return')" \
   "1"
 
-check "hyprland: bind after submap reset is unscoped" \
-  "$(grep -F 'mouse:272' <<< "$hypr_out" | cut -f1 | grep -c '\[')" \
+check "hyprland: compound modmask 9 decodes to ALT + SHIFT in canonical order" \
+  "$(grep -F 'Kill focused window' <<< "$hypr_out" | cut -f1 | grep -cE '^ALT \+ SHIFT \+ Q')" \
+  "1"
+
+check "hyprland: compound modmask 76 decodes to SUPER + ALT + CTRL" \
+  "$(grep -F 'exec' <<< "$hypr_out" | cut -f1 | grep -cE '^SUPER \+ ALT \+ CTRL \+ X')" \
+  "1"
+
+check "hyprland: mouse binds are listed" \
+  "$(grep -F 'mouse:272' <<< "$hypr_out" | cut -f1 | grep -cE '^ALT \+ mouse:272')" \
+  "1"
+
+check "hyprland: submap-scoped bind display carries [resize] prefix" \
+  "$(grep -F 'Grow width' <<< "$hypr_out" | cut -f1 | grep -c '\[resize\]')" \
+  "1"
+
+check "hyprland: bind outside a submap is unscoped" \
+  "$(grep -F 'Launcher' <<< "$hypr_out" | cut -f1 | grep -c '\[')" \
   "0"
 
-check "hyprland: bindm entries are parsed too" \
-  "$(grep -F 'mouse:272' <<< "$hypr_out" | cut -f2)" \
-  "movewindow"
+check "hyprland: bind without a description falls back to the dispatcher" \
+  "$(grep -cF 'exec' <<< "$hypr_out")" \
+  "1"
+
+check "hyprland: keycode-only bind renders as code:N" \
+  "$(grep -F 'Bound by keycode' <<< "$hypr_out" | cut -f1 | grep -cE '^SUPER \+ code:28')" \
+  "1"
+
+check "hyprland: catch_all bind renders as catchall" \
+  "$(grep -F 'Swallow everything else' <<< "$hypr_out" | cut -f1 | grep -c 'catchall')" \
+  "1"
+
+check "hyprland: over-long descriptions are truncated with an ellipsis" \
+  "$(grep -F 'comfortably longer' <<< "$hypr_out" | cut -f1 | grep -c '\.\.\.$')" \
+  "1"
+
+# The dispatch column must be empty for every entry: Hyprland reports Lua binds
+# as an opaque registry handle, so the cheatsheet is display-only there.
+check "hyprland: dispatch column is empty for all entries" \
+  "$(cut -f2 <<< "$hypr_out" | grep -c .)" \
+  "0"
 
 # --- Sway: mode scoping, no --no-startup-id stripping ---
 sway_out="$(parse_keybindings "$here/sway.config" sway)"

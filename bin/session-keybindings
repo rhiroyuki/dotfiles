@@ -1,74 +1,68 @@
 #!/usr/bin/env bash
 # vim: set ft=sh:
 #
-# Unified keybindings cheatsheet for hyprland/sway/i3 (issue 0009). Config
-# path and bind grammar come from the WM adapter table (ADR 0001,
-# bin/lib/wm.sh); dispatching a selected bind uses dispatch_cmd from the
-# same table, so every WM gets Hyprland's "select to activate" behaviour,
-# not just Hyprland. Replaces config/{hypr,sway,i3}/bin/keybindings.
+# Unified keybindings cheatsheet for hyprland/sway/i3 (issue 0009). The bind
+# source and grammar come from the WM adapter table (ADR 0001, bin/lib/wm.sh).
+# Replaces config/{hypr,sway,i3}/bin/keybindings.
 #
 # Referenced directly at $HOME/dotfiles/bin/session-keybindings from each WM
 # config, mirroring bin/session-launcher (issue 0007) and
 # bin/session-powermenu (issue 0008).
 #
+# Selecting an entry runs it on Sway and i3, but NOT on Hyprland - see the
+# note on the hyprland branch below.
+#
 # parse_keybindings is kept separate from the rofi/dispatch flow below so it
-# can be exercised against fixture configs without opening rofi; see
+# can be exercised against fixtures without opening rofi; see
 # bin/lib/fixtures/check-keybindings-parser.sh.
 
-# parse_keybindings <config_path> <wm_id> - emit TAB-separated bind entries.
+# parse_keybindings <source> <wm_id> - emit TAB-separated bind entries.
 #
 # Each line is <display>\t<dispatch>. <display> is what rofi shows; <dispatch>
-# is the raw dispatcher/action text to hand to the WM's dispatch_cmd if this
-# entry is selected. Hyprland's grammar is "bind[elm]? = MODS,KEY,DISPATCHER
-# [,ARGS]" with optional "submap = NAME" ... "submap = reset" blocks. Sway
-# and i3 share "bindsym KEY ACTION" with optional "mode \"NAME\" { ... }"
-# blocks; i3 additionally strips a leading "--no-startup-id" from the action
-# before display and before dispatch (i3-msg does not understand that flag).
+# is the raw action text to hand to the WM's dispatch_cmd if this entry is
+# selected, or empty when the WM cannot re-fire a bind (Hyprland).
+#
+# <source> is a `hyprctl binds -j` JSON dump under Hyprland, and the WM's
+# config file under Sway/i3. Sway and i3 share "bindsym KEY ACTION" with
+# optional "mode \"NAME\" { ... }" blocks; i3 additionally strips a leading
+# "--no-startup-id" from the action before display (i3-msg does understand
+# the flag, so it is kept in the dispatch text).
 parse_keybindings() {
   local config="$1" wm_id="$2"
 
   case "$wm_id" in
     hyprland)
-      awk '
-        /^submap = / {
-          current_submap = ($3 == "reset") ? "" : $3
-          next
-        }
+      # Read the live compositor state rather than parsing hyprland.lua.
+      # Since 0.55 binds are Lua closures, so a config parser would have to
+      # evaluate Lua to find them; `hyprctl binds -j` already reports every
+      # bind with its description and submap, and cannot drift from what is
+      # actually loaded.
+      #
+      # The dispatch column is intentionally empty: hyprctl reports Lua binds
+      # as {"dispatcher": "__lua", "arg": "<registry index>"}, an opaque
+      # handle, and HL.Keybind exposes no way to fire a bind. So this is a
+      # read-only cheatsheet on Hyprland.
+      jq -r '
+        def modnames($m):
+          [ {b:64,n:"SUPER"}, {b:8,n:"ALT"}, {b:4,n:"CTRL"}, {b:1,n:"SHIFT"} ]
+          | map(select((($m / .b) | floor) % 2 == 1) | .n);
 
-        /^bind[elm]? = / {
-          line = $0
-          sub(/^bind[elm]? = /, "", line)
-
-          n = split(line, parts, /[[:space:]]*,[[:space:]]*/)
-          mods = parts[1]
-          key  = parts[2]
-          disp = parts[3]
-
-          args = ""
-          for (i = 4; i <= n; i++) args = args (i > 4 ? " " : "") parts[i]
-          dispatch = disp (args != "" ? " " args : "")
-
-          combo = (mods != "") ? mods "+" key : key
-          gsub(/[[:space:]]/, "", combo)
-
-          desc = (prev_comment != "") ? prev_comment : dispatch
+        .[]
+        | (if .key != "" then .key
+           elif .keycode != 0 then "code:\(.keycode)"
+           elif .catch_all then "catchall"
+           else "?" end) as $key
+        | ((modnames(.modmask) + [$key]) | join(" + ")) as $combo
+        | (if .submap != "" then "[\(.submap)] " else "" end) as $prefix
+        | (if .has_description and .description != "" then .description
+           else .dispatcher end) as $desc
+        | "\($combo)\t\($prefix)\($desc)"
+      ' "$config" |
+        awk -F'\t' '{
+          desc = $2
           if (length(desc) > 60) desc = substr(desc, 1, 57) "..."
-
-          prefix = (current_submap != "") ? "[" current_submap "] " : ""
-          printf "%-35s  %s%s\t%s\n", combo, prefix, desc, dispatch
-          prev_comment = ""
-          next
-        }
-
-        /^[[:space:]]*#/ {
-          line = $0
-          sub(/^[[:space:]]*# ?/, "", line)
-          prev_comment = line
-          next
-        }
-
-        { prev_comment = "" }
-      ' "$config"
+          printf "%-35s  %s\t\n", $1, desc
+        }'
       ;;
 
     sway|i3)
@@ -130,15 +124,23 @@ fi
 source "$HOME/dotfiles/bin/lib/wm.sh"
 wm_detect
 
-config="$(wm_get config_file)" || exit 1
-dispatch_cmd="$(wm_get dispatch_cmd)" || exit 1
+# Hyprland reads from the live compositor, every other WM from its config file.
+if [[ "$WM_ID" == hyprland ]]; then
+  source="$(mktemp)"
+  trap 'rm -f "$source"' EXIT
+  hyprctl binds -j > "$source" || exit 1
+else
+  source="$(wm_get config_file)" || exit 1
+fi
 
-entries="$(parse_keybindings "$config" "$WM_ID" | sort)"
+entries="$(parse_keybindings "$source" "$WM_ID" | sort)"
 
 idx="$(cut -f1 <<< "$entries" | rofi -dmenu -i -p "Keybindings" -no-custom -format i)"
 [ -z "$idx" ] && exit 0
 
 dispatch="$(sed -n "$((idx + 1))p" <<< "$entries" | cut -f2)"
+# Empty on Hyprland, where binds cannot be re-fired: the list is display-only.
 [ -z "$dispatch" ] && exit 0
 
+dispatch_cmd="$(wm_get dispatch_cmd)" || exit 1
 $dispatch_cmd $dispatch

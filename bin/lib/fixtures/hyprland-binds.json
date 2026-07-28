@@ -1,0 +1,67 @@
+[
+  {
+    "locked": false, "mouse": false, "release": false, "repeat": false,
+    "longPress": false, "non_consuming": false, "auto_consuming": false,
+    "has_description": true, "modmask": 64, "submap": "",
+    "submap_universal": "false", "key": "Return", "keycode": 0,
+    "catch_all": false, "description": "Launcher",
+    "allow_input_capture": false, "dispatcher": "__lua", "arg": "1"
+  },
+  {
+    "locked": false, "mouse": false, "release": false, "repeat": false,
+    "longPress": false, "non_consuming": false, "auto_consuming": false,
+    "has_description": true, "modmask": 9, "submap": "",
+    "submap_universal": "false", "key": "Q", "keycode": 0,
+    "catch_all": false, "description": "Kill focused window",
+    "allow_input_capture": false, "dispatcher": "__lua", "arg": "2"
+  },
+  {
+    "locked": false, "mouse": true, "release": false, "repeat": false,
+    "longPress": false, "non_consuming": false, "auto_consuming": false,
+    "has_description": true, "modmask": 8, "submap": "",
+    "submap_universal": "false", "key": "mouse:272", "keycode": 0,
+    "catch_all": false, "description": "Drag window",
+    "allow_input_capture": false, "dispatcher": "__lua", "arg": "3"
+  },
+  {
+    "locked": false, "mouse": false, "release": false, "repeat": true,
+    "longPress": false, "non_consuming": false, "auto_consuming": false,
+    "has_description": true, "modmask": 0, "submap": "resize",
+    "submap_universal": "false", "key": "right", "keycode": 0,
+    "catch_all": false, "description": "Grow width",
+    "allow_input_capture": false, "dispatcher": "__lua", "arg": "4"
+  },
+  {
+    "locked": false, "mouse": false, "release": false, "repeat": false,
+    "longPress": false, "non_consuming": false, "auto_consuming": false,
+    "has_description": false, "modmask": 76, "submap": "",
+    "submap_universal": "false", "key": "X", "keycode": 0,
+    "catch_all": false, "description": "",
+    "allow_input_capture": false, "dispatcher": "exec", "arg": "5"
+  },
+  {
+    "locked": false, "mouse": false, "release": false, "repeat": false,
+    "longPress": false, "non_consuming": false, "auto_consuming": false,
+    "has_description": true, "modmask": 64, "submap": "",
+    "submap_universal": "false", "key": "", "keycode": 28,
+    "catch_all": false, "description": "Bound by keycode",
+    "allow_input_capture": false, "dispatcher": "__lua", "arg": "6"
+  },
+  {
+    "locked": false, "mouse": false, "release": false, "repeat": false,
+    "longPress": false, "non_consuming": false, "auto_consuming": false,
+    "has_description": true, "modmask": 0, "submap": "resize",
+    "submap_universal": "false", "key": "", "keycode": 0,
+    "catch_all": true, "description": "Swallow everything else",
+    "allow_input_capture": false, "dispatcher": "__lua", "arg": "7"
+  },
+  {
+    "locked": false, "mouse": false, "release": false, "repeat": false,
+    "longPress": false, "non_consuming": false, "auto_consuming": false,
+    "has_description": true, "modmask": 64, "submap": "",
+    "submap_universal": "false", "key": "V", "keycode": 0,
+    "catch_all": false,
+    "description": "A description that is comfortably longer than the sixty character display budget and must be truncated",
+    "allow_input_capture": false, "dispatcher": "__lua", "arg": "8"
+  }
+]
