@@ -3,9 +3,13 @@
 # Toggle a persistent float window rule for the focused window's class.
 # No rule yet -> confirm and add one; rule exists -> confirm and remove it.
 # Reloads Hyprland and updates the current window immediately.
-# Bound in hyprland.conf: ALT SHIFT, F.
+# Bound in hyprland.lua: ALT SHIFT + F.
+#
+# Targets hyprland.lua, not hyprland.conf: since Hyprland 0.55 hyprlang is
+# deprecated and .lua wins when both exist, so the .conf is no longer the file
+# Hyprland reads.
 
-config="$HOME/.config/hypr/hyprland.conf"
+config="$HOME/.config/hypr/hyprland.lua"
 
 # Grab class + address from the focused window in a single query, before the
 # yad dialog opens and steals focus (a later query would target yad itself).
@@ -18,7 +22,7 @@ if [ -z "$class" ]; then
   exit 1
 fi
 
-rule="windowrule = match:class $class, float on"
+rule="hl.window_rule({ match = { class = \"$class\" }, float = true })"
 
 # Fixed-string match: class names contain dots that would be regex wildcards.
 if grep -qF "$rule" "$config"; then
@@ -35,7 +39,7 @@ if grep -qF "$rule" "$config"; then
   rm -f "$tmp"
 
   hyprctl reload >/dev/null
-  hyprctl dispatch settiled "address:$address" >/dev/null
+  hyprctl dispatch "hl.dsp.window.float({ action = \"off\", window = \"address:$address\" })" >/dev/null
   notify-send -t 2000 "Float window" "\"$class\" will no longer float."
   exit 0
 fi
@@ -47,5 +51,5 @@ yad --question --center --title="Float window" --text="$text" \
 
 printf '%s\n' "$rule" >>"$config"
 hyprctl reload >/dev/null
-hyprctl dispatch setfloating "address:$address" >/dev/null
+hyprctl dispatch "hl.dsp.window.float({ action = \"on\", window = \"address:$address\" })" >/dev/null
 notify-send -t 2000 "Float window" "\"$class\" will now float."

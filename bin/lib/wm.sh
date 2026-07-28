@@ -14,6 +14,10 @@
 #
 # Fields (per WM): config_file, bind_grammar, dispatch_cmd, lock_cmd,
 # exit_cmd, workspace_module, startup_marker, waybar_config.
+#
+# Note on hyprland:dispatch_cmd - since Hyprland 0.55 `hyprctl dispatch` is
+# shorthand for `eval 'hl.dispatch(...)'`, so its argument is a Lua expression
+# (`hl.dsp.window.close()`), not the old `killactive` dispatcher name.
 
 # wm_detect - resolve the running WM from $XDG_CURRENT_DESKTOP into WM_ID.
 #
@@ -46,8 +50,8 @@ wm_get() {
   fi
 
   case "$WM_ID:$field" in
-    hyprland:config_file)      echo "$HOME/.config/hypr/hyprland.conf" ;;
-    hyprland:bind_grammar)     echo 'bind[elm]? = MODS, KEY, DISPATCHER[, ARGS...] (comma-separated; optional "submap = NAME" ... "submap = reset" blocks scope a set of binds)' ;;
+    hyprland:config_file)      echo "$HOME/.config/hypr/hyprland.lua" ;;
+    hyprland:bind_grammar)     echo 'hl.bind("MODS + KEY", hl.dsp.<dispatcher>(...), { flags }) (Lua; binds are closures, so read them from `hyprctl binds -j` rather than parsing the config - see bin/session-keybindings)' ;;
     hyprland:dispatch_cmd)     echo "hyprctl dispatch" ;;
     hyprland:lock_cmd)         echo "hyprlock" ;;
     hyprland:exit_cmd)         echo "uwsm stop" ;;
