@@ -5,8 +5,8 @@
 # a schedule the way wlsunset (or Hyprland's hyprsunset profiles) does. This
 # script applies the current hour's temperature from bin/lib/temperature-
 # profile.sh -- the single source of the schedule, shared with Hyprland's
-# generated hyprsunset.conf (issue 0013, docs/adr/0002-gamma-contract.md) --
-# via `bin/gamma temp`, ADR 0002's single owner of colour temperature. Run
+# generated hyprsunset.conf (issue 0013) -- via `bin/gamma temp`, the single
+# owner of colour temperature. Run
 # with --daemon from the Sway config to keep it updated; run with no args to
 # apply once.
 

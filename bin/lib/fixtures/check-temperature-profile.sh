@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # vim: set ft=sh:
 #
-# Fixture-based check for bin/lib/temperature-profile.sh (issue 0013,
-# docs/adr/0002-gamma-contract.md): every boundary hour, including the
+# Fixture-based check for bin/lib/temperature-profile.sh (issue 0013):
+# every boundary hour, including the
 # midnight wrap, resolves to the canonical Hyprland values, and both
 # consumers (config/sway/bin/temperature-schedule and the generated
 # config/hypr/hyprsunset.conf) agree for the same hour. Runs without a real

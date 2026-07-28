@@ -1,27 +1,27 @@
 #!/usr/bin/env bash
 # vim: set ft=sh:
 #
-# Single owner of brightness + colour temperature (ADR 0002,
-# docs/adr/0002-gamma-contract.md). Unit is integer percent 0-100; STEP=5,
-# MIN=10, MAX=100 are defined once, here. State stays at STATE_FILE as an
+# Single owner of brightness + colour temperature (issue 0010). Unit is
+# integer percent 0-100; STEP=5, MIN=10, MAX=100 are defined once, here.
+# State stays at STATE_FILE as an
 # integer percent, written on every set/nudge so Waybar's display module can
 # poll it cheaply -- but `get` never trusts that file, it re-probes the live
 # backend (or falls back to DEFAULT in degraded mode) every time it's called.
 #
 # Backend is selected by probing directly -- busctl for wl-gammarelay-rs
-# (Sway), hyprctl hyprsunset (Hyprland) -- not through bin/lib/wm.sh
-# (ADR 0001). "Which WM is running" and "which gamma backend is present" are
-# independent facts (ADR 0002 decision 6), so this module owns its own
-# two-entry backend table instead of adding a field to the WM adapter.
+# (Sway), hyprctl hyprsunset (Hyprland) -- not through bin/lib/wm.sh.
+# "Which WM is running" and "which gamma backend is present" are
+# independent facts, so this module owns its own two-entry backend table
+# instead of adding a field to the WM adapter.
 #
 # Degraded mode (no backend probes successfully): get/set/nudge/temp all
 # exit 0 and behave as if brightness were always at DEFAULT=MAX -- a session
-# with no working gamma control is "always full brightness", not "broken"
-# (ADR 0002 decision 5). Only malformed arguments produce a non-zero exit.
+# with no working gamma control is "always full brightness", not "broken".
+# Only malformed arguments produce a non-zero exit.
 #
 # Issue 0011 lands this module and switches one caller (Sway's
 # XF86MonBrightness* keys) over as a tracer; issue 0012 rewires the rest
-# (config/waybar/custom/brightness.sh, hyprland.conf's brightness binds) and
+# (config/waybar/custom/brightness.sh, Hyprland's brightness binds) and
 # deletes config/sway/bin/brightness.
 #
 # Pure logic (clamping, integer parsing) is exercised without a real backend
@@ -50,7 +50,7 @@ clamp() {
   echo "$v"
 }
 
-# --- backend table (ADR 0002 decision 6): probed directly, two entries ---
+# --- backend table: probed directly, two entries ---
 
 backend_gammarelay_probe() {
   busctl --user get-property rs.wl-gammarelay / rs.wl.gammarelay Brightness &>/dev/null

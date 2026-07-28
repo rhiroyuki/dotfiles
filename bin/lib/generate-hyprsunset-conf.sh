@@ -2,7 +2,7 @@
 # vim: set ft=sh:
 #
 # Regenerates config/hypr/hyprsunset.conf from the shared schedule in
-# bin/lib/temperature-profile.sh (issue 0013, docs/adr/0002-gamma-contract.md).
+# bin/lib/temperature-profile.sh (issue 0013).
 #
 # hyprsunset is a daemon that reads its conf once at startup, not a script,
 # so there is no live "read the same table" option without restarting the

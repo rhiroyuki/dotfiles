@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # vim: set ft=sh:
 #
-# Unified waybar launcher/supervisor for Hyprland and Sway (issue 0016,
-# ADR 0001). Replaces config/{hypr,sway}/bin/launch_waybar, which had
+# Unified waybar launcher/supervisor for Hyprland and Sway (issue 0016).
+# Replaces config/{hypr,sway}/bin/launch_waybar, which had
 # diverged: every reliability fix (crash-restart backoff, render health
 # check, height watchdog, NVIDIA warm-up, session-start marker) had only
 # ever been added to the Hyprland copy, leaving Sway with no crash

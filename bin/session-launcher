@@ -4,7 +4,7 @@
 # Unified app launcher for hyprland/sway/i3 (issue 0007). Nothing here is
 # WM-specific; the three per-WM copies this replaced were byte-identical.
 # Referenced directly at $HOME/dotfiles/bin/session-launcher from each WM
-# config, mirroring how bin/lib/wm.sh is sourced (ADR 0001) - no install
+# config, mirroring how bin/lib/wm.sh is sourced - no install
 # step symlinks top-level bin/ anywhere, so WM configs call the canonical
 # repo path directly.
 

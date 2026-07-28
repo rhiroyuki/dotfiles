@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # vim: set ft=sh:
 #
-# Single source of the day/night colour-temperature schedule (issue 0013,
-# docs/adr/0002-gamma-contract.md). Canonical values are Hyprland's: commit
+# Single source of the day/night colour-temperature schedule (issue 0013).
+# Canonical values are Hyprland's: commit
 # 0049973 ("raise night temperature to 4200K") is evidence the Hyprland
 # schedule is current intent, while the Sway script had drifted to 3300K at
 # night under a comment falsely claiming it mirrored this table.
@@ -16,8 +16,8 @@
 #
 # Consumers:
 #   - config/sway/bin/temperature-schedule sources this file and applies
-#     profile_temp_for_hour's result via `bin/gamma temp` (ADR 0002's single
-#     owner of colour temperature).
+#     profile_temp_for_hour's result via `bin/gamma temp`, the single owner
+#     of colour temperature.
 #   - config/hypr/hyprsunset.conf is generated from this table by
 #     bin/lib/generate-hyprsunset-conf.sh. hyprsunset is a daemon that reads
 #     its conf once at startup (not a script), so this repo regenerates the

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # vim: set ft=sh:
 #
-# Fixture-based check for bin/gamma's pure logic (issue 0011, ADR 0002):
+# Fixture-based check for bin/gamma's pure logic (issue 0011):
 # integer clamping and argument validation, plus the degraded-mode
 # decisions when no backend is present. Runs without a real backend --
 # clamp/is_int are exercised in-process; the verb/degraded-mode checks

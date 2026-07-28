@@ -5,9 +5,8 @@
 # Reloads Hyprland and updates the current window immediately.
 # Bound in hyprland.lua: ALT SHIFT + F.
 #
-# Targets hyprland.lua, not hyprland.conf: since Hyprland 0.55 hyprlang is
-# deprecated and .lua wins when both exist, so the .conf is no longer the file
-# Hyprland reads.
+# Targets hyprland.lua: since Hyprland 0.55 hyprlang is deprecated, and the
+# old hyprland.conf has been deleted.
 
 config="$HOME/.config/hypr/hyprland.lua"
 

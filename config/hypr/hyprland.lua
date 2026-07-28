@@ -2,11 +2,9 @@
 --
 -- Since Hyprland 0.55 hyprlang is deprecated in favour of Lua
 -- (https://wiki.hypr.land/Configuring/Start/). Hyprland loads exactly one
--- config per startup and `hyprland.lua` wins over `hyprland.conf`, so this
--- file supersedes the sibling `hyprland.conf` the moment both are symlinked
--- into ~/.config/hypr/. The .conf is kept as a reference for the old syntax
--- until hyprlang is dropped for good; keep the two in sync or delete the
--- .conf once the migration has settled.
+-- config per startup, and this file is the only one this repo ships -- the
+-- superseded hyprland.conf has been deleted (recoverable from git history if
+-- the old syntax is ever needed).
 --
 -- Lua stubs for LSP autocompletion live in /usr/share/hypr/stubs.
 
@@ -170,7 +168,7 @@ hl.bind("XF86AudioMicMute",
     hl.dsp.exec_cmd([[pactl set-source-mute @DEFAULT_SOURCE@ toggle && notify-send -t 1500 "Mic" "$(pactl get-source-mute @DEFAULT_SOURCE@ | grep -q yes && echo Muted || echo Unmuted)"]]),
     { locked = true, description = "Toggle mic mute" })
 
--- Brightness is owned by bin/gamma (ADR 0002), not brightnessctl: this box has
+-- Brightness is owned by bin/gamma, not brightnessctl: this box has
 -- no /sys/class/backlight device.
 hl.bind("XF86MonBrightnessUp",
     hl.dsp.exec_cmd([[notify-send -t 1500 "Brightness" "$(]] .. home .. [[/dotfiles/bin/gamma nudge up)%"]]),

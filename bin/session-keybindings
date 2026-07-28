@@ -2,7 +2,7 @@
 # vim: set ft=sh:
 #
 # Unified keybindings cheatsheet for hyprland/sway/i3 (issue 0009). The bind
-# source and grammar come from the WM adapter table (ADR 0001, bin/lib/wm.sh).
+# source and grammar come from the WM adapter table (bin/lib/wm.sh).
 # Replaces config/{hypr,sway,i3}/bin/keybindings.
 #
 # Referenced directly at $HOME/dotfiles/bin/session-keybindings from each WM

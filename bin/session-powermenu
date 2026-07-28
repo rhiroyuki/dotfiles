@@ -3,7 +3,7 @@
 #
 # Unified session power menu for hyprland/sway/i3 (issue 0008). The menu is
 # defined once here; only lock/exit commands are WM-specific, and those come
-# from the adapter table (ADR 0001, bin/lib/wm.sh) instead of being
+# from the adapter table (bin/lib/wm.sh) instead of being
 # hardcoded per copy. Replaces the three per-WM config/{hypr,sway,i3}/bin/powermenu
 # scripts, which had diverged (Sway's copy silently dropped Suspend).
 # Referenced directly at $HOME/dotfiles/bin/session-powermenu from each WM

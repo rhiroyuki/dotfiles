@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # vim: set ft=sh:
 #
-# WM adapter registry (ADR 0001, docs/adr/0001-wm-adapter-registry.md).
+# WM adapter registry (issue 0006).
 #
 # Single source of truth for "which WM am I in, and what are its verbs?".
 # Callers source this file, call wm_detect once, then read fields with
