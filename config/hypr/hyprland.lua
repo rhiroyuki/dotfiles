@@ -305,6 +305,7 @@ end)
 -- Float rules. bin/float-window appends/removes anonymous rules of exactly the
 -- shape below, so keep that formatting on one line if you edit these by hand.
 hl.window_rule({ match = { class = "blueman-manager" }, float = true })
+hl.window_rule({ match = { class = "vlc" }, float = true })
 hl.window_rule({ match = { class = "yad", title = "yad-calendar" }, float = true })
 -- float-window confirmation dialog (bin/float-window)
 hl.window_rule({ match = { class = "yad", title = "Float window" }, float = true })

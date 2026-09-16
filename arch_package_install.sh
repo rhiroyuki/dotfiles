@@ -68,8 +68,7 @@ sudo pacman -S --noconfirm \
                python-pip \
                python-pipx \
                tree-sitter-cli \
-               lm_sensors \
-               waybar
+               lm_sensors
 
 if ! command -v yay >/dev/null 2>&1; then
   git clone https://aur.archlinux.org/yay.git
@@ -80,8 +79,11 @@ fi
 
 sudo fc-cache -fv
 
+# waybar-git (not extra/waybar): only master fixes hyprland/workspaces clicks
+# under a Lua Hyprland config. Switch back once a release carries the fix.
 yay -S --noconfirm --needed \
   handy-bin \
+  waybar-git \
   wl-gammarelay-rs \
   rofi-emoji-git \
   hyprlauncher \
