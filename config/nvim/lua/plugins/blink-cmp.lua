@@ -61,7 +61,13 @@ return {
         },
       },
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer', 'copilot' },
+        default = function()
+          local sources = { 'lsp', 'path', 'snippets', 'buffer' }
+          if vim.g.copilot_enabled then
+            table.insert(sources, 'copilot')
+          end
+          return sources
+        end,
         providers = {
           copilot = {
             name = 'copilot',

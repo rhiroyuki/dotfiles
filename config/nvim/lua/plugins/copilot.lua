@@ -3,7 +3,20 @@ return {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     lazy = true,
-    event = "InsertEnter",
+    dependencies = {
+      "saghen/blink.cmp",
+    },
+    keys = {
+      {
+        "<leader>cp",
+        function()
+          vim.g.copilot_enabled = true
+          require("copilot.command").enable()
+          require("blink.cmp").reload("copilot")
+        end,
+        desc = "Enable Copilot",
+      },
+    },
     config = function()
       require("copilot").setup({
         suggestion = { enabled = false, auto_trigger = false },

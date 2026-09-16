@@ -11,7 +11,14 @@ return {
     "neovim/nvim-lspconfig",
     lazy = true,
     cmd = "LspInfo",
-    event = { "BufReadPre", "BufNewFile" },
+    keys = {
+      { "<leader>la", "<cmd>LspStart<cr>", desc = "Activate LSP" },
+    },
+    init = function()
+      vim.api.nvim_create_user_command("LspStart", function()
+        require("lazy").load({ plugins = { "nvim-lspconfig" } })
+      end, { desc = "Activate LSP for this Neovim instance" })
+    end,
     dependencies = {
       { "williamboman/mason.nvim" },
       { "williamboman/mason-lspconfig.nvim" },
@@ -26,49 +33,28 @@ return {
       },
     },
     config = function()
-      local lspconfig = require("lspconfig")
       local utils = require("utils")
       local capabilities = utils.setup_capabilities({})
-      -- Enabling folding for nvim-ufo
       capabilities.textDocument.foldingRange = {
-          dynamicRegistration = false,
-          lineFoldingOnly = true
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
       }
 
-      local default_opt = { autostart = true, capabilities = capabilities }
-
-      local lsp_server_setup = function(server, opt)
-        local built_capabilities = opt and opt.capabilities or {}
-
-        local merge_capabilities = vim.tbl_deep_extend("force", built_capabilities, opt or {})
-
-        lspconfig[server].setup(
-          vim.tbl_deep_extend("force", default_opt, {
-            capabilities = merge_capabilities,
-          })
-        )
-      end
-
-      require("mason").setup({ autostart = false })
-      require("mason-lspconfig").setup({
-        ensure_installed = { "gopls" },
-        handlers = {
-          lsp_server_setup,
-          gopls = function()
-            lspconfig.gopls.setup(vim.tbl_deep_extend("force", default_opt, {
-              settings = {
-                gopls = {
-                  completeUnimported = true,
-                  usePlaceholders = true,
-                },
-              },
-            }))
-          end,
-          standardrb = function() end,
-          rubocop = function() end,
-          ruby_lsp = function() end
+      vim.lsp.config("*", { capabilities = capabilities })
+      vim.lsp.config("gopls", {
+        settings = {
+          gopls = {
+            completeUnimported = true,
+            usePlaceholders = true,
+          },
         },
       })
-    end
+
+      require("mason").setup()
+      require("mason-lspconfig").setup({
+        ensure_installed = { "gopls" },
+        automatic_enable = true,
+      })
+    end,
   },
 }
