@@ -27,7 +27,7 @@ rule="hl.window_rule({ match = { class = \"$class\" }, float = true })"
 if grep -qF "$rule" "$config"; then
   # Rule exists -> confirm removal and re-tile this class.
   text=$(printf 'Stop floating windows of:\n\n<b>%s</b>' "$class")
-  yad --question --center --title="Float window" --text="$text" \
+  yad --image="dialog-question" --center --title="Float window" --text="$text" \
       --button="Cancel:1" --button="Stop floating:0" || exit 0
 
   # Rewrite through the symlink (cat >, not mv/sed -i) so the repo file
@@ -45,7 +45,7 @@ fi
 
 # No rule yet -> confirm and add one.
 text=$(printf 'Always float windows of:\n\n<b>%s</b>' "$class")
-yad --question --center --title="Float window" --text="$text" \
+yad --image="dialog-question" --center --title="Float window" --text="$text" \
     --button="Cancel:1" --button="Float:0" || exit 0
 
 printf '%s\n' "$rule" >>"$config"
