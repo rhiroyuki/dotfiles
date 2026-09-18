@@ -62,7 +62,7 @@ wm_get() {
     sway:config_file)      echo "$HOME/.config/sway/config" ;;
     sway:bind_grammar)     echo 'bindsym KEY ACTION... ($mod/$mod2 macro-expanded; optional "mode \"NAME\" { ... }" blocks scope a set of binds)' ;;
     sway:dispatch_cmd)     echo "swaymsg" ;;
-    sway:lock_cmd)         echo 'swaylock -f --image $HOME/dotfiles/wallpapers/cloudy.png --effect-blur 7x5' ;;
+    sway:lock_cmd)         echo "swaylock -f --image $HOME/dotfiles/wallpapers/cloudy.png --effect-blur 7x5" ;;
     sway:exit_cmd)         echo "swaymsg exit" ;;
     sway:workspace_module) echo "sway/workspaces" ;;
     sway:startup_marker)   echo "/tmp/waybar_start_ts" ;;
@@ -71,7 +71,7 @@ wm_get() {
     i3:config_file)      echo "$HOME/.config/i3/config" ;;
     i3:bind_grammar)     echo 'bindsym KEY ACTION... (same grammar as sway; optional "mode \"NAME\" { ... }" blocks scope a set of binds)' ;;
     i3:dispatch_cmd)     echo "i3-msg" ;;
-    i3:lock_cmd)         echo 'i3lock --nofork -i $HOME/dotfiles/wallpapers/cloudy.png' ;;
+    i3:lock_cmd)         echo "i3lock --nofork -i $HOME/dotfiles/wallpapers/cloudy.png" ;;
     i3:exit_cmd)         echo "i3-msg exit" ;;
     i3:workspace_module) echo "i3/workspaces (rendered via Polybar, not Waybar - i3 has no launch_waybar)" ;;
     i3:startup_marker)   echo "" ;;

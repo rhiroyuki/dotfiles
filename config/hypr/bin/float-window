@@ -10,6 +10,16 @@
 
 config="$HOME/.config/hypr/hyprland.lua"
 
+lua_literal() {
+  # jq emits a JSON string literal. -r is important: without it jq prints the
+  # JSON-encoded literal as a jq string, adding a second layer of quotes.
+  jq -Rrn --arg value "$1" '$value | tojson'
+}
+
+if [[ "${FLOAT_WINDOW_SOURCE_ONLY:-}" == "1" ]]; then
+  return 0 2>/dev/null || exit 0
+fi
+
 # Grab class + address from the focused window in a single query, before the
 # yad dialog opens and steals focus (a later query would target yad itself).
 window=$(hyprctl activewindow -j)
@@ -21,7 +31,14 @@ if [ -z "$class" ]; then
   exit 1
 fi
 
-rule="hl.window_rule({ match = { class = \"$class\" }, float = true })"
+# Hyprland evaluates this file as Lua. Window classes come from clients and
+# must not be interpolated into executable source without validation.
+if [[ ! "$class" =~ ^[[:alnum:]_.:-]+$ ]]; then
+  notify-send -t 3000 "Float window" "Unsupported window class: $class"
+  exit 1
+fi
+class_lua=$(lua_literal "$class")
+rule="hl.window_rule({ match = { class = $class_lua }, float = true })"
 
 # Fixed-string match: class names contain dots that would be regex wildcards.
 if grep -qF "$rule" "$config"; then

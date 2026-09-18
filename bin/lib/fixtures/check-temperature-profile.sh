@@ -50,7 +50,9 @@ check "gamma at hour 2 (midnight wrap)" "$(profile_gamma_for_hour 2)" "0.85"
 
 stub_dir="$(mktemp -d)"
 state_file="$(mktemp -u)"
-trap 'rm -rf "$stub_dir"; rm -f "$state_file"' EXIT
+installed_root="$(mktemp -d)"
+hyprctl_log="$(mktemp -u)"
+trap 'rm -rf "$stub_dir" "$installed_root"; rm -f "$state_file" "$hyprctl_log"' EXIT
 
 cat > "$stub_dir/busctl" <<'EOF'
 #!/usr/bin/env bash
@@ -64,7 +66,6 @@ exit 0
 EOF
 chmod +x "$stub_dir/busctl" "$stub_dir/hyprctl"
 
-hyprctl_log="$(mktemp -u)"
 : > "$hyprctl_log"
 
 # Sway's script, forced to hour 20, via a stubbed backend.
@@ -74,6 +75,17 @@ PATH="$stub_dir:$PATH" GAMMA_STATE_FILE="$state_file" PROFILE_HOUR=20 \
 
 applied="$(awk '{print $3}' "$hyprctl_log" | tail -n1)"
 check "sway schedule at hour 20 applies profile temp via bin/gamma" "$applied" "4200"
+
+# The installed helper is a symlink under ~/.config. It must resolve the
+# physical repository path before sourcing the shared profile.
+mkdir -p "$installed_root/.config/sway/bin"
+ln -s "$repo_root/config/sway/bin/temperature-schedule" \
+  "$installed_root/.config/sway/bin/temperature-schedule"
+PATH="$stub_dir:$PATH" GAMMA_STATE_FILE="$state_file" PROFILE_HOUR=20 \
+  HYPRCTL_LOG="$hyprctl_log" \
+  bash "$installed_root/.config/sway/bin/temperature-schedule" >/dev/null
+applied="$(awk '{print $3}' "$hyprctl_log" | tail -n1)"
+check "installed symlink resolves repository profile" "$applied" "4200"
 
 # Generated hyprsunset.conf must carry the same 20:00 value.
 hypr_temp="$(awk '/time = 20:00/{f=1} f && /temperature/{print $3; exit}' \

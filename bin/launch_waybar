@@ -13,7 +13,8 @@
 # from bin/lib/wm.sh's adapter table. i3 has no launch_waybar entry point
 # at all - it uses Polybar, not Waybar (see wm.sh's i3:workspace_module).
 
-source "$HOME/dotfiles/bin/lib/wm.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib/wm.sh"
 wm_detect
 
 # WAYBAR_CONFIG selects the per-WM overlay (issue 0017): config.jsonc holds
@@ -38,11 +39,24 @@ trap "killall waybar" EXIT
 # unrecognised WM_ID falls through with no wait rather than hanging forever.
 case "$WM_ID" in
   hyprland)
-    until hyprctl monitors 2>/dev/null | grep -q "Monitor"; do sleep 0.1; done
+    ready=0
+    for _ in $(seq 1 300); do
+      if hyprctl monitors 2>/dev/null | grep -q "Monitor"; then ready=1; break; fi
+      sleep 0.1
+    done
+    (( ready )) || echo "launch_waybar: Hyprland IPC not ready after 30s; launching anyway" >&2
     ;;
   sway)
-    until swaymsg -t get_outputs 2>/dev/null | grep -q '"active": true'; do sleep 0.1; done
-    while pgrep -f apply_display_modes >/dev/null 2>&1; do sleep 0.1; done
+    ready=0
+    for _ in $(seq 1 300); do
+      if swaymsg -t get_outputs 2>/dev/null | grep -q '"active": true'; then ready=1; break; fi
+      sleep 0.1
+    done
+    (( ready )) || echo "launch_waybar: Sway IPC not ready after 30s; launching anyway" >&2
+    for _ in $(seq 1 300); do
+      pgrep -f apply_display_modes >/dev/null 2>&1 || break
+      sleep 0.1
+    done
     ;;
 esac
 sleep 0.5

@@ -1,4 +1,6 @@
-#! /bin/sh
+#! /usr/bin/env bash
+
+set -euo pipefail
 
 sudo pacman -S --noconfirm --needed base-devel git wget jq
 sudo pacman -S --noconfirm \
@@ -8,6 +10,10 @@ sudo pacman -S --noconfirm \
                curl \
                tmux \
                zsh \
+               neovim \
+               libnotify \
+               yad \
+               unzip \
                inotify-tools \
                ripgrep \
                fd \
@@ -71,10 +77,10 @@ sudo pacman -S --noconfirm \
                lm_sensors
 
 if ! command -v yay >/dev/null 2>&1; then
-  git clone https://aur.archlinux.org/yay.git
-  cd yay
-  makepkg -si
-  cd ..
+  yay_build_dir=$(mktemp -d)
+  trap 'rm -rf "$yay_build_dir"' EXIT
+  git clone https://aur.archlinux.org/yay.git "$yay_build_dir/yay"
+  (cd "$yay_build_dir/yay" && makepkg -si --noconfirm)
 fi
 
 sudo fc-cache -fv

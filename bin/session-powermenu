@@ -9,7 +9,8 @@
 # Referenced directly at $HOME/dotfiles/bin/session-powermenu from each WM
 # config, mirroring bin/session-launcher (issue 0007).
 
-source "$HOME/dotfiles/bin/lib/wm.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib/wm.sh"
 wm_detect
 lock_cmd="$(wm_get lock_cmd)"
 exit_cmd="$(wm_get exit_cmd)"

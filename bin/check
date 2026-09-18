@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Fast, dependency-light regression checks for this dotfiles repository.
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+fixture_dir="$repo_root/bin/lib/fixtures"
+
+echo "Checking shell syntax..."
+shell_files=$({
+  rg --files -g '*.sh' -g 'install.sh' -g 'arch_config_install.sh' "$repo_root"
+  # A number of runtime helpers intentionally have no extension. Include
+  # executable files with a shell shebang as well.
+  while IFS= read -r file; do
+    if [[ -x "$file" ]] && head -n1 "$file" | grep -Eq '^#!.*(ba|z)?sh([[:space:]]|$)'; then
+      printf '%s\n' "$file"
+    fi
+  done < <(rg --files "$repo_root")
+} | sort -u)
+while IFS= read -r file; do
+  [[ -n "$file" ]] && bash -n "$file"
+done <<< "$shell_files"
+zsh -n "$repo_root/zshrc_dotfile"
+
+echo "Checking JSONC syntax..."
+python3 "$repo_root/bin/lib/check-jsonc.py" "$repo_root"/config/**/*.jsonc
+
+if command -v shellcheck >/dev/null 2>&1; then
+  echo "Checking shell with ShellCheck..."
+  shellcheck -x $shell_files
+else
+  echo "Skipping ShellCheck (not installed)"
+fi
+
+echo "Running fixture checks..."
+"$fixture_dir/check-gamma-logic.sh"
+"$fixture_dir/check-temperature-profile.sh"
+"$fixture_dir/check-keybindings-parser.sh"
+"$fixture_dir/check-install-helper.sh"
+"$fixture_dir/check-float-window.sh"
+"$fixture_dir/check-keyd-install.sh"
+"$fixture_dir/check-fzf-integration.sh"
+"$fixture_dir/check-nvidia-early-modules.sh"
+
+if command -v luac >/dev/null 2>&1; then
+  echo "Checking Lua syntax..."
+  while IFS= read -r file; do luac -p "$file"; done < <(rg --files "$repo_root/config/nvim" "$repo_root/config/hypr" -g '*.lua')
+else
+  echo "Skipping Lua syntax (luac not installed)"
+fi
+
+echo "Dotfiles checks: all OK"

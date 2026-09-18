@@ -10,18 +10,37 @@
 # with --daemon from the Sway config to keep it updated; run with no args to
 # apply once.
 
+# Installed config helpers are symlinks under ~/.config. Resolve the link before
+# walking back to the repository, otherwise an invocation through
+# ~/.config/sway/bin points at ~/.config/bin instead of this checkout.
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 # shellcheck source=/dev/null
-source "$HOME/dotfiles/bin/lib/temperature-profile.sh"
+source "$REPO_ROOT/bin/lib/temperature-profile.sh"
 
 apply_current_temp() {
-    "$HOME/dotfiles/bin/gamma" temp "$(profile_temp_for_hour "$(profile_current_hour)")"
+    "$REPO_ROOT/bin/gamma" temp "$(profile_temp_for_hour "$(profile_current_hour)")"
 }
 
 case "$1" in
     --daemon)
+        last_temp=""
         while true; do
-            apply_current_temp
-            sleep 900
+            current_temp="$(profile_temp_for_hour "$(profile_current_hour)")"
+            if [[ "$current_temp" != "$last_temp" ]]; then
+                # A missing backend is intentionally a successful no-op for
+                # interactive gamma callers, but the daemon must not mark the
+                # hour as applied in that case. Strict mode makes it retry
+                # after the compositor/backend becomes available; a transient
+                # write failure is also retried on the next cadence.
+                if GAMMA_REQUIRE_BACKEND=1 "$REPO_ROOT/bin/gamma" temp "$current_temp"; then
+                    last_temp="$current_temp"
+                fi
+            fi
+            # A one-minute bound keeps a profile transition prompt without
+            # waking the shell and D-Bus backend every few seconds.
+            sleep 60
         done
         ;;
     *)

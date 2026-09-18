@@ -55,6 +55,8 @@ main () {
 
   append_command_to_file "$HOME/.zshrc" "$ZSHRC_SOURCE_LINE"
 
+  source "$DOTFILES_DIR/install/setup_zsh_dependencies.sh"
+
   source "$DOTFILES_DIR/install/install_keyd_service.sh"
 
   # Run the remaining Arch-specific steps when on Arch, or when explicitly

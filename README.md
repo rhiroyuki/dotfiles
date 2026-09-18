@@ -24,3 +24,6 @@ $ bash arch_package_install.sh
 ```
 
 See `AGENTS.md` for what each tool's config is and how installation works.
+
+After changing shell scripts or configuration, run `bin/check` for syntax and
+fixture-based regression checks.

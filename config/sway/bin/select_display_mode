@@ -55,20 +55,23 @@ for output in "${outputs[@]}"; do
     ) &
     COUNTDOWN_PID=$!
 
+    confirmation_file=$(mktemp)
     rofi -dmenu -p "Keep $chosen on $output?" \
         -mesg "Enter to keep, Esc or wait ${CONFIRM_TIMEOUT}s to revert" \
-        <<< $'y\nn' &
+        <<< $'Keep\nRevert' >"$confirmation_file" &
     ROFI_PID=$!
     ( sleep "$CONFIRM_TIMEOUT" && kill "$ROFI_PID" 2>/dev/null ) &
     TIMER_PID=$!
     wait "$ROFI_PID"
     ROFI_EXIT=$?
+    confirmation=$(<"$confirmation_file")
+    rm -f "$confirmation_file"
     kill "$TIMER_PID" 2>/dev/null
     kill "$COUNTDOWN_PID" 2>/dev/null
     wait "$TIMER_PID" 2>/dev/null
     wait "$COUNTDOWN_PID" 2>/dev/null
 
-    if [[ $ROFI_EXIT -eq 0 ]]; then
+    if [[ $ROFI_EXIT -eq 0 && "$confirmation" == "Keep" ]]; then
         # User confirmed — persist the choice
         tmpfile=$(mktemp)
         grep -v "^output $output " "$SAVE_FILE" > "$tmpfile" 2>/dev/null

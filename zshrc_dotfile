@@ -51,27 +51,16 @@ export KEYTIMEOUT=1
 bindkey '^P' up-history
 bindkey '^N' down-history
 
-# check for tmux plugin manager
-if [[ ! -d ~/.tmux/plugins/tpm ]];
-then
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-fi
-
 export PATH="$HOME/.local/bin:$PATH"
 
-if [[ ! -d "${ASDF_DATA_DIR:-$HOME/.asdf}" ]];
-then
-  if [[ ! -f /usr/local/bin/asdf ]]; then
-    wget -qO- https://github.com/asdf-vm/asdf/releases/download/v0.16.7/asdf-v0.16.7-linux-amd64.tar.gz | sudo tar -xz -C /usr/local/bin/
-
-    mkdir -p "${ASDF_DATA_DIR:-$HOME/.asdf}/completions"
-    /usr/local/bin/asdf completion zsh > "${ASDF_DATA_DIR:-$HOME/.asdf}/completions/_asdf"
-  fi
-  export PATH="/usr/local/bin/:$PATH"
-else
-  export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
-
-  fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
+# Add asdf's shims based on their install location, independently of whether
+# the asdf executable is currently on PATH. This keeps installed tool shims
+# available in fresh shells even when asdf is initialized elsewhere.
+asdf_data_dir="${ASDF_DATA_DIR:-$HOME/.asdf}"
+[[ -d "$asdf_data_dir/shims" ]] && export PATH="$asdf_data_dir/shims:$PATH"
+if (( $+commands[asdf] )); then
+  export PATH="$(dirname "$(command -v asdf)"):$PATH"
+  [[ -d "$asdf_data_dir/completions" ]] && fpath=("$asdf_data_dir/completions" $fpath)
 fi
 
 # 'ls' pretty colors
@@ -81,14 +70,27 @@ autoload colors && colors
 [[ $- != *i* ]] && return
 [[ -z "$TMUX" ]] && tmux new-session -A -s main
 
-# fuzzy finder
-source <(fzf --zsh)
-[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
-[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+# fuzzy finder (one initialization path; packaged files are an exclusive
+# fallback for systems whose fzf package does not provide `fzf --zsh`).
+# `rehash` matters when a package manager installs/replaces fzf after zsh has
+# already populated its command hash table. Keep the generated source in a
+# scalar so a failing `fzf --zsh` can fall through to the packaged files.
+_fzf_init() {
+  local fzf_bin fzf_zsh packaged_dir
+  rehash
+  fzf_bin="${commands[fzf]:-}"
+  packaged_dir="${FZF_PACKAGED_DIR:-/usr/share/fzf}"
 
-if type fzf &> /dev/null; then
-  source <(fzf --zsh)
-fi
+  if [[ -n "$fzf_bin" ]] && fzf_zsh="$($fzf_bin --zsh 2>/dev/null)" && [[ -n "$fzf_zsh" ]]; then
+    eval "$fzf_zsh"
+    return 0
+  fi
+
+  [[ -f "$packaged_dir/completion.zsh" ]] && source "$packaged_dir/completion.zsh"
+  [[ -f "$packaged_dir/key-bindings.zsh" ]] && source "$packaged_dir/key-bindings.zsh"
+}
+_fzf_init
+unfunction _fzf_init
 
 # --files: List files that would be searched but do not search
 # --hidden: Search hidden files and folders
@@ -108,52 +110,33 @@ export FZF_DEFAULT_COMMAND='rg --colors line:fg:yellow      \
 [[ -f ~/.zsh_env ]] && source ~/.zsh_env
 [[ -f ~/.aliases ]] && source ~/.aliases
 
-zstyle :compinstall filename '/home/ricardo/.zshrc'
+zstyle :compinstall filename "$HOME/.zshrc"
 
 # ZSH extensions
 
-# git-completion or ohmyzsh::gitfast
-if [[ ! -d ~/.zsh/git-completion ]]
-then
-  git clone https://github.com/felipec/git-completion.git "$HOME/.zsh/git-completion"
-  (cd $HOME/.zsh/git-completion && make install)
-fi
 fpath+=(~/.local/share/git-completion/zsh)
-source ~/.local/share/git-completion/prompt.sh
+[[ -f ~/.local/share/git-completion/prompt.sh ]] && source ~/.local/share/git-completion/prompt.sh
 
-# zsh-completions
-if [[ ! -d ~/.zsh/zsh-completions ]]
-then
-  git clone https://github.com/zsh-users/zsh-completions.git "$HOME/.zsh/zsh-completions"
-  rm -f ~/.zcompdump
-fi
+# zsh-completions (installed by install/setup_zsh_dependencies.sh)
 fpath+=($HOME/.zsh/zsh-completions/src)
 
-# pure theme/prompt
-if [[ ! -d ~/.zsh/pure ]]
-then
-  git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
-fi
+# pure theme/prompt (installed by install/setup_zsh_dependencies.sh)
 fpath+=($HOME/.zsh/pure)
 
-# fish-like autosuggestions
-if [[ ! -d ~/.zsh/zsh-autosuggestions ]]
-then
-  git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-fi
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+# fish-like autosuggestions (installed by install/setup_zsh_dependencies.sh)
+[[ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit promptinit; promptinit
 
 # Check zcompdump once a day: https://gist.github.com/ctechols/ca1035271ad134841284
-if [ "$(find ~/.zcompdump -mtime 1)" ] ; then
+if [[ ! -f ~/.zcompdump || -z "$(find ~/.zcompdump -mtime -1 -print -quit 2>/dev/null)" ]] ; then
   compinit
 else
   compinit -C
 fi
 
-prompt pure
+[[ -d ~/.zsh/pure ]] && prompt pure
 
 [ -d ~/.fzf/bin ] && export PATH="$HOME/.fzf/bin:$PATH"
 [ -d ~/.cargo/bin ] && export PATH="$HOME/.cargo/bin:$PATH"

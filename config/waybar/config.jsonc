@@ -86,7 +86,7 @@
   "custom/temp": {
     "exec": "~/.config/waybar/custom/startup-gate.sh temp.sh",
     "return-type": "json",
-    "interval": 2,
+    "interval": 5,
     "format": "{}",
     "tooltip": true,
     "on-click": "foot watch -n 1 sensors"
@@ -109,7 +109,6 @@
   },
   "network": {
     "interval": 5,
-    "interface": "wlan0",
     "format": "{ifname}",
     "format-wifi": " ",
     "format-ethernet": "{ipaddr}/{cidr} 󰊗",

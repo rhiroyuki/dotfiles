@@ -91,6 +91,46 @@ check "degraded: temp exits 0" "$code" "0"
 out="$(gamma temp abc 2>/dev/null)"; code=$?
 check "degraded: temp with non-integer exits 1" "$code" "1"
 
+# A live backend write failure must not update the locally cached state.
+failing_dir="$(mktemp -d)"
+cat > "$failing_dir/busctl" <<'EOF'
+#!/usr/bin/env bash
+if [[ "$1" == "--user" && "$2" == "get-property" ]]; then
+  echo 'd 0.50'
+  exit 0
+fi
+exit 1
+EOF
+cat > "$failing_dir/hyprctl" <<'EOF'
+#!/usr/bin/env bash
+exit 1
+EOF
+chmod +x "$failing_dir/busctl" "$failing_dir/hyprctl"
+before="$(cat "$state_file")"
+out="$(env PATH="$failing_dir:$PATH" GAMMA_STATE_FILE="$state_file" "$repo_root/bin/gamma" set 50 2>/dev/null)"; code=$?
+check "backend failure: set exits 1" "$code" "1"
+check "backend failure: state is unchanged" "$(cat "$state_file")" "$before"
+out="$(env PATH="$failing_dir:$PATH" GAMMA_STATE_FILE="$state_file" "$repo_root/bin/gamma" temp 4200 2>/dev/null)"; code=$?
+check "backend failure: temp exits 1" "$code" "1"
+check "backend failure: temp emits no success value" "$out" ""
+rm -rf "$failing_dir"
+
+# set/nudge use a bounded lock wait so a stuck or concurrent caller cannot
+# block the compositor keybinding forever.
+(
+  exec 9>"${state_file}.lock"
+  flock -x 9
+  sleep 2
+) &
+holder=$!
+sleep 0.1
+started="$(date +%s)"
+out="$(GAMMA_LOCK_TIMEOUT=1 GAMMA_STATE_FILE="$state_file" "$repo_root/bin/gamma" set 50 2>/dev/null)"; code=$?
+elapsed=$(( $(date +%s) - started ))
+wait "$holder"
+check "lock contention: set exits 1" "$code" "1"
+(( elapsed < 2 )) && check "lock contention: wait is bounded" ok ok || check "lock contention: wait is bounded" fail ok
+
 gamma >/dev/null 2>&1; code=$?
 check "no verb exits 2" "$code" "2"
 

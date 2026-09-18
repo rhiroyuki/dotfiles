@@ -121,7 +121,8 @@ if [[ "${SESSION_KEYBINDINGS_SOURCE_ONLY:-}" == "1" ]]; then
   return 0 2>/dev/null || exit 0
 fi
 
-source "$HOME/dotfiles/bin/lib/wm.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib/wm.sh"
 wm_detect
 
 # Hyprland reads from the live compositor, every other WM from its config file.
