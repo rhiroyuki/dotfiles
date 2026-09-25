@@ -154,7 +154,9 @@ blink-cmp. Before that, blink-cmp uses its normal LSP, path, snippet, and
 buffer sources without loading Copilot. The plugin uses dynamic Node.js path
 detection to work with asdf-managed Node versions (see `config/nvim/lua/plugins/`).
 
-Treesitter uses the plugins' `main` branches, installs the Ruby parser, enables
+Treesitter uses the plugins' `main` branches, installs the Ruby parser up front,
+auto-installs the parser for any other filetype the first time a matching buffer
+opens (when nvim-treesitter supports that language), enables
 highlighting for available parsers, and provides text-object selection and
 navigation keymaps from `config/nvim/lua/plugins/nvim-treesitter.lua`. Vim's
 legacy syntax highlighting is disabled so Treesitter owns highlighting.

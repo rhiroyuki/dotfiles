@@ -12,11 +12,27 @@ return {
     build = ":TSUpdate",
     lazy = false,
     config = function()
-      require("nvim-treesitter").install({ "ruby" })
+      local ts = require("nvim-treesitter")
+      ts.install({ "ruby" })
+
+      local available = ts.get_available()
 
       vim.api.nvim_create_autocmd("FileType", {
-        callback = function()
-          pcall(vim.treesitter.start)
+        callback = function(args)
+          local lang = vim.treesitter.language.get_lang(args.match)
+          if not lang or not vim.list_contains(available, lang) or vim.list_contains(ts.get_installed(), lang) then
+            pcall(vim.treesitter.start, args.buf)
+            return
+          end
+
+          ts.install(lang):await(function(err)
+            if err then return end
+            vim.schedule(function()
+              if vim.api.nvim_buf_is_valid(args.buf) then
+                pcall(vim.treesitter.start, args.buf, lang)
+              end
+            end)
+          end)
         end,
       })
 
