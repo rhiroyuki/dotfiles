@@ -103,7 +103,8 @@ tooltip label {
 
 #custom-power {
     color: @red;
-    padding: 0 12px 0 4px;
+    padding: 0 8px;
+    margin-right: 4px;
 }
 
 #custom-power:hover {
