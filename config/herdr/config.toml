@@ -1,0 +1,49 @@
+onboarding = false
+
+[keys]
+prefix = "ctrl+a"
+
+toggle_sidebar = "prefix+ctrl+backslash"
+
+reload_config = "prefix+r"
+resize_mode = "prefix+shift+r"
+settings = "prefix+comma"
+
+split_vertical = ["prefix+v", "prefix+ctrl+v"]
+split_horizontal = ["prefix+s", "prefix+ctrl+s", "prefix+minus"]
+workspace_picker = ["prefix+w", "prefix+shift+s"]
+copy_mode = ["prefix+[", "prefix+esc", "prefix+ctrl+["]
+zoom = ["prefix+z", "ctrl+z"]
+last_pane = "prefix+backslash"
+
+previous_workspace = "prefix+p"
+next_workspace = "prefix+n"
+previous_tab = "ctrl+shift+tab"
+next_tab = "ctrl+tab"
+
+previous_agent = "prefix+shift+p"
+next_agent = "prefix+shift+n"
+focus_agent = "prefix+alt+1..9"
+
+move_tab_previous = "prefix+ctrl+shift+left"
+move_tab_next = "prefix+ctrl+shift+right"
+
+swap_pane_left = ["prefix+shift+h", "ctrl+alt+left"]
+swap_pane_down = ["prefix+shift+j", "ctrl+alt+down"]
+swap_pane_up = ["prefix+shift+k", "ctrl+alt+up"]
+swap_pane_right = ["prefix+shift+l", "ctrl+alt+right"]
+
+resize_pane_left = ["shift+left", "ctrl+left"]
+resize_pane_down = ["shift+down", "ctrl+down"]
+resize_pane_up = ["shift+up", "ctrl+up"]
+resize_pane_right = ["shift+right", "ctrl+right"]
+
+[ui]
+agent_panel_sort = "priority"
+tab_bar_right = [
+  { type = "command", command = '"$HERDR_BIN_PATH" workspace get "$HERDR_ACTIVE_WORKSPACE_ID" | jq -r .result.workspace.label', interval_seconds = 1, timeout_seconds = 2 },
+  { type = "zoom" },
+  { type = "hostname" },
+  { type = "datetime", format = "%H:%M" },
+]
+tab_bar_right_separator = " · "

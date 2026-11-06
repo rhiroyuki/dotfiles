@@ -68,7 +68,7 @@ alias ls='ls --color=auto'
 autoload colors && colors
 
 [[ $- != *i* ]] && return
-[[ -z "$TMUX" ]] && tmux new-session -A -s main
+# [[ -z "$TMUX" ]] && tmux new-session -A -s main
 
 # fuzzy finder (one initialization path; packaged files are an exclusive
 # fallback for systems whose fzf package does not provide `fzf --zsh`).

@@ -49,7 +49,7 @@ smart_gaps off
 smart_borders on
 
 # Monitor layout
-exec_always --no-startup-id autorandr --change
+exec_always --no-startup-id autorandr --change; xrandr --dpi 96
 
 # Keyboard layout, repeat rate, caps as ctrl, right alt as left alt
 exec_always --no-startup-id setxkbmap -layout 'us(intl)' -option ctrl:nocaps && xmodmap -e "keycode 108 = Alt_L Meta_L Alt_L Meta_L"

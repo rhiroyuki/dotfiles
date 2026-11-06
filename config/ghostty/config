@@ -38,3 +38,6 @@ window-decoration = none
 
 confirm-close-surface=false
 bell-features = ""
+
+keybind = ctrl+tab=unbind
+keybind = ctrl+shift+tab=unbind
